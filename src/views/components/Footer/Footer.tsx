@@ -3,14 +3,16 @@ import styled from "styled-components";
 
 interface IFooter {}
 
-const Footer: FC<IFooter> = ({}) => {
+const Footer: FC<IFooter> = () => {
   return (
     <>
       <Wrapper>
         <LeftUnit>
           <Title>© 2018 BaseballCloud</Title>
-          <Link>Terms of Service</Link>
-          <Link>Privacy Policy</Link>
+          <div>
+            <Link>Terms of Service</Link>
+            <Link>Privacy Policy</Link>
+          </div>
         </LeftUnit>
         <RightUnit>
           <Link>Blog</Link>
@@ -30,13 +32,27 @@ const Wrapper = styled.div`
   justify-content: space-between;
 
   padding: 16px;
+  @media (max-width: 650px) {
+    flex-flow: column;
+    flex-direction: column-reverse;
+  }
 `;
 
 const LeftUnit = styled.div`
   display: flex;
+  @media (max-width: 650px) {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 `;
 const RightUnit = styled.div`
   display: flex;
+  @media (max-width: 650px) {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 `;
 
 const Title = styled.p`

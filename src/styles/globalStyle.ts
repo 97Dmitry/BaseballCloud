@@ -7,7 +7,7 @@ const Global = createGlobalStyle`
   a:focus, a:active {outline: none;}
   nav, footer, header, aside {display: block;}
   html, body {height: 100%;width: 100%;
-  line-height: 1;font-size: 16px;}
+  line-height: 1.25;font-size: 16px; font-family: 'Lato', sans-serif;}
   input, button, textarea {font-family: inherit;}
   input::-ms-clear {display: none;}
   button {cursor: pointer;}

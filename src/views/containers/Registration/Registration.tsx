@@ -3,9 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Field, Form } from "react-final-form";
 
-import { Header } from "../../components/Header";
-import { Footer } from "../../components/Footer";
-import Required, { required } from "../../components/UI/Required";
+import { Header } from "views/components/Header";
+import { Footer } from "views/components/Footer";
 
 import {
   AuthContent,
@@ -14,10 +13,10 @@ import {
   AuthSubmitButton,
 } from "styles/generalStyle";
 
-import UserIcon from "../../../asset/svg/user_icon_for_input.svg";
-import LockIcon from "../../../asset/svg/lock_icon_for_input.svg";
-import ConfirmIcon from "../../../asset/svg/confirm_icon_for_input.svg";
-import { ReactComponent as ConfirmToggleIcon } from "../../../asset/svg/confirm_icon_for_toggle.svg";
+import UserIcon from "asset/svg/user_icon_for_input.svg";
+import LockIcon from "asset/svg/lock_icon_for_input.svg";
+import ConfirmIcon from "asset/svg/confirm_icon_for_input.svg";
+import { ReactComponent as ConfirmToggleIcon } from "asset/svg/confirm_icon_for_toggle.svg";
 
 interface IRegistration {}
 
@@ -66,17 +65,25 @@ const Registration: FC<IRegistration> = () => {
           <Form
             onSubmit={registrationHandler}
             validate={(values) => {
-              const errors = {
-                confirmPassword: "",
-              };
-              if (values.confirm !== values.password) {
+              const errors: Record<string, string> = {};
+              if (!values.email) {
+                errors.email = "Must be required";
+              }
+              if (!values.password) {
+                errors.password = "Must be required";
+              } else if (values.password.length < 8) {
+                errors.password = "Must contain more than 8 characters";
+              }
+              if (!values.confirmPassword) {
+                errors.confirmPassword = "Must be required";
+              } else if (values.confirmPassword !== values.password) {
                 errors.confirmPassword = "Must match";
               }
               return errors;
             }}
             render={({ handleSubmit, form }) => (
               <form onSubmit={handleSubmit}>
-                <Field name={"email"} validate={required}>
+                <Field name={"email"}>
                   {({ input, meta }) => (
                     <InputWrapper>
                       <AuthInput
@@ -84,11 +91,13 @@ const Registration: FC<IRegistration> = () => {
                         placeholder={"Email"}
                         bgPath={UserIcon}
                       />
-                      <Required metaData={meta} />
+                      {meta.error && meta.touched && (
+                        <ConfirmError>{meta.error}</ConfirmError>
+                      )}
                     </InputWrapper>
                   )}
                 </Field>
-                <Field name={"password"} validate={required}>
+                <Field name={"password"}>
                   {({ input, meta }) => (
                     <InputWrapper>
                       <AuthInput
@@ -97,7 +106,9 @@ const Registration: FC<IRegistration> = () => {
                         placeholder={"Password"}
                         bgPath={LockIcon}
                       />
-                      <Required metaData={meta} />
+                      {meta.error && meta.touched && (
+                        <ConfirmError>{meta.error}</ConfirmError>
+                      )}
                     </InputWrapper>
                   )}
                 </Field>

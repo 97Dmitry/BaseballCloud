@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 
+import { useAppDispatch } from "store/hooks";
+import { authorization } from "store/user/userSlice";
+
 import { Footer } from "views/components/Footer";
 import { Header } from "views/components/Header";
 import Required, { required } from "views/components/UI/Required";
@@ -19,8 +22,9 @@ import LockIcon from "asset/svg/lock_icon_for_input.svg";
 
 interface ILogin {}
 const Login: FC<ILogin> = () => {
-  const loginHandler = (value: Record<string, string>) => {
-    console.log(value);
+  const dispatch = useAppDispatch();
+  const loginHandler = (value: { email: string; password: string }) => {
+    dispatch(authorization({ email: value.email, password: value.password }));
   };
 
   return (
@@ -54,6 +58,7 @@ const Login: FC<ILogin> = () => {
                       <InputWrapper>
                         <AuthInput
                           {...input}
+                          type={"password"}
                           placeholder={"Password"}
                           bgPath={LockIcon}
                         />

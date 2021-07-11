@@ -12,7 +12,7 @@ import { Provider } from "react-redux";
 import Global from "./styles/globalStyle";
 
 const client = new ApolloClient({
-  uri: "https://48p1r2roz4.sse.codesandbox.io/",
+  uri: "https://baseballcloud-back.herokuapp.com/api/v1/",
   cache: new InMemoryCache(),
 });
 

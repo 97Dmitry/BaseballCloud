@@ -13,4 +13,5 @@ export interface IAuth {
 export interface IRegistration {
   email: string;
   password: string;
+  password_confirmation: string;
 }

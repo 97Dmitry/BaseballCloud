@@ -27,10 +27,15 @@ export function* handleSingIn(
 }
 
 export function* handleSingUp(
-  action: PayloadAction<{ email: string; password: string }>
+  action: PayloadAction<{
+    email: string;
+    password: string;
+    password_confirmation: string;
+  }>
 ): any {
   try {
     const response = yield call(singUp, { ...action.payload });
+    console.log(response.data);
     yield put(
       setUser({
         token: response.header["access-token"],

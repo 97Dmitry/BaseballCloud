@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 
 import { useAppDispatch } from "store/hooks";
@@ -23,8 +23,11 @@ import LockIcon from "asset/svg/lock_icon_for_input.svg";
 interface ILogin {}
 const Login: FC<ILogin> = () => {
   const dispatch = useAppDispatch();
+  const history = useHistory();
+  const error = null;
   const loginHandler = (value: { email: string; password: string }) => {
     dispatch(authorization({ email: value.email, password: value.password }));
+    history.push("/profile");
   };
 
   return (
@@ -66,6 +69,7 @@ const Login: FC<ILogin> = () => {
                       </InputWrapper>
                     )}
                   </Field>
+                  {error && <p>{error}</p>}
                   <AuthSubmitButton type={"submit"}>Sing In</AuthSubmitButton>
                 </form>
               )}

@@ -6,6 +6,9 @@ import { Field, Form } from "react-final-form";
 import { Header } from "views/components/Header";
 import { Footer } from "views/components/Footer";
 
+import { useAppDispatch } from "store/hooks";
+import { registration } from "store/user/userSlice";
+
 import {
   AuthContent,
   AuthFormWrapper,
@@ -21,7 +24,15 @@ import { ReactComponent as ConfirmToggleIcon } from "asset/svg/confirm_icon_for_
 interface IRegistration {}
 
 const Registration: FC<IRegistration> = () => {
+  const dispatch = useAppDispatch();
   const registrationHandler = (value: Record<string, string>) => {
+    dispatch(
+      registration({
+        email: value.email,
+        password: value.password,
+        password_confirmation: value.password,
+      })
+    );
     console.log(value);
   };
 

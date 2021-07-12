@@ -2,6 +2,7 @@ export interface IUser {
   email: string;
   role: string;
   token: string | null;
+  clientToken: string | null;
   id: number | null;
 }
 

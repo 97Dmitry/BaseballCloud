@@ -10,6 +10,8 @@ export const selectorUser = createSelector(selectSelf, (state: RootState) => {
 export const selectorUserToken = createSelector(
   selectSelf,
   (state: RootState) => {
-    return state.userState.token;
-  },
+    return {
+      ...state.userState,
+    };
+  }
 );

@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
 import { useAppSelector } from "store/hooks";
 import { selectorUserToken } from "store/user/userSelector";
@@ -11,6 +12,8 @@ interface IHeader {}
 
 const Header: FC<IHeader> = () => {
   const user = useAppSelector(selectorUserToken);
+  const history = useHistory();
+
   const [drop, setDrop] = useState(false);
   return (
     <Wrapper>
@@ -23,8 +26,14 @@ const Header: FC<IHeader> = () => {
           <ProfileDrop onClick={() => setDrop(!drop)}>
             Profile Name
             <Dropdown drop={drop}>
-              <p>Profile</p>
-              <p>Logout</p>
+              <DropdownLink
+                onClick={() => {
+                  history.push("/profile");
+                }}
+              >
+                Profile
+              </DropdownLink>
+              <DropdownLink>Logout</DropdownLink>
             </Dropdown>
           </ProfileDrop>
         </RightUnit>
@@ -59,6 +68,7 @@ const RightUnit = styled.div`
 
 const Clickable = styled.div`
   margin-right: 15px;
+  cursor: pointer;
 `;
 
 const UserImg = styled(UserProfile)`
@@ -70,6 +80,7 @@ const UserImg = styled(UserProfile)`
 const ProfileDrop = styled.div`
   position: relative;
   display: inline-block;
+  cursor: pointer;
 `;
 
 interface IDropdown {
@@ -84,4 +95,9 @@ const Dropdown = styled.div<IDropdown>`
   padding: 12px 16px;
   margin-top: 20px;
   z-index: 1;
+`;
+
+const DropdownLink = styled.p`
+  cursor: pointer;
+  margin: 10px 5px 5px;
 `;

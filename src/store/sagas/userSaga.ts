@@ -13,9 +13,12 @@ export function* handleSingIn(
   try {
     const response = yield call(singIn, { ...action.payload });
     const data = response.data.data;
+    yield console.log(response);
+
     yield put(
       setUser({
         token: response.headers["access-token"],
+        clientToken: response.headers.client,
         email: data.email,
         id: data.id,
         role: data.role,
@@ -35,11 +38,11 @@ export function* handleSingUp(
 ): any {
   try {
     const response = yield call(singUp, { ...action.payload });
-    console.log(response.data);
     yield put(
       setUser({
         token: response.header["access-token"],
         email: response.data.email,
+        clientToken: response.headers.client,
         id: response.data.id,
         role: response.data.role,
       })

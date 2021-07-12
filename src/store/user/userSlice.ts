@@ -4,6 +4,7 @@ import { IAuth, IRegistration, IUser } from "./iUser";
 const initialState: IUser = {
   token: null,
   email: "",
+  clientToken: null,
   id: null,
   role: "",
 };

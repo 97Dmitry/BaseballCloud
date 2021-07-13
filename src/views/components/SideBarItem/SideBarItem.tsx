@@ -1,4 +1,3 @@
-import { gql, useQuery } from "@apollo/client";
 import { FC } from "react";
 import styled from "styled-components";
 
@@ -9,25 +8,6 @@ interface ISideBarItem {
 }
 
 const SideBarItem: FC<ISideBarItem> = ({ icon, label, value }) => {
-  const GEt = gql`
-    query LeaderboardBatting($input: FilterProfileEventsInput!) {
-      leaderboard_batting(input: $input) {
-        batter_name
-        exit_velocity
-        launch_angle
-        distance
-        batter_datraks_id
-        age
-        school
-        id
-      }
-    }
-  `;
-
-  const { data } = useQuery(GEt, {
-    variables: { input: { profile_id: "157", count: 10, offset: 0 } },
-  });
-  console.log(data);
   return (
     <>
       <Wrapper>

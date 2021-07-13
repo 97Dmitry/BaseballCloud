@@ -1,14 +1,24 @@
 import { FC } from "react";
+import { useQuery } from "@apollo/client";
 import styled from "styled-components";
+
+import { CurrentProfile } from "graphqlQuery/CurrentProfile";
 
 interface ISessionReports {}
 
-const SessionReports: FC<ISessionReports> = ({}) => {
-  const data = null;
+const SessionReports: FC<ISessionReports> = () => {
+  const { data, error } = useQuery(CurrentProfile);
+
   return (
     <>
       <Wrapper>
-        <Title>Recent Session Reports</Title>
+        <Title
+          onClick={() => {
+            console.log(data);
+          }}
+        >
+          Recent Session Reports
+        </Title>
         <Data>
           {data ? <p>data</p> : <p>No data currently linked to this profile</p>}
         </Data>

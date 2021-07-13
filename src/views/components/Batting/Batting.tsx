@@ -1,19 +1,31 @@
 import { FC } from "react";
 import styled from "styled-components";
+import { useQuery } from "@apollo/client";
+
+import { Loading } from "views/components/Loading";
+
 import BattingColumn from "./BattingColumn";
+import { BattingSummary } from "graphqlQuery/BattingSummary";
 
 interface IBatting {}
 
 const Batting: FC<IBatting> = () => {
+  const { data, loading, error } = useQuery(BattingSummary, {
+    variables: { id: "157" },
+  });
   return (
     <>
       <Wrapper>
         <Title>Top Batting Values</Title>
-        <Content>
-          <BattingColumn title={"Exit Velocity"} load={15} />
-          <BattingColumn title={"Carry Distance"} load={35} />
-          <BattingColumn title={"Launch Angle"} load={75} />
-        </Content>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Content>
+            <BattingColumn title={"Exit Velocity"} load={15} />
+            <BattingColumn title={"Carry Distance"} load={35} />
+            <BattingColumn title={"Launch Angle"} load={75} />
+          </Content>
+        )}
       </Wrapper>
     </>
   );

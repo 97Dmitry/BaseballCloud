@@ -1,13 +1,18 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Field, Form } from "react-final-form";
 
 import { Header } from "views/components/Header";
 import { Footer } from "views/components/Footer";
 
-import { useAppDispatch } from "store/hooks";
-import { registration } from "store/user/userSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { registration, setAuthorized } from "store/user/userSlice";
+import {
+  selectorAuthorized,
+  selectorErrors,
+  selectorLoading,
+} from "store/user/userSelector";
 
 import {
   AuthContent,
@@ -25,6 +30,12 @@ interface IRegistration {}
 
 const Registration: FC<IRegistration> = () => {
   const dispatch = useAppDispatch();
+  const history = useHistory();
+
+  const loading = useAppSelector(selectorLoading);
+  const errors = useAppSelector(selectorErrors);
+  const authorized = useAppSelector(selectorAuthorized);
+
   const registrationHandler = (value: Record<string, string>) => {
     dispatch(
       registration({
@@ -33,8 +44,12 @@ const Registration: FC<IRegistration> = () => {
         password_confirmation: value.password,
       })
     );
-    console.log(value);
   };
+
+  if (authorized) {
+    dispatch(setAuthorized(false));
+    history.push("/profile");
+  }
 
   const [player, setPlayer] = useState(true);
   const [scout, setScout] = useState(false);
@@ -138,12 +153,15 @@ const Registration: FC<IRegistration> = () => {
                     </InputWrapper>
                   )}
                 </Field>
+                {errors && <p>{errors}</p>}
                 <Rules>
                   By clicking Sign Up, you agree to our
                   <StyledLink to={""}> Terms of Service</StyledLink> and
                   <StyledLink to={""}> Privacy Policy</StyledLink>.
                 </Rules>
-                <AuthSubmitButton type={"submit"}>Sing Up</AuthSubmitButton>
+                <AuthSubmitButton disabled={loading} type={"submit"}>
+                  Sing Up
+                </AuthSubmitButton>
               </form>
             )}
           />

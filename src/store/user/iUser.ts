@@ -4,6 +4,9 @@ export interface IUser {
   token: string | null;
   clientToken: string | null;
   id: number | null;
+  loading?: boolean;
+  errors?: string | null;
+  authorized?: boolean;
 }
 
 export interface IAuth {

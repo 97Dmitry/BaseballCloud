@@ -15,3 +15,21 @@ export const selectorUserToken = createSelector(
     };
   }
 );
+
+export const selectorLoading = createSelector(
+  selectSelf,
+  (state: RootState) => {
+    return state.userState.loading;
+  }
+);
+
+export const selectorErrors = createSelector(selectSelf, (state: RootState) => {
+  return state.userState.errors;
+});
+
+export const selectorAuthorized = createSelector(
+  selectSelf,
+  (state: RootState) => {
+    return state.userState.authorized;
+  }
+);

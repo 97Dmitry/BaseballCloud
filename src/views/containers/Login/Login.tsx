@@ -3,8 +3,13 @@ import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 
-import { useAppDispatch } from "store/hooks";
-import { authorization } from "store/user/userSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { authorization, setAuthorized } from "store/user/userSlice";
+import {
+  selectorAuthorized,
+  selectorErrors,
+  selectorLoading,
+} from "store/user/userSelector";
 
 import { Footer } from "views/components/Footer";
 import { Header } from "views/components/Header";
@@ -24,11 +29,19 @@ interface ILogin {}
 const Login: FC<ILogin> = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const error = null;
+
+  const loading = useAppSelector(selectorLoading);
+  const errors = useAppSelector(selectorErrors);
+  const authorized = useAppSelector(selectorAuthorized);
+
   const loginHandler = (value: { email: string; password: string }) => {
     dispatch(authorization({ email: value.email, password: value.password }));
-    history.push("/profile");
   };
+
+  if (authorized) {
+    dispatch(setAuthorized(false));
+    history.push("/profile");
+  }
 
   return (
     <Wrapper>
@@ -69,8 +82,10 @@ const Login: FC<ILogin> = () => {
                       </InputWrapper>
                     )}
                   </Field>
-                  {error && <p>{error}</p>}
-                  <AuthSubmitButton type={"submit"}>Sing In</AuthSubmitButton>
+                  {errors && <p>{errors}</p>}
+                  <AuthSubmitButton disabled={loading} type={"submit"}>
+                    Sing In
+                  </AuthSubmitButton>
                 </form>
               )}
             />

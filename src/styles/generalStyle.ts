@@ -61,4 +61,8 @@ export const AuthSubmitButton = styled.button`
   margin-bottom: 15px;
   border-radius: 4px;
   width: 100%;
+
+  &:active {
+    background-color: #246991;
+  }
 `;

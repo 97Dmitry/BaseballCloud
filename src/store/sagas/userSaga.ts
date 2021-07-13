@@ -2,7 +2,12 @@ import { call, put } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 import { singIn, singUp } from "api/userApi";
-import { setUser } from "store/user/userSlice";
+import {
+  setAuthorized,
+  setErrors,
+  setLoading,
+  setUser,
+} from "store/user/userSlice";
 
 export function* handleSingIn(
   action: PayloadAction<{
@@ -11,9 +16,10 @@ export function* handleSingIn(
   }>
 ): any {
   try {
+    yield put(setErrors(null));
+    yield put(setLoading(true));
     const response = yield call(singIn, { ...action.payload });
     const data = response.data.data;
-    yield console.log(response);
 
     yield put(
       setUser({
@@ -24,8 +30,11 @@ export function* handleSingIn(
         role: data.role,
       })
     );
+    yield put(setLoading(false));
+    yield put(setAuthorized(true));
   } catch (e) {
-    console.log(e);
+    yield put(setLoading(false));
+    yield put(setErrors(e.error));
   }
 }
 
@@ -37,6 +46,8 @@ export function* handleSingUp(
   }>
 ): any {
   try {
+    yield put(setErrors(null));
+    yield put(setLoading(true));
     const response = yield call(singUp, { ...action.payload });
     yield put(
       setUser({
@@ -47,7 +58,10 @@ export function* handleSingUp(
         role: response.data.role,
       })
     );
+    yield put(setLoading(false));
+    yield put(setAuthorized(true));
   } catch (e) {
-    console.log(e);
+    yield put(setLoading(false));
+    yield put(setErrors(e.error));
   }
 }

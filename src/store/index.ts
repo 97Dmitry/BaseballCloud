@@ -17,6 +17,8 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
+import { createFilter } from "redux-persist-transform-filter";
+
 import createSagaMiddleware from "@redux-saga/core";
 
 import authSlice from "./user/userSlice";
@@ -28,11 +30,17 @@ const rootReducer = combineReducers({
   userState: authSlice,
 });
 
+const saveSubsetFilter = createFilter("userState", [
+  "token",
+  "clientToken",
+  "email",
+]);
+
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["userState"],
+  transforms: [saveSubsetFilter],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -7,6 +7,9 @@ const initialState: IUser = {
   clientToken: null,
   id: null,
   role: "",
+  loading: false,
+  errors: null,
+  authorized: false,
 };
 
 export const userSlice = createSlice({
@@ -18,6 +21,15 @@ export const userSlice = createSlice({
     setUser: (state, action: PayloadAction<IUser>) => {
       return { ...state, ...action.payload };
     },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      return { ...state, loading: action.payload };
+    },
+    setErrors: (state, action: PayloadAction<string | null>) => {
+      return { ...state, errors: action.payload };
+    },
+    setAuthorized: (state, action: PayloadAction<boolean>) => {
+      return { ...state, authorized: action.payload };
+    },
     removeUser: () => {
       return { ...initialState };
     },
@@ -25,5 +37,12 @@ export const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { authorization, setUser, registration, removeUser } =
-  userSlice.actions;
+export const {
+  authorization,
+  setUser,
+  registration,
+  removeUser,
+  setLoading,
+  setErrors,
+  setAuthorized,
+} = userSlice.actions;

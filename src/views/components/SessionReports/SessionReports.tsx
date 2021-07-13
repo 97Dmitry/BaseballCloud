@@ -4,24 +4,30 @@ import styled from "styled-components";
 
 import { CurrentProfile } from "graphqlQuery/CurrentProfile";
 
+import { Loading } from "../Loading";
+
 interface ISessionReports {}
 
 const SessionReports: FC<ISessionReports> = () => {
-  const { data, error } = useQuery(CurrentProfile);
+  const { data, loading, error } = useQuery(CurrentProfile);
 
   return (
     <>
       <Wrapper>
-        <Title
-          onClick={() => {
-            console.log(data);
-          }}
-        >
-          Recent Session Reports
-        </Title>
-        <Data>
-          {data ? <p>data</p> : <p>No data currently linked to this profile</p>}
-        </Data>
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <Title>Recent Session Reports</Title>
+            <Data>
+              {data ? (
+                <p>data</p>
+              ) : (
+                <p>No data currently linked to this profile</p>
+              )}
+            </Data>
+          </>
+        )}
       </Wrapper>
     </>
   );

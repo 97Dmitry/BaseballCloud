@@ -17,13 +17,31 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-const rootReducer = combineReducers({});
+import { createFilter } from "redux-persist-transform-filter";
+
+import createSagaMiddleware from "@redux-saga/core";
+
+import authSlice from "./user/userSlice";
+import { watcherSaga } from "./sagas/rootSaga";
+
+const sagaMiddleware = createSagaMiddleware();
+
+const rootReducer = combineReducers({
+  userState: authSlice,
+});
+
+const saveSubsetFilter = createFilter("userState", [
+  "token",
+  "clientToken",
+  "email",
+  "id",
+]);
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["userState"],
+  transforms: [saveSubsetFilter],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -38,8 +56,10 @@ const middleware = getDefaultMiddleware({
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: [...middleware],
+  middleware: [...middleware, sagaMiddleware],
 });
+
+sagaMiddleware.run(watcherSaga);
 
 export const persistor = persistStore(store);
 

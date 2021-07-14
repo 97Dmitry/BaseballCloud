@@ -34,6 +34,7 @@ const saveSubsetFilter = createFilter("userState", [
   "token",
   "clientToken",
   "email",
+  "id",
 ]);
 
 const persistConfig = {

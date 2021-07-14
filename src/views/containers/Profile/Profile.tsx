@@ -1,27 +1,46 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { Batting } from "views/components/Batting";
+
+import { useQuery } from "@apollo/client";
+import { CurrentProfile, ICurrentProfile } from "graphqlQuery/CurrentProfile";
 
 import { Header } from "views/components/Header";
+import { Footer } from "views/components/Footer";
 import { ProfileInfo } from "views/components/ProfileInfo";
+import { Batting } from "views/components/Batting";
 import { SessionReports } from "views/components/SessionReports";
 import { SideBar } from "views/components/SideBar";
+import { Loading } from "views/components/UI/Loading";
 
 interface IProfile {}
 
 const Profile: FC<IProfile> = () => {
+  const { data, loading, error } = useQuery<ICurrentProfile>(CurrentProfile);
   return (
     <>
       <Wrapper>
-        <Header />
-        <Content>
-          <SideBar />
-          <Info>
-            <Batting />
-            <SessionReports />
-            <ProfileInfo />
-          </Info>
-        </Content>
+        {data ? (
+          <>
+            <Header
+              username={
+                data.current_profile.first_name +
+                " " +
+                data.current_profile.last_name
+              }
+            />
+            <Content>
+              <SideBar />
+              <Info>
+                <Batting id={data.current_profile.id} />
+                <SessionReports id={data.current_profile.id} />
+                <ProfileInfo />
+              </Info>
+            </Content>
+            <Footer />
+          </>
+        ) : (
+          <Loading />
+        )}
       </Wrapper>
     </>
   );
@@ -40,6 +59,9 @@ const Content = styled.div`
 const Info = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: auto;
+  width: calc(100vw - 220px);
+
   width: 100%;
 
   background: #788b99;

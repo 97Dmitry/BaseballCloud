@@ -1,17 +1,28 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { useQuery } from "@apollo/client";
 
-import { Loading } from "views/components/Loading";
+import { useQuery } from "@apollo/client";
+import {
+  BattingSummary,
+  IBattingSummary,
+  IBattingSummaryVar,
+} from "graphqlQuery/BattingSummary";
+
+import { Loading } from "views/components/UI/Loading";
 
 import BattingColumn from "./BattingColumn";
-import { BattingSummary } from "graphqlQuery/BattingSummary";
 
-interface IBatting {}
+interface IBatting {
+  id: number;
+}
 
-const Batting: FC<IBatting> = () => {
-  const { data, loading, error } = useQuery(BattingSummary, {
-    variables: { id: "157" },
+const Batting: FC<IBatting> = ({ id }) => {
+  const { data, loading, error } = useQuery<
+    IBattingSummary,
+    IBattingSummaryVar
+  >(BattingSummary, {
+    skip: !id,
+    variables: { id: id },
   });
   return (
     <>
@@ -20,11 +31,25 @@ const Batting: FC<IBatting> = () => {
         {loading ? (
           <Loading />
         ) : (
-          <Content>
-            <BattingColumn title={"Exit Velocity"} load={15} />
-            <BattingColumn title={"Carry Distance"} load={35} />
-            <BattingColumn title={"Launch Angle"} load={75} />
-          </Content>
+          data && (
+            <Content>
+              <BattingColumn
+                title={"Exit Velocity"}
+                load={data.top_values?.exit_velocity}
+                value={data.top_values?.exit_velocity}
+              />
+              <BattingColumn
+                title={"Carry Distance"}
+                load={data?.top_values?.distance}
+                value={data?.top_values?.distance}
+              />
+              <BattingColumn
+                title={"Launch Angle"}
+                load={data?.top_values?.launch_angle}
+                value={data?.top_values?.launch_angle}
+              />
+            </Content>
+          )
         )}
       </Wrapper>
     </>

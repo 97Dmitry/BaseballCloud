@@ -23,7 +23,7 @@ const SideBarItem: FC<ISideBarItem> = ({ icon, label, value }) => {
 export default SideBarItem;
 
 const Wrapper = styled.div`
-  margin-top: 15px;
+  padding: 16px 0;
 
   display: flex;
   justify-content: space-between;

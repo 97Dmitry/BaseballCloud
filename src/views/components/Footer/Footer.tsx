@@ -31,6 +31,13 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
 
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+
+  background: #fff;
+  border-top: 1px solid #979494;
+
   padding: 16px;
   @media (max-width: 650px) {
     flex-flow: column;

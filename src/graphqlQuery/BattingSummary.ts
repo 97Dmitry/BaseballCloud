@@ -20,3 +20,24 @@ export const BattingSummary = gql`
     }
   }
 `;
+
+export interface IBattingSummary {
+  top_values: {
+    id: number;
+    distance: number;
+    pitch_type: string;
+    launch_angle: number;
+    exit_velocity: number;
+  };
+  average_values: {
+    id: number;
+    distance: number;
+    pitch_type: string;
+    launch_angle: number;
+    exit_velocity: number;
+  };
+}
+
+export interface IBattingSummaryVar {
+  id: number;
+}

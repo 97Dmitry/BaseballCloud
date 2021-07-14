@@ -1,15 +1,26 @@
 import { FC } from "react";
-import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 
-import { CurrentProfile } from "graphqlQuery/CurrentProfile";
+import { useQuery } from "@apollo/client";
+import {
+  ProfileEvents,
+  IProfileEvents,
+  IProfileEventsVars,
+} from "graphqlQuery/ProfileEvents";
 
-import { Loading } from "../Loading";
+import { Loading } from "../UI/Loading";
 
-interface ISessionReports {}
+interface ISessionReports {
+  id: number;
+}
 
-const SessionReports: FC<ISessionReports> = () => {
-  const { data, loading, error } = useQuery(CurrentProfile);
+const SessionReports: FC<ISessionReports> = ({ id }) => {
+  const { data, loading, error } = useQuery<IProfileEvents, IProfileEventsVars>(
+    ProfileEvents,
+    {
+      variables: { input: { profile_id: id, count: 10, offset: 0 } },
+    }
+  );
 
   return (
     <>
@@ -20,8 +31,10 @@ const SessionReports: FC<ISessionReports> = () => {
           <>
             <Title>Recent Session Reports</Title>
             <Data>
-              {data ? (
-                <p>data</p>
+              {data?.profile_events.total_count ? (
+                data.profile_events.events.map((el, id) => {
+                  return <p key={id}>{el.event_name}</p>;
+                })
               ) : (
                 <p>No data currently linked to this profile</p>
               )}

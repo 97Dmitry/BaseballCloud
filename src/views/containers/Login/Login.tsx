@@ -40,7 +40,9 @@ const Login: FC<ILogin> = () => {
 
   if (authorized) {
     dispatch(setAuthorized(false));
-    history.push("/profile");
+    setTimeout(() => {
+      history.push("/profile");
+    }, 100);
   }
 
   return (

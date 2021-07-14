@@ -8,9 +8,11 @@ import { selectorUserToken } from "store/user/userSelector";
 import { ReactComponent as HeaderIcon } from "asset/svg/headerIcon.svg";
 import { ReactComponent as UserProfile } from "asset/svg/user_profile_for_header.svg";
 
-interface IHeader {}
+interface IHeader {
+  username?: string;
+}
 
-const Header: FC<IHeader> = () => {
+const Header: FC<IHeader> = ({ username }) => {
   const user = useAppSelector(selectorUserToken);
   const history = useHistory();
 
@@ -24,7 +26,7 @@ const Header: FC<IHeader> = () => {
           <Clickable>Network</Clickable>
           <UserImg />
           <ProfileDrop onClick={() => setDrop(!drop)}>
-            Profile Name
+            {username ? username : null}
             <Dropdown drop={drop}>
               <DropdownLink
                 onClick={() => {
@@ -48,6 +50,8 @@ const Wrapper = styled.div`
   position: sticky;
   top: 0;
   z-index: 1;
+
+  border-bottom: 1px solid #979494;
 
   background: #fff;
   display: flex;

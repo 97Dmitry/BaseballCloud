@@ -5,13 +5,19 @@ interface ISideBarTextItem {
   title: string;
   subtitle: any; //string | Record<string, string>;
   object: boolean;
+  fat?: boolean;
 }
 
-const SideBarTextItem: FC<ISideBarTextItem> = ({ title, subtitle, object }) => {
+const SideBarTextItem: FC<ISideBarTextItem> = ({
+  title,
+  subtitle,
+  object,
+  fat = false,
+}) => {
   return (
     <>
       <Wrapper>
-        <Title>{title}</Title>
+        <Title fat={fat}>{title}</Title>
         {object ? (
           Object.keys(subtitle).map((id) => {
             return (
@@ -33,10 +39,13 @@ export default SideBarTextItem;
 
 const Wrapper = styled.div``;
 
-const Title = styled.div`
+interface ITitle {
+  fat: boolean;
+}
+const Title = styled.div<ITitle>`
   font-size: 14px;
   line-height: 17px;
-  font-weight: 300;
+  font-weight: ${(props) => (props.fat ? "700" : "300")};
   color: #667784;
   margin-bottom: 6px;
 `;

@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 import { useQuery } from "@apollo/client";
 import {
-  BattingSummary,
-  IBattingSummary,
-  IBattingSummaryVar,
-} from "graphqlQuery/BattingSummary";
+  BattingSummaryQuery,
+  IBattingSummaryQuery,
+  IBattingSummaryQueryVars,
+} from "graphqlQuery/BattingSummaryQuery";
 
 import { Loading } from "views/components/UI/Loading";
 
@@ -18,9 +18,9 @@ interface IBatting {
 
 const Batting: FC<IBatting> = ({ id }) => {
   const { data, loading, error } = useQuery<
-    IBattingSummary,
-    IBattingSummaryVar
-  >(BattingSummary, {
+    IBattingSummaryQuery,
+    IBattingSummaryQueryVars
+  >(BattingSummaryQuery, {
     skip: !id,
     variables: { id: id },
   });

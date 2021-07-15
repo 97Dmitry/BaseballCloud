@@ -2,7 +2,10 @@ import { FC } from "react";
 import styled from "styled-components";
 
 import { useQuery } from "@apollo/client";
-import { CurrentProfile, ICurrentProfile } from "graphqlQuery/CurrentProfile";
+import {
+  CurrentProfileQuery,
+  ICurrentProfileQuery,
+} from "graphqlQuery/CurrentProfileQuery";
 
 import { ReactComponent as Pencel } from "asset/svg/pencel_icon_for_profile.svg";
 import { ReactComponent as Age } from "asset/svg/age_icon.svg";
@@ -13,11 +16,13 @@ import { ReactComponent as Bats } from "asset/svg/bats_icon.svg";
 import { SideBarItem } from "../SideBarItem";
 import { Loading } from "../UI/Loading";
 import { SideBarTextItem } from "../SideBarTextItem";
+import { SideBarProfileChangerForm } from "../SideBarProfileChangerForm";
 
 interface ISideBar {}
 
 const SideBar: FC<ISideBar> = () => {
-  const { data, loading, error } = useQuery<ICurrentProfile>(CurrentProfile);
+  const { data, loading, error } =
+    useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
 
   return (
     <>
@@ -37,6 +42,11 @@ const SideBar: FC<ISideBar> = () => {
                       data.current_profile.last_name}
                   </p>
                 </Name>
+                <SideBarProfileChangerForm />
+                <Positions>
+                  <p>{data.current_profile.position}</p>
+                  <p>{data.current_profile.position2}</p>
+                </Positions>
               </ImgAndName>
               <SideBarItem
                 icon={<Age />}
@@ -84,6 +94,11 @@ const SideBar: FC<ISideBar> = () => {
                   subtitle={data.current_profile.facilities.u_name}
                   object={false}
                 />
+                <SideBarTextItem
+                  title={"About"}
+                  subtitle={data.current_profile.biography}
+                  object={false}
+                />
               </SchoolInfo>
             </>
           )
@@ -126,6 +141,13 @@ const Name = styled.div`
   margin-top: 15px;
   display: flex;
   justify-content: center;
+`;
+
+const Positions = styled.div`
+  text-align: center;
+  &::last-child {
+    border-top: 1px solid #cbcccd;
+  }
 `;
 
 const SchoolInfo = styled.div`

@@ -12,8 +12,10 @@ export const SchoolQuery = gql`
 
 export interface ISchoolQuery {
   schools: {
-    id: number;
-    name: string;
+    schools: Array<{
+      id: number;
+      name: string;
+    }>;
   };
 }
 

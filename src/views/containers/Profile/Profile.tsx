@@ -2,7 +2,10 @@ import { FC } from "react";
 import styled from "styled-components";
 
 import { useQuery } from "@apollo/client";
-import { CurrentProfile, ICurrentProfile } from "graphqlQuery/CurrentProfile";
+import {
+  CurrentProfileQuery,
+  ICurrentProfileQuery,
+} from "graphqlQuery/CurrentProfileQuery";
 
 import { Header } from "views/components/Header";
 import { Footer } from "views/components/Footer";
@@ -15,7 +18,8 @@ import { Loading } from "views/components/UI/Loading";
 interface IProfile {}
 
 const Profile: FC<IProfile> = () => {
-  const { data, loading, error } = useQuery<ICurrentProfile>(CurrentProfile);
+  const { data, loading, error } =
+    useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
   return (
     <>
       <Wrapper>

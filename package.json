@@ -22,6 +22,7 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-select": "^4.3.1",
     "react-tabs": "^3.2.2",
     "redux-persist": "^6.0.0",
     "redux-persist-transform-filter": "^0.0.20",
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",
+    "@types/react-select": "^4.0.17",
     "@types/react-tabs": "^2.3.3",
     "@types/styled-components": "^5.1.11"
   }

@@ -11,15 +11,44 @@ interface IProfileInfo {}
 
 const ProfileInfo: FC<IProfileInfo> = () => {
   const [unit, setUnit] = useState(0);
+  const [battingDropdown, setBattingDropdown] = useState(false);
 
   const contentButton = ["Batting", "Comparison", "SessionReports"];
   const contentArr = [<Batting />, <SessionReports />, <Comparison />];
+  console.log(battingDropdown);
 
   return (
     <>
       <Wrapper>
         <Buttons>
           {contentButton.map((el, id) => {
+            if (el === "Batting") {
+              if (id === 0) {
+                return (
+                  <SelectedButton
+                    onClick={() => {
+                      setUnit(id);
+                    }}
+                    onMouseOver={() => setBattingDropdown(true)}
+                    onMouseLeave={() => setBattingDropdown(false)}
+                    key={id}
+                  >
+                    {el}
+                  </SelectedButton>
+                );
+              }
+
+              return (
+                <Button
+                  onClick={() => {
+                    setUnit(id);
+                  }}
+                  key={id}
+                >
+                  {el}
+                </Button>
+              );
+            }
             if (id === unit) {
               return (
                 <SelectedButton

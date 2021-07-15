@@ -19,6 +19,7 @@ const Header: FC<IHeader> = ({ username }) => {
   const [drop, setDrop] = useState(false);
   return (
     <Wrapper>
+      {drop && <OutsideClick onClick={() => setDrop(!drop)} />}
       <HeaderIcon />
       {user && (
         <RightUnit>
@@ -99,10 +100,19 @@ const Dropdown = styled.div<IDropdown>`
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 12px 16px;
   margin-top: 20px;
-  z-index: 1;
+  z-index: 200;
 `;
 
 const DropdownLink = styled.p`
   cursor: pointer;
   margin: 10px 5px 5px;
+`;
+
+const OutsideClick = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  height: 100vh;
+  width: 100%;
 `;

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const CurrentProfile = gql`
-  query CurrentProfile {
+export const CurrentProfileQuery = gql`
+  query CurrentProfileQuery {
     current_profile {
       id
       first_name
@@ -50,7 +50,7 @@ interface IFacilities {
   u_name: string;
 }
 
-export interface ICurrentProfile {
+export interface ICurrentProfileQuery {
   current_profile: {
     id: number;
     first_name: string;

@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
-export const ProfileEvents = gql`
-  query ProfileEvents($input: FilterProfileEventsInput!) {
+export const ProfileEventsQuery = gql`
+  query ProfileEventsQuery($input: FilterProfileEventsInput!) {
     profile_events(input: $input) {
       events {
         id
@@ -13,7 +13,7 @@ export const ProfileEvents = gql`
   }
 `;
 
-export interface IProfileEvents {
+export interface IProfileEventsQuery {
   profile_events: {
     events: Array<{
       id: number;
@@ -25,6 +25,6 @@ export interface IProfileEvents {
   };
 }
 
-export interface IProfileEventsVars {
+export interface IProfileEventsQueryVars {
   input: { profile_id: number; count: number; offset: number };
 }

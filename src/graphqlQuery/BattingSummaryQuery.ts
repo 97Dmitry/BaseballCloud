@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const BattingSummary = gql`
+export const BattingSummaryQuery = gql`
   query BattingSummary($id: ID!) {
     batting_summary(id: $id) {
       top_values {
@@ -21,7 +21,7 @@ export const BattingSummary = gql`
   }
 `;
 
-export interface IBattingSummary {
+export interface IBattingSummaryQuery {
   top_values: {
     id: number;
     distance: number;
@@ -38,6 +38,6 @@ export interface IBattingSummary {
   };
 }
 
-export interface IBattingSummaryVar {
+export interface IBattingSummaryQueryVars {
   id: number;
 }

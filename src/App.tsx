@@ -1,5 +1,10 @@
 import { FC } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import styled from "styled-components";
 
 import {
@@ -67,6 +72,9 @@ const App: FC = () => {
       <Router>
         <Switch>
           <Wrapper>
+            <Route path={"/"}>
+              <Redirect to={"/profile"} />
+            </Route>
             <RouterGuard
               children={
                 <Route path={"/profile"}>

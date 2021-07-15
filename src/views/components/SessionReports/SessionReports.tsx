@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 import { useQuery } from "@apollo/client";
 import {
-  ProfileEvents,
-  IProfileEvents,
-  IProfileEventsVars,
-} from "graphqlQuery/ProfileEvents";
+  ProfileEventsQuery,
+  IProfileEventsQuery,
+  IProfileEventsQueryVars,
+} from "graphqlQuery/ProfileEventsQuery";
 
 import { Loading } from "../UI/Loading";
 
@@ -15,12 +15,12 @@ interface ISessionReports {
 }
 
 const SessionReports: FC<ISessionReports> = ({ id }) => {
-  const { data, loading, error } = useQuery<IProfileEvents, IProfileEventsVars>(
-    ProfileEvents,
-    {
-      variables: { input: { profile_id: id, count: 10, offset: 0 } },
-    }
-  );
+  const { data, loading, error } = useQuery<
+    IProfileEventsQuery,
+    IProfileEventsQueryVars
+  >(ProfileEventsQuery, {
+    variables: { input: { profile_id: id, count: 10, offset: 0 } },
+  });
 
   return (
     <>

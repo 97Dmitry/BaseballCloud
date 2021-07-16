@@ -2,10 +2,7 @@ import { FC, useState } from "react";
 import styled from "styled-components";
 
 import { useQuery } from "@apollo/client";
-import {
-  CurrentProfileQuery,
-  ICurrentProfileQuery,
-} from "graphqlQuery/CurrentProfileQuery";
+import { ICurrentProfileQuery } from "graphqlQuery/CurrentProfileQuery";
 import {
   SchoolQuery,
   ISchoolQuery,
@@ -33,12 +30,12 @@ import { Loading } from "../UI/Loading";
 import { SideBarTextItem } from "../SideBarTextItem";
 import { SideBarProfileChangerForm } from "../SideBarProfileChangerForm";
 
-interface ISideBar {}
+interface ISideBar {
+  profileData: ICurrentProfileQuery;
+}
 
-const SideBar: FC<ISideBar> = () => {
+const SideBar: FC<ISideBar> = ({ profileData }) => {
   const [changing, setChanging] = useState(false);
-  const { data, loading, error } =
-    useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
 
   const { data: schoolData, loading: schoolLoading } = useQuery<
     ISchoolQuery,
@@ -64,16 +61,15 @@ const SideBar: FC<ISideBar> = () => {
   return (
     <>
       <Wrapper>
-        {loading && schoolLoading && teamLoading && facilityLoading ? (
+        {schoolLoading && teamLoading && facilityLoading ? (
           <Loading />
         ) : (
-          data &&
           schoolData &&
           teamData &&
           facilityData &&
           (changing ? (
             <SideBarProfileChangerForm
-              profile={data}
+              profileData={profileData}
               schoolData={schoolData}
               teamData={teamData}
               facilityData={facilityData}
@@ -82,74 +78,74 @@ const SideBar: FC<ISideBar> = () => {
           ) : (
             <>
               <ImgAndName>
-                <ProfileImg src={data.current_profile.avatar} />
+                <ProfileImg src={profileData.current_profile.avatar} />
                 <StyledPencil onClick={() => setChanging(true)} />
                 <Name>
                   <p>
-                    {data.current_profile.first_name +
+                    {profileData.current_profile.first_name +
                       " " +
-                      data.current_profile.last_name}
+                      profileData.current_profile.last_name}
                   </p>
                 </Name>
                 <Positions>
-                  <p>{data.current_profile.position}</p>
-                  <p>{data.current_profile.position2}</p>
+                  <p>{profileData.current_profile.position}</p>
+                  <p>{profileData.current_profile.position2}</p>
                 </Positions>
               </ImgAndName>
               <SideBarItem
                 icon={<Age />}
                 label={"Age"}
-                value={data.current_profile.age}
+                value={profileData.current_profile.age}
               />
               <SideBarItem
                 icon={<Height />}
                 label={"Height"}
                 value={
-                  data.current_profile.feet +
+                  profileData.current_profile.feet +
                   " ft " +
-                  data.current_profile.inches +
+                  profileData.current_profile.inches +
                   " in"
                 }
               />
               <SideBarItem
                 icon={<Weight />}
                 label={"Weight"}
-                value={data.current_profile.weight + " lbs"}
+                value={profileData.current_profile.weight + " lbs"}
               />
               <SideBarItem
                 icon={<Throws />}
                 label={"Throws"}
-                value={data.current_profile.throws_hand}
+                value={profileData.current_profile.throws_hand}
               />
               <SideBarItem
                 icon={<Bats />}
                 label={"Bats"}
-                value={data.current_profile.bats_hand}
+                value={profileData.current_profile.bats_hand}
               />
               <SchoolInfo>
                 <SideBarTextItem
                   title={"School"}
-                  subtitle={data.current_profile.school.name}
+                  subtitle={profileData.current_profile.school.name}
                   object={false}
                 />
                 <SideBarTextItem
                   title={"School Year"}
-                  subtitle={data.current_profile.school_year}
+                  subtitle={profileData.current_profile.school_year}
                   object={false}
                 />
                 <SideBarTextItem
                   title={"Team"}
-                  subtitle={data.current_profile.teams}
+                  subtitle={profileData.current_profile.teams}
                   object={true}
                 />
                 <SideBarTextItem
                   title={"Facility"}
-                  subtitle={data.current_profile.facilities}
+                  subtitle={profileData.current_profile.facilities}
                   object={true}
                 />
                 <SideBarTextItem
                   title={"About"}
-                  subtitle={data.current_profile.biography}
+                  subtitle={profileData.current_profile.biography}
                   object={false}
                 />
               </SchoolInfo>

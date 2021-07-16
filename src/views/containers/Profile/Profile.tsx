@@ -36,7 +36,7 @@ const Profile: FC<IProfile> = () => {
                 }
               />
               <Content>
-                <SideBar />
+                <SideBar profileData={data} />
                 <Info>
                   <Batting id={data.current_profile.id} />
                   <SessionReports id={data.current_profile.id} />

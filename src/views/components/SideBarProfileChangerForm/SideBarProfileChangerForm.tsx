@@ -3,13 +3,19 @@ import styled from "styled-components";
 import { Form, Field } from "react-final-form";
 import Select from "react-select";
 
+import { useMutation } from "@apollo/client";
+import {
+  ProfileMutation,
+  IProfileMutation,
+  IProfileMutationVars,
+} from "graphqlMutation/ProfileMutation";
 import { ISchoolQuery } from "graphqlQuery/SchoolQuery";
 import { ITeamsQuery } from "graphqlQuery/TeamsQuery";
 import { IFacilityQuery } from "graphqlQuery/FacilityQuery";
 import { ICurrentProfileQuery } from "graphqlQuery/CurrentProfileQuery";
 
 interface ISideBarProfileChangerForm {
-  profile: ICurrentProfileQuery;
+  profileData: ICurrentProfileQuery;
   schoolData: ISchoolQuery;
   teamData: ITeamsQuery;
   facilityData: IFacilityQuery;
@@ -17,7 +23,7 @@ interface ISideBarProfileChangerForm {
 }
 
 const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
-  profile,
+  profileData,
   schoolData,
   teamData,
   facilityData,
@@ -27,8 +33,55 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
   const teams: { value: number; label: string }[] = [];
   const facilities: { value: number; label: string }[] = [];
 
-  const profileChangeHandler = (value: any) => {
-    console.log(value);
+  const [updateProfile] = useMutation<IProfileMutation, IProfileMutationVars>(
+    ProfileMutation
+  );
+
+  const profileChangeHandler = (value: {
+    age: number;
+    bats: { value: string; label: string };
+    biography: string;
+    facility: Array<{ value: string; label: string }>;
+    feet: number;
+    firstName: string;
+    inches: number;
+    lastName: string;
+    positionOne: { value: string; label: string };
+    positionTwo: { value: string; label: string };
+    school: { value: number; label: string };
+    schoolsYear: { value: string; label: string };
+    teams: Array<{ value: number; label: string }>;
+    throws: { value: string; label: string };
+    weight: number;
+  }) => {
+    updateProfile({
+      variables: {
+        form: {
+          id: profileData.current_profile.id,
+          age: +value.age,
+          bats_hand: value.bats.value,
+          biography: value.biography,
+          facilities: [
+            { id: 32, email: "facility@example.com", u_name: "Example" },
+          ],
+          feet: +value.feet,
+          first_name: value.firstName,
+          school: { id: value.school.value, name: value.school.label },
+          inches: +value.inches,
+          last_name: value.lastName,
+          position: value.positionOne.value,
+          position2: value.positionTwo.value,
+          school_year: value.schoolsYear.value,
+          teams: value.teams
+            ? value.teams.map((el) => {
+                return { id: +el.value, name: el.label };
+              })
+            : [],
+          throws_hand: value.throws.value,
+          weight: +value.weight,
+        },
+      },
+    });
   };
 
   const positions = [
@@ -48,7 +101,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
   const schoolYear = [
     { value: "freshman", label: "Freshman" },
     { value: "sophomore", label: "Sophomore" },
-    { value: "junior", label: "junior" },
+    { value: "junior", label: "Junior" },
     { value: "senior", label: "Senior" },
     { value: "", label: "None" },
   ];
@@ -79,72 +132,73 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
       });
     });
   }
-  const defPosOne: any = [];
-  const defPosTwo: any = [];
-  const defThrow: any = [];
-  const defBats: any = [];
-  const defSchool: any = [];
-  const defSchoolYear: any = [];
-  const defTeam: any = [];
-  const defFacility: any = [];
+  const defPosOne: Array<{ value: string | number; label: string }> = [];
+  const defPosTwo: Array<{ value: string | number; label: string }> = [];
+  const defThrow: Array<{ value: string | number; label: string }> = [];
+  const defBats: Array<{ value: string | number; label: string }> = [];
+  const defSchool: Array<{ value: string | number; label: string }> = [];
+  const defSchoolYear: Array<{ value: string | number; label: string }> = [];
+  const defTeams: Array<{ value: string | number; label: string }> = [];
+  const defFacility: Array<{ value: string | number; label: string }> = [];
   useEffect(() => {
     console.log("Effect");
 
     defPosTwo.push({
-      value: profile.current_profile.position,
+      value: profileData.current_profile.position,
       label: positions.filter(
-        (el) => el.value === profile.current_profile.position2
+        (el) => el.value === profileData.current_profile.position2
       )[0].label,
     });
 
     defPosOne.push({
-      value: profile.current_profile.position,
+      value: profileData.current_profile.position,
       label: positions.filter(
-        (el) => el.value === profile.current_profile.position
+        (el) => el.value === profileData.current_profile.position
       )[0].label,
     });
 
     defThrow.push({
-      value: profile.current_profile.throws_hand,
+      value: profileData.current_profile.throws_hand,
       label: leftRight.filter(
-        (el) => el.value === profile.current_profile.throws_hand
+        (el) => el.value === profileData.current_profile.throws_hand
       )[0].label,
     });
 
     defBats.push({
-      value: profile.current_profile.bats_hand,
+      value: profileData.current_profile.bats_hand,
       label: leftRight.filter(
-        (el) => el.value === profile.current_profile.bats_hand
+        (el) => el.value === profileData.current_profile.bats_hand
       )[0].label,
     });
 
-    if (schools.length) {
+    if (profileData.current_profile.school.id) {
       defSchool.push({
-        value: profile.current_profile.school,
+        value: profileData.current_profile.school.id,
         label: schools.filter(
-          (el) => el.value === profile.current_profile.school.id
+          (el) => el.value === profileData.current_profile.school.id
         )[0].label,
       });
     }
 
     defSchoolYear.push({
-      value: profile.current_profile.school_year,
+      value: profileData.current_profile.school_year,
       label: schoolYear.filter(
-        (el) => el.value === profile.current_profile.school_year
+        (el) => el.value === profileData.current_profile.school_year
       )[0].label,
     });
 
-    if (profile.current_profile.teams.length) {
-      profile.current_profile.teams.forEach((el) => {
-        defTeam.push({
+    if (profileData.current_profile.teams.length) {
+      profileData.current_profile.teams.forEach((el) => {
+        defTeams.push({
           value: el.id,
           label: el.name,
         });
       });
     }
+    console.log(profileData.current_profile.facilities);
 
-    if (profile.current_profile.facilities.length) {
-      profile.current_profile.facilities.forEach((el) => {
+    if (profileData.current_profile.facilities.length) {
+      profileData.current_profile.facilities.forEach((el) => {
         defFacility.push({
           value: el.id,
           label: el.u_name,
@@ -158,9 +212,9 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
     defBats,
     defSchool,
     defSchoolYear,
-    defTeam,
+    defTeams,
     defFacility,
-    profile,
+    profileData,
     positions,
     leftRight,
     schools,
@@ -178,7 +232,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                 <TwoInputUberWrapper>
                   <Field
                     name={"firstName"}
-                    defaultValue={profile.current_profile.first_name}
+                    defaultValue={profileData.current_profile.first_name}
                   >
                     {({ input, meta }) => (
                       <TwoInputWrapper>
@@ -189,7 +243,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
 
                   <Field
                     name={"lastName"}
-                    defaultValue={profile.current_profile.last_name}
+                    defaultValue={profileData.current_profile.last_name}
                   >
                     {({ input, meta }) => (
                       <TwoInputWrapper>
@@ -217,7 +271,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
 
                 {defPosTwo.length && (
                   <>
-                    <Field name={"positionTow"} defaultValue={defPosTwo}>
+                    <Field name={"positionTwo"} defaultValue={defPosTwo}>
                       {({ input, meta }) => (
                         <OneInputWrapper>
                           <Select
@@ -234,9 +288,9 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                 <Title>Personal Info</Title>
 
                 <OneInputWrapper>
-                  <Field
+                  <Field<number>
                     name={"age"}
-                    defaultValue={profile.current_profile.age}
+                    defaultValue={profileData.current_profile.age}
                   >
                     {({ input, meta }) => (
                       <Input {...input} placeholder={"Age"} />
@@ -248,7 +302,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   <TwoInputWrapper>
                     <Field
                       name={"feet"}
-                      defaultValue={profile.current_profile.feet}
+                      defaultValue={profileData.current_profile.feet}
                     >
                       {({ input, meta }) => (
                         <Input {...input} placeholder={"Feet"} />
@@ -259,7 +313,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   <TwoInputWrapper>
                     <Field
                       name={"inches"}
-                      defaultValue={profile.current_profile.inches}
+                      defaultValue={profileData.current_profile.inches}
                     >
                       {({ input, meta }) => (
                         <Input {...input} placeholder={"Inches"} />
@@ -270,11 +324,11 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
 
                 <OneInputWrapper>
                   <Field
-                    name={"wight"}
-                    defaultValue={profile.current_profile.weight}
+                    name={"weight"}
+                    defaultValue={profileData.current_profile.weight}
                   >
                     {({ input, meta }) => (
-                      <Input {...input} placeholder={"Wight"} />
+                      <Input {...input} placeholder={"Weight"} />
                     )}
                   </Field>
                 </OneInputWrapper>
@@ -316,7 +370,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                 <Title>School</Title>
                 {defSchool.length && (
                   <>
-                    <Field name={"schools"} defaultValue={defSchool}>
+                    <Field name={"school"} defaultValue={defSchool[0]}>
                       {({ input, meta }) => (
                         <OneInputWrapper>
                           <Select
@@ -344,16 +398,31 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                     </Field>
                   </>
                 )}
-                {defTeam.length && (
+                {defTeams.length ? (
                   <>
-                    <Field name={"team"} defaultValue={defTeam}>
+                    <Field name={"teams"} defaultValue={defTeams}>
                       {({ input, meta }) => (
                         <OneInputWrapper>
                           <Select
                             {...input}
                             options={teams}
                             isMulti={true}
-                            placeholder={"Team"}
+                            placeholder={"Teams"}
+                          />
+                        </OneInputWrapper>
+                      )}
+                    </Field>
+                  </>
+                ) : (
+                  <>
+                    <Field name={"teams"}>
+                      {({ input, meta }) => (
+                        <OneInputWrapper>
+                          <Select
+                            {...input}
+                            options={teams}
+                            isMulti={true}
+                            placeholder={"Teams"}
                           />
                         </OneInputWrapper>
                       )}
@@ -362,9 +431,24 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                 )}
 
                 <Title>Facility</Title>
-                {defFacility.length && (
+                {defFacility.length ? (
                   <>
                     <Field name={"facility"} defaultValue={defFacility}>
+                      {({ input, meta }) => (
+                        <OneInputWrapper>
+                          <Select
+                            {...input}
+                            options={facilities}
+                            isMulti={true}
+                            placeholder={"Facility"}
+                          />
+                        </OneInputWrapper>
+                      )}
+                    </Field>
+                  </>
+                ) : (
+                  <>
+                    <Field name={"facility"}>
                       {({ input, meta }) => (
                         <OneInputWrapper>
                           <Select
@@ -383,12 +467,12 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
 
                 <Field
                   name={"biography"}
-                  defaultValue={profile.current_profile.biography}
+                  defaultValue={profileData.current_profile.biography}
                 >
                   {({ input, meta }) => (
                     <OneInputWrapper>
                       <Textarea
-                        defaultValue={profile.current_profile.biography}
+                        {...input}
                         placeholder={"Description yourself"}
                       />
                     </OneInputWrapper>
@@ -462,5 +546,3 @@ const Textarea = styled.textarea`
   color: #667784;
   border: 1px solid transparent;
 `;
-
-// const Selector = styled(Select)``;

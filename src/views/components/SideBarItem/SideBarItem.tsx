@@ -4,7 +4,7 @@ import styled from "styled-components";
 interface ISideBarItem {
   icon: React.ReactNode;
   label: string;
-  value: string;
+  value: string | number;
 }
 
 const SideBarItem: FC<ISideBarItem> = ({ icon, label, value }) => {

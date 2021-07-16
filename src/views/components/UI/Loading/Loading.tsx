@@ -39,7 +39,7 @@ interface IWrapper {
   fullScreen: boolean;
 }
 const Wrapper = styled.div<IWrapper>`
-  width: auto;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

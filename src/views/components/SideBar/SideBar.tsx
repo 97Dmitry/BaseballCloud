@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import styled from "styled-components";
 
 import { useQuery } from "@apollo/client";
@@ -6,8 +6,23 @@ import {
   CurrentProfileQuery,
   ICurrentProfileQuery,
 } from "graphqlQuery/CurrentProfileQuery";
+import {
+  SchoolQuery,
+  ISchoolQuery,
+  ISchoolQueryVars,
+} from "graphqlQuery/SchoolQuery";
+import {
+  TeamsQuery,
+  ITeamsQuery,
+  ITeamsQueryVars,
+} from "graphqlQuery/TeamsQuery";
+import {
+  FacilityQuery,
+  IFacilityQuery,
+  IFacilityQueryVars,
+} from "graphqlQuery/FacilityQuery";
 
-import { ReactComponent as Pencel } from "asset/svg/pencel_icon_for_profile.svg";
+import { ReactComponent as Pencil } from "asset/svg/pencel_icon_for_profile.svg";
 import { ReactComponent as Age } from "asset/svg/age_icon.svg";
 import { ReactComponent as Height } from "asset/svg/height_icon.svg";
 import { ReactComponent as Weight } from "asset/svg/weight_icon.svg";
@@ -21,20 +36,54 @@ import { SideBarProfileChangerForm } from "../SideBarProfileChangerForm";
 interface ISideBar {}
 
 const SideBar: FC<ISideBar> = () => {
+  const [changing, setChanging] = useState(false);
   const { data, loading, error } =
     useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
+
+  const { data: schoolData, loading: schoolLoading } = useQuery<
+    ISchoolQuery,
+    ISchoolQueryVars
+  >(SchoolQuery, {
+    variables: { search: "" },
+  });
+
+  const { data: teamData, loading: teamLoading } = useQuery<
+    ITeamsQuery,
+    ITeamsQueryVars
+  >(TeamsQuery, { variables: { search: "" } });
+
+  const { data: facilityData, loading: facilityLoading } = useQuery<
+    IFacilityQuery,
+    IFacilityQueryVars
+  >(FacilityQuery, {
+    variables: {
+      search: "",
+    },
+  });
 
   return (
     <>
       <Wrapper>
-        {loading ? (
+        {loading && schoolLoading && teamLoading && facilityLoading ? (
           <Loading />
         ) : (
-          data && (
+          data &&
+          schoolData &&
+          teamData &&
+          facilityData &&
+          (changing ? (
+            <SideBarProfileChangerForm
+              profile={data}
+              schoolData={schoolData}
+              teamData={teamData}
+              facilityData={facilityData}
+              setChanging={setChanging}
+            />
+          ) : (
             <>
               <ImgAndName>
-                <ProfileImg />
-                <StyledPencel />
+                <ProfileImg src={data.current_profile.avatar} />
+                <StyledPencil onClick={() => setChanging(true)} />
                 <Name>
                   <p>
                     {data.current_profile.first_name +
@@ -42,7 +91,6 @@ const SideBar: FC<ISideBar> = () => {
                       data.current_profile.last_name}
                   </p>
                 </Name>
-                <SideBarProfileChangerForm />
                 <Positions>
                   <p>{data.current_profile.position}</p>
                   <p>{data.current_profile.position2}</p>
@@ -56,7 +104,12 @@ const SideBar: FC<ISideBar> = () => {
               <SideBarItem
                 icon={<Height />}
                 label={"Height"}
-                value={data.current_profile.feet}
+                value={
+                  data.current_profile.feet +
+                  " ft " +
+                  data.current_profile.inches +
+                  " in"
+                }
               />
               <SideBarItem
                 icon={<Weight />}
@@ -91,8 +144,8 @@ const SideBar: FC<ISideBar> = () => {
                 />
                 <SideBarTextItem
                   title={"Facility"}
-                  subtitle={data.current_profile.facilities.u_name}
-                  object={false}
+                  subtitle={data.current_profile.facilities}
+                  object={true}
                 />
                 <SideBarTextItem
                   title={"About"}
@@ -101,7 +154,7 @@ const SideBar: FC<ISideBar> = () => {
                 />
               </SchoolInfo>
             </>
-          )
+          ))
         )}
       </Wrapper>
     </>
@@ -110,18 +163,20 @@ const SideBar: FC<ISideBar> = () => {
 
 export default SideBar;
 
-const Wrapper = styled.div`
+const Wrapper = styled.aside`
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   padding: 15px;
-  overflow: auto;
+
+  overflow-y: auto;
+
   flex: 0 0 298px;
-  height: auto;
 `;
 
 const ImgAndName = styled.div`
   position: relative;
 `;
-const ProfileImg = styled.div`
+const ProfileImg = styled.img`
+  display: block;
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -129,7 +184,7 @@ const ProfileImg = styled.div`
   margin: 0 auto;
 `;
 
-const StyledPencel = styled(Pencel)`
+const StyledPencil = styled(Pencil)`
   position: absolute;
   top: 10%;
   right: 10%;
@@ -145,7 +200,7 @@ const Name = styled.div`
 
 const Positions = styled.div`
   text-align: center;
-  &::last-child {
+  &:last-child {
     border-top: 1px solid #cbcccd;
   }
 `;

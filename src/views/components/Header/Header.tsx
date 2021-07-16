@@ -2,7 +2,8 @@ import { FC, useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { removeUser } from "store/user/userSlice";
 import { selectorUserToken } from "store/user/userSelector";
 
 import { ReactComponent as HeaderIcon } from "asset/svg/headerIcon.svg";
@@ -13,8 +14,13 @@ interface IHeader {
 }
 
 const Header: FC<IHeader> = ({ username }) => {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectorUserToken);
   const history = useHistory();
+
+  const logout = () => {
+    dispatch(removeUser());
+  };
 
   const [drop, setDrop] = useState(false);
   return (
@@ -36,7 +42,7 @@ const Header: FC<IHeader> = ({ username }) => {
               >
                 Profile
               </DropdownLink>
-              <DropdownLink>Logout</DropdownLink>
+              <DropdownLink onClick={logout}>Logout</DropdownLink>
             </Dropdown>
           </ProfileDrop>
         </RightUnit>

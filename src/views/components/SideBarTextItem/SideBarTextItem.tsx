@@ -22,7 +22,7 @@ const SideBarTextItem: FC<ISideBarTextItem> = ({
           Object.keys(subtitle).map((id) => {
             return (
               <ObjectSubtitle key={subtitle[id].id}>
-                {subtitle[id].name}
+                {subtitle[id].name || subtitle[id].u_name}
                 {"⠀"}
               </ObjectSubtitle>
             );

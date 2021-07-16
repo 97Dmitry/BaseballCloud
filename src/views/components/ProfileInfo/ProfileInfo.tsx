@@ -15,7 +15,6 @@ const ProfileInfo: FC<IProfileInfo> = () => {
 
   const contentButton = ["Batting", "Comparison", "SessionReports"];
   const contentArr = [<Batting />, <SessionReports />, <Comparison />];
-  console.log(battingDropdown);
 
   return (
     <>
@@ -23,7 +22,7 @@ const ProfileInfo: FC<IProfileInfo> = () => {
         <Buttons>
           {contentButton.map((el, id) => {
             if (el === "Batting") {
-              if (id === 0) {
+              if (unit === 0) {
                 return (
                   <SelectedButton
                     onClick={() => {
@@ -107,6 +106,7 @@ const Wrapper = styled.div`
   margin: 16px;
   padding: 16px;
   border-radius: 8px;
+  min-height: 420px;
 `;
 
 const Buttons = styled.div`

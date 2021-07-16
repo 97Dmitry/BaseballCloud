@@ -1,12 +1,14 @@
 import { FC } from "react";
 import styled, { keyframes } from "styled-components";
 
-interface ILoading {}
+interface ILoading {
+  fullScreen?: boolean;
+}
 
-const Loading: FC<ILoading> = () => {
+const Loading: FC<ILoading> = ({ fullScreen = false }) => {
   return (
     <>
-      <Wrapper>
+      <Wrapper fullScreen>
         <LoadingElement>
           <div></div>
           <div></div>
@@ -33,7 +35,11 @@ const ldsRoller = keyframes`
     }
 `;
 
-const Wrapper = styled.div`
+interface IWrapper {
+  fullScreen: boolean;
+}
+const Wrapper = styled.div<IWrapper>`
+  width: auto;
   display: flex;
   justify-content: center;
   align-items: center;

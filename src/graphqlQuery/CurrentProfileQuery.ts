@@ -67,7 +67,7 @@ export interface ICurrentProfileQuery {
     weight: string;
     age: string;
     school: ISchool;
-    teams: ITeams;
-    facilities: IFacilities;
+    teams: Array<ITeams>;
+    facilities: Array<IFacilities>;
   };
 }

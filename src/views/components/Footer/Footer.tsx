@@ -30,6 +30,7 @@ export default Footer;
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  flex: 0 0;
 
   position: sticky;
   bottom: 0;

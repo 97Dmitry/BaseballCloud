@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { Form, Field } from "react-final-form";
 import Select from "react-select";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { useMutation } from "@apollo/client";
 import {
   ProfileMutation,
@@ -13,6 +16,8 @@ import { ISchoolQuery } from "graphqlQuery/SchoolQuery";
 import { ITeamsQuery } from "graphqlQuery/TeamsQuery";
 import { IFacilityQuery } from "graphqlQuery/FacilityQuery";
 import { ICurrentProfileQuery } from "graphqlQuery/CurrentProfileQuery";
+
+import { Loading } from "../UI/Loading";
 
 interface ISideBarProfileChangerForm {
   profileData: ICurrentProfileQuery;
@@ -33,9 +38,14 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
   const teams: { value: number; label: string }[] = [];
   const facilities: { value: number; label: string }[] = [];
 
-  const [updateProfile] = useMutation<IProfileMutation, IProfileMutationVars>(
-    ProfileMutation
-  );
+  const updated = () => toast.success("🦄 Success updated!");
+
+  const [updateProfile, { data: updatedProfileData, loading: updateLoading }] =
+    useMutation<IProfileMutation, IProfileMutationVars>(ProfileMutation, {
+      onCompleted() {
+        updated();
+      },
+    });
 
   const profileChangeHandler = (value: {
     age: number;
@@ -61,9 +71,11 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
           age: +value.age,
           bats_hand: value.bats.value,
           biography: value.biography,
-          facilities: [
-            { id: 32, email: "facility@example.com", u_name: "Example" },
-          ],
+          facilities: value.facility
+            ? value.facility.map((el) => {
+                return { id: +el.value, u_name: el.label };
+              })
+            : [],
           feet: +value.feet,
           first_name: value.firstName,
           school: { id: value.school.value, name: value.school.label },
@@ -195,7 +207,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
         });
       });
     }
-    console.log(profileData.current_profile.facilities);
 
     if (profileData.current_profile.facilities.length) {
       profileData.current_profile.facilities.forEach((el) => {
@@ -224,272 +235,277 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
   return (
     <>
       <Wrapper>
-        <>
-          <Form
-            onSubmit={profileChangeHandler}
-            render={({ handleSubmit, form }) => (
-              <form onSubmit={handleSubmit}>
-                <TwoInputUberWrapper>
-                  <Field
-                    name={"firstName"}
-                    defaultValue={profileData.current_profile.first_name}
-                  >
-                    {({ input, meta }) => (
-                      <TwoInputWrapper>
-                        <Input {...input} placeholder={"First Name"} />
-                      </TwoInputWrapper>
-                    )}
-                  </Field>
-
-                  <Field
-                    name={"lastName"}
-                    defaultValue={profileData.current_profile.last_name}
-                  >
-                    {({ input, meta }) => (
-                      <TwoInputWrapper>
-                        <Input {...input} placeholder={"Last Name"} />
-                      </TwoInputWrapper>
-                    )}
-                  </Field>
-                </TwoInputUberWrapper>
-
-                {defPosTwo.length && (
-                  <>
-                    <Field name={"positionOne"} defaultValue={defPosOne}>
-                      {({ input, meta }) => (
-                        <OneInputWrapper>
-                          <Select
-                            {...input}
-                            options={positions}
-                            placeholder={"Position in Game"}
-                          />
-                        </OneInputWrapper>
-                      )}
-                    </Field>
-                  </>
-                )}
-
-                {defPosTwo.length && (
-                  <>
-                    <Field name={"positionTwo"} defaultValue={defPosTwo}>
-                      {({ input, meta }) => (
-                        <OneInputWrapper>
-                          <Select
-                            {...input}
-                            options={positions}
-                            placeholder={"Secondary position in Game"}
-                          />
-                        </OneInputWrapper>
-                      )}
-                    </Field>
-                  </>
-                )}
-
-                <Title>Personal Info</Title>
-
-                <OneInputWrapper>
-                  <Field<number>
-                    name={"age"}
-                    defaultValue={profileData.current_profile.age}
-                  >
-                    {({ input, meta }) => (
-                      <Input {...input} placeholder={"Age"} />
-                    )}
-                  </Field>
-                </OneInputWrapper>
-
-                <TwoInputUberWrapper>
-                  <TwoInputWrapper>
+        <ToastContainer />
+        {updateLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Form
+              onSubmit={profileChangeHandler}
+              render={({ handleSubmit, form }) => (
+                <form onSubmit={handleSubmit}>
+                  <TwoInputUberWrapper>
                     <Field
-                      name={"feet"}
-                      defaultValue={profileData.current_profile.feet}
+                      name={"firstName"}
+                      defaultValue={profileData.current_profile.first_name}
                     >
                       {({ input, meta }) => (
-                        <Input {...input} placeholder={"Feet"} />
+                        <TwoInputWrapper>
+                          <Input {...input} placeholder={"First Name"} />
+                        </TwoInputWrapper>
                       )}
                     </Field>
-                  </TwoInputWrapper>
 
-                  <TwoInputWrapper>
                     <Field
-                      name={"inches"}
-                      defaultValue={profileData.current_profile.inches}
+                      name={"lastName"}
+                      defaultValue={profileData.current_profile.last_name}
                     >
                       {({ input, meta }) => (
-                        <Input {...input} placeholder={"Inches"} />
+                        <TwoInputWrapper>
+                          <Input {...input} placeholder={"Last Name"} />
+                        </TwoInputWrapper>
                       )}
                     </Field>
-                  </TwoInputWrapper>
-                </TwoInputUberWrapper>
+                  </TwoInputUberWrapper>
 
-                <OneInputWrapper>
-                  <Field
-                    name={"weight"}
-                    defaultValue={profileData.current_profile.weight}
-                  >
-                    {({ input, meta }) => (
-                      <Input {...input} placeholder={"Weight"} />
-                    )}
-                  </Field>
-                </OneInputWrapper>
-
-                <TwoInputUberWrapper>
-                  {defThrow.length && (
+                  {defPosTwo.length && (
                     <>
-                      <Field name={"throws"} defaultValue={defThrow}>
+                      <Field name={"positionOne"} defaultValue={defPosOne}>
                         {({ input, meta }) => (
-                          <TwoInputWrapper>
+                          <OneInputWrapper>
                             <Select
                               {...input}
-                              options={leftRight}
-                              placeholder={"Throws"}
+                              options={positions}
+                              placeholder={"Position in Game"}
                             />
-                          </TwoInputWrapper>
+                          </OneInputWrapper>
                         )}
                       </Field>
                     </>
                   )}
 
-                  {defThrow.length && (
+                  {defPosTwo.length && (
                     <>
-                      <Field name={"bats"} defaultValue={defBats}>
+                      <Field name={"positionTwo"} defaultValue={defPosTwo}>
                         {({ input, meta }) => (
-                          <TwoInputWrapper>
+                          <OneInputWrapper>
                             <Select
                               {...input}
-                              options={leftRight}
-                              placeholder={"Bats"}
+                              options={positions}
+                              placeholder={"Secondary position in Game"}
                             />
-                          </TwoInputWrapper>
+                          </OneInputWrapper>
                         )}
                       </Field>
                     </>
                   )}
-                </TwoInputUberWrapper>
 
-                <Title>School</Title>
-                {defSchool.length && (
-                  <>
-                    <Field name={"school"} defaultValue={defSchool[0]}>
-                      {({ input, meta }) => (
-                        <OneInputWrapper>
-                          <Select
-                            {...input}
-                            options={schools}
-                            placeholder={"School"}
-                          />
-                        </OneInputWrapper>
-                      )}
-                    </Field>
-                  </>
-                )}
-                {defSchoolYear.length && (
-                  <>
-                    <Field name={"schoolsYear"} defaultValue={defSchoolYear}>
-                      {({ input, meta }) => (
-                        <OneInputWrapper>
-                          <Select
-                            {...input}
-                            options={schoolYear}
-                            placeholder={"School Year"}
-                          />
-                        </OneInputWrapper>
-                      )}
-                    </Field>
-                  </>
-                )}
-                {defTeams.length ? (
-                  <>
-                    <Field name={"teams"} defaultValue={defTeams}>
-                      {({ input, meta }) => (
-                        <OneInputWrapper>
-                          <Select
-                            {...input}
-                            options={teams}
-                            isMulti={true}
-                            placeholder={"Teams"}
-                          />
-                        </OneInputWrapper>
-                      )}
-                    </Field>
-                  </>
-                ) : (
-                  <>
-                    <Field name={"teams"}>
-                      {({ input, meta }) => (
-                        <OneInputWrapper>
-                          <Select
-                            {...input}
-                            options={teams}
-                            isMulti={true}
-                            placeholder={"Teams"}
-                          />
-                        </OneInputWrapper>
-                      )}
-                    </Field>
-                  </>
-                )}
+                  <Title>Personal Info</Title>
 
-                <Title>Facility</Title>
-                {defFacility.length ? (
-                  <>
-                    <Field name={"facility"} defaultValue={defFacility}>
+                  <OneInputWrapper>
+                    <Field<number>
+                      name={"age"}
+                      defaultValue={profileData.current_profile.age}
+                    >
                       {({ input, meta }) => (
-                        <OneInputWrapper>
-                          <Select
-                            {...input}
-                            options={facilities}
-                            isMulti={true}
-                            placeholder={"Facility"}
-                          />
-                        </OneInputWrapper>
+                        <Input {...input} placeholder={"Age"} />
                       )}
                     </Field>
-                  </>
-                ) : (
-                  <>
-                    <Field name={"facility"}>
+                  </OneInputWrapper>
+
+                  <TwoInputUberWrapper>
+                    <TwoInputWrapper>
+                      <Field
+                        name={"feet"}
+                        defaultValue={profileData.current_profile.feet}
+                      >
+                        {({ input, meta }) => (
+                          <Input {...input} placeholder={"Feet"} />
+                        )}
+                      </Field>
+                    </TwoInputWrapper>
+
+                    <TwoInputWrapper>
+                      <Field
+                        name={"inches"}
+                        defaultValue={profileData.current_profile.inches}
+                      >
+                        {({ input, meta }) => (
+                          <Input {...input} placeholder={"Inches"} />
+                        )}
+                      </Field>
+                    </TwoInputWrapper>
+                  </TwoInputUberWrapper>
+
+                  <OneInputWrapper>
+                    <Field
+                      name={"weight"}
+                      defaultValue={profileData.current_profile.weight}
+                    >
                       {({ input, meta }) => (
-                        <OneInputWrapper>
-                          <Select
-                            {...input}
-                            options={facilities}
-                            isMulti={true}
-                            placeholder={"Facility"}
-                          />
-                        </OneInputWrapper>
+                        <Input {...input} placeholder={"Weight"} />
                       )}
                     </Field>
-                  </>
-                )}
+                  </OneInputWrapper>
 
-                <Title>About</Title>
+                  <TwoInputUberWrapper>
+                    {defThrow.length && (
+                      <>
+                        <Field name={"throws"} defaultValue={defThrow}>
+                          {({ input, meta }) => (
+                            <TwoInputWrapper>
+                              <Select
+                                {...input}
+                                options={leftRight}
+                                placeholder={"Throws"}
+                              />
+                            </TwoInputWrapper>
+                          )}
+                        </Field>
+                      </>
+                    )}
 
-                <Field
-                  name={"biography"}
-                  defaultValue={profileData.current_profile.biography}
-                >
-                  {({ input, meta }) => (
-                    <OneInputWrapper>
-                      <Textarea
-                        {...input}
-                        placeholder={"Description yourself"}
-                      />
-                    </OneInputWrapper>
+                    {defThrow.length && (
+                      <>
+                        <Field name={"bats"} defaultValue={defBats}>
+                          {({ input, meta }) => (
+                            <TwoInputWrapper>
+                              <Select
+                                {...input}
+                                options={leftRight}
+                                placeholder={"Bats"}
+                              />
+                            </TwoInputWrapper>
+                          )}
+                        </Field>
+                      </>
+                    )}
+                  </TwoInputUberWrapper>
+
+                  <Title>School</Title>
+                  {defSchool.length && (
+                    <>
+                      <Field name={"school"} defaultValue={defSchool[0]}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={schools}
+                              placeholder={"School"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
                   )}
-                </Field>
-                <button type={"submit"}>dewew</button>
-                <button
-                  onClick={() => {
-                    setChanging(false);
-                  }}
-                >
-                  Close
-                </button>
-              </form>
-            )}
-          />
-        </>
+                  {defSchoolYear.length && (
+                    <>
+                      <Field name={"schoolsYear"} defaultValue={defSchoolYear}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={schoolYear}
+                              placeholder={"School Year"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  )}
+                  {defTeams.length ? (
+                    <>
+                      <Field name={"teams"} defaultValue={defTeams}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={teams}
+                              isMulti={true}
+                              placeholder={"Teams"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  ) : (
+                    <>
+                      <Field name={"teams"}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={teams}
+                              isMulti={true}
+                              placeholder={"Teams"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  )}
+
+                  <Title>Facility</Title>
+                  {defFacility.length ? (
+                    <>
+                      <Field name={"facility"} defaultValue={defFacility}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={facilities}
+                              isMulti={true}
+                              placeholder={"Facility"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  ) : (
+                    <>
+                      <Field name={"facility"}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={facilities}
+                              isMulti={true}
+                              placeholder={"Facility"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  )}
+
+                  <Title>About</Title>
+
+                  <Field
+                    name={"biography"}
+                    defaultValue={profileData.current_profile.biography}
+                  >
+                    {({ input, meta }) => (
+                      <OneInputWrapper>
+                        <Textarea
+                          {...input}
+                          placeholder={"Description yourself"}
+                        />
+                      </OneInputWrapper>
+                    )}
+                  </Field>
+                  <button type={"submit"}>dewew</button>
+                  <button
+                    onClick={() => {
+                      setChanging(false);
+                    }}
+                  >
+                    Close
+                  </button>
+                </form>
+              )}
+            />
+          </>
+        )}
       </Wrapper>
     </>
   );

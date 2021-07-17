@@ -59,7 +59,7 @@ interface ITeams {
 
 interface IFacilities {
   id: number;
-  email: string;
+  email?: string;
   u_name: string;
 }
 

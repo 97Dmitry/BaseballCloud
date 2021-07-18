@@ -138,16 +138,21 @@ const SideBar: FC<ISideBar> = ({ profileData }) => {
                   subtitle={profileData.current_profile.teams}
                   object={true}
                 />
-                <SideBarTextItem
-                  title={"Facility"}
-                  subtitle={profileData.current_profile.facilities}
-                  object={true}
-                />
-                <SideBarTextItem
-                  title={"About"}
-                  subtitle={profileData.current_profile.biography}
-                  object={false}
-                />
+                {profileData.current_profile.facilities.length ? (
+                  <SideBarTextItem
+                    title={"Facility"}
+                    subtitle={profileData.current_profile.facilities}
+                    object={true}
+                  />
+                ) : null}
+                {profileData.current_profile.biography.length ? (
+                  <SideBarTextItem
+                    title={"About"}
+                    subtitle={profileData.current_profile.biography}
+                    fatTitleWithLine={true}
+                    object={false}
+                  />
+                ) : null}
               </SchoolInfo>
             </>
           ))
@@ -172,6 +177,8 @@ const ImgAndName = styled.div`
   position: relative;
 `;
 const ProfileImg = styled.img`
+  object-fit: cover;
+
   display: block;
   width: 100px;
   height: 100px;

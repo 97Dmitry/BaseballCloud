@@ -6,15 +6,20 @@ import {
   Comparison,
   SessionReports,
 } from "views/components/ProfileInfoContent";
+import { ProfileInfoBattingButton } from "../ProfileInfoBattingButton";
 
 interface IProfileInfo {}
 
 const ProfileInfo: FC<IProfileInfo> = () => {
   const [unit, setUnit] = useState(0);
-  const [battingDropdown, setBattingDropdown] = useState(false);
 
+  const [battingContent, setBattingContent] = useState(1);
   const contentButton = ["Batting", "Comparison", "SessionReports"];
-  const contentArr = [<Batting />, <SessionReports />, <Comparison />];
+  const contentArr = [
+    <Batting contentNum={battingContent} />,
+    <SessionReports />,
+    <Comparison />,
+  ];
 
   return (
     <>
@@ -22,30 +27,16 @@ const ProfileInfo: FC<IProfileInfo> = () => {
         <Buttons>
           {contentButton.map((el, id) => {
             if (el === "Batting") {
-              if (unit === 0) {
-                return (
-                  <SelectedButton
-                    onClick={() => {
-                      setUnit(id);
-                    }}
-                    onMouseOver={() => setBattingDropdown(true)}
-                    onMouseLeave={() => setBattingDropdown(false)}
-                    key={id}
-                  >
-                    {el}
-                  </SelectedButton>
-                );
-              }
-
               return (
-                <Button
-                  onClick={() => {
-                    setUnit(id);
-                  }}
-                  key={id}
-                >
-                  {el}
-                </Button>
+                <ProfileInfoBattingButton
+                  Button={Button}
+                  SelectedButton={SelectedButton}
+                  el={el}
+                  id={id}
+                  setUnit={setUnit}
+                  unit={unit}
+                  setBattingContent={setBattingContent}
+                />
               );
             }
             if (id === unit) {

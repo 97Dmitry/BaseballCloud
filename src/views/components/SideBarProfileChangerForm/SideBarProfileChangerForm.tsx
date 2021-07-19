@@ -493,14 +493,16 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                       </OneInputWrapper>
                     )}
                   </Field>
-                  <button type={"submit"}>dewew</button>
-                  <button
-                    onClick={() => {
-                      setChanging(false);
-                    }}
-                  >
-                    Close
-                  </button>
+                  <Buttons>
+                    <SaveButton type={"submit"}>Save</SaveButton>
+                    <CloseButton
+                      onClick={() => {
+                        setChanging(false);
+                      }}
+                    >
+                      Close
+                    </CloseButton>
+                  </Buttons>
                 </form>
               )}
             />
@@ -561,4 +563,24 @@ const Textarea = styled.textarea`
   font-weight: 400;
   color: #667784;
   border: 1px solid transparent;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+`;
+
+const SaveButton = styled.button`
+  height: 35px;
+  border-radius: 8px;
+  background: green;
+  width: 45%;
+`;
+
+const CloseButton = styled.button`
+  height: 35px;
+  border-radius: 8px;
+  background: red;
+  width: 45%;
 `;

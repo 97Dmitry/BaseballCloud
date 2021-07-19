@@ -13,9 +13,11 @@ export const FacilityQuery = gql`
 
 export interface IFacilityQuery {
   facilities: {
-    id: number;
-    email: string;
-    u_name: string;
+    facilities: Array<{
+      id: number;
+      email: string;
+      u_name: string;
+    }>;
   };
 }
 

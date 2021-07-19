@@ -1,4 +1,4 @@
-import { FC } from "react";
+import {FC, useEffect} from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Field } from "react-final-form";
@@ -39,7 +39,6 @@ const Login: FC<ILogin> = () => {
   };
 
   if (authorized) {
-    dispatch(setAuthorized(false));
     setTimeout(() => {
       history.push("/profile");
     }, 100);

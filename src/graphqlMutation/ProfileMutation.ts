@@ -59,7 +59,7 @@ interface ITeams {
 
 interface IFacilities {
   id: number;
-  email: string;
+  email?: string;
   u_name: string;
 }
 
@@ -93,33 +93,33 @@ export interface IProfileMutation {
     feet: string;
     inches: string;
     weight: string;
-    age: string;
+    age: number;
     recent_events: IRecentEvents;
     school: ISchool;
     teams: ITeams;
-    facilities: IFacilities;
+    facilities: Array<IFacilities>;
   };
 }
 
 export interface IProfileMutationVars {
-  profile: {
+  form: {
     id: number;
     first_name: string;
     last_name: string;
     position: string;
     position2: string;
-    avatar: string;
+    avatar?: string;
     throws_hand: string;
     bats_hand: string;
     biography: string;
     school_year: string;
-    feet: string;
-    inches: string;
-    weight: string;
-    age: string;
-    recent_events: IRecentEvents;
+    feet: number;
+    inches: number;
+    weight: number;
+    age: number;
+    recent_events?: IRecentEvents;
     school: ISchool;
-    teams: ITeams;
-    facilities: IFacilities;
+    teams: Array<ITeams>;
+    facilities: Array<IFacilities>;
   };
 }

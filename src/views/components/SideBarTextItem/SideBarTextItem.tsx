@@ -5,24 +5,27 @@ interface ISideBarTextItem {
   title: string;
   subtitle: any; //string | Record<string, string>;
   object: boolean;
-  fat?: boolean;
+  fatTitleWithLine?: boolean;
 }
 
 const SideBarTextItem: FC<ISideBarTextItem> = ({
   title,
   subtitle,
   object,
-  fat = false,
+  fatTitleWithLine = false,
 }) => {
   return (
     <>
       <Wrapper>
-        <Title fat={fat}>{title}</Title>
+        <Title fat={fatTitleWithLine}>
+          <TitleText fat={fatTitleWithLine}>{title}</TitleText>
+        </Title>
+
         {object ? (
           Object.keys(subtitle).map((id) => {
             return (
               <ObjectSubtitle key={subtitle[id].id}>
-                {subtitle[id].name}
+                {subtitle[id].name || subtitle[id].u_name}
                 {"⠀"}
               </ObjectSubtitle>
             );
@@ -42,12 +45,45 @@ const Wrapper = styled.div``;
 interface ITitle {
   fat: boolean;
 }
+
+const afterLine = {
+  content: "",
+  position: "absolute",
+  width: "100%",
+  right: 0,
+  top: "50%",
+  "z-index": "-1",
+  height: "1px",
+  background: "#e7ebef",
+};
+
 const Title = styled.div<ITitle>`
-  font-size: 14px;
+  display: flex;
+  position: relative;
+  vertical-align: middle;
+  margin-bottom: 6px;
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    right: 0;
+    top: 50%;
+    z-index: -1;
+    height: 1px;
+    background: #e7ebef;
+  }
+`;
+
+const TitleText = styled.div<ITitle>`
+  position: relative;
+
+  background-color: #ffffff;
+  font-size: ${(props) => (props.fat ? "19px" : "14px")};
   line-height: 17px;
   font-weight: ${(props) => (props.fat ? "700" : "300")};
-  color: #667784;
-  margin-bottom: 6px;
+  color: ${(props) => (props.fat ? "black" : "#667784")};
+  padding-right: 15px;
 `;
 
 const Subtitle = styled.div`

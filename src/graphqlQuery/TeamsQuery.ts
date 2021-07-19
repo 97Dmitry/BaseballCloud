@@ -12,8 +12,10 @@ export const TeamsQuery = gql`
 
 export interface ITeamsQuery {
   teams: {
-    id: number;
-    name: string;
+    teams: Array<{
+      id: number;
+      name: string;
+    }>;
   };
 }
 

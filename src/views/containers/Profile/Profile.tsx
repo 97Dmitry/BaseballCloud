@@ -22,30 +22,32 @@ const Profile: FC<IProfile> = () => {
     useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
   return (
     <>
-      <Wrapper>
-        {data ? (
-          <>
-            <Header
-              username={
-                data.current_profile.first_name +
-                " " +
-                data.current_profile.last_name
-              }
-            />
-            <Content>
-              <SideBar />
-              <Info>
-                <Batting id={data.current_profile.id} />
-                <SessionReports id={data.current_profile.id} />
-                <ProfileInfo />
-              </Info>
-            </Content>
-            <Footer />
-          </>
-        ) : (
-          <Loading />
-        )}
-      </Wrapper>
+      {loading ? (
+        <Loading fullScreen={true} />
+      ) : (
+        <Wrapper>
+          {data && (
+            <>
+              <Header
+                username={
+                  data.current_profile.first_name +
+                  " " +
+                  data.current_profile.last_name
+                }
+              />
+              <Content>
+                <SideBar profileData={data} />
+                <Info>
+                  <Batting id={data.current_profile.id} />
+                  <SessionReports id={data.current_profile.id} />
+                  <ProfileInfo />
+                </Info>
+              </Content>
+              <Footer />
+            </>
+          )}
+        </Wrapper>
+      )}
     </>
   );
 };
@@ -53,20 +55,24 @@ const Profile: FC<IProfile> = () => {
 export default Profile;
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
 `;
 
 const Content = styled.div`
   display: flex;
+  height: 100%;
+  overflow: hidden;
 `;
 
-const Info = styled.div`
+const Info = styled.main`
   display: flex;
   flex-direction: column;
-  overflow: auto;
+
   width: calc(100vw - 220px);
 
-  width: 100%;
+  overflow-y: auto;
 
   background: #788b99;
 `;

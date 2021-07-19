@@ -1,32 +1,102 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
 import { Form, Field } from "react-final-form";
 import Select from "react-select";
 
-import { useQuery } from "@apollo/client";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { useMutation } from "@apollo/client";
 import {
-  SchoolQuery,
-  ISchoolQuery,
-  ISchoolQueryVars,
-} from "graphqlQuery/SchoolQuery";
+  ProfileMutation,
+  IProfileMutation,
+  IProfileMutationVars,
+} from "graphqlMutation/ProfileMutation";
+import { ISchoolQuery } from "graphqlQuery/SchoolQuery";
+import { ITeamsQuery } from "graphqlQuery/TeamsQuery";
+import { IFacilityQuery } from "graphqlQuery/FacilityQuery";
+import { ICurrentProfileQuery } from "graphqlQuery/CurrentProfileQuery";
 
-interface ISideBarProfileChangerForm {}
+import { Loading } from "../UI/Loading";
 
-const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({}) => {
-  const { data, loading } = useQuery<ISchoolQuery, ISchoolQueryVars>(
-    SchoolQuery,
-    {
-      variables: { search: "" },
-    }
-  );
+interface ISideBarProfileChangerForm {
+  profileData: ICurrentProfileQuery;
+  schoolData: ISchoolQuery;
+  teamData: ITeamsQuery;
+  facilityData: IFacilityQuery;
+  setChanging: any;
+}
 
-  console.log(data?.schools.schools[2].name);
+const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
+  profileData,
+  schoolData,
+  teamData,
+  facilityData,
+  setChanging,
+}) => {
+  const schools: { value: number; label: string }[] = [];
+  const teams: { value: number; label: string }[] = [];
+  const facilities: { value: number; label: string }[] = [];
 
-  const profileChangeHandler = (value: any) => {
-    console.log(value);
+  const updated = () => toast.success("🦄 Success updated!");
+
+  const [updateProfile, { data: updatedProfileData, loading: updateLoading }] =
+    useMutation<IProfileMutation, IProfileMutationVars>(ProfileMutation, {
+      onCompleted() {
+        updated();
+      },
+    });
+
+  const profileChangeHandler = (value: {
+    age: number;
+    bats: { value: string; label: string };
+    biography: string;
+    facility: Array<{ value: string; label: string }>;
+    feet: number;
+    firstName: string;
+    inches: number;
+    lastName: string;
+    positionOne: { value: string; label: string };
+    positionTwo: { value: string; label: string };
+    school: { value: number; label: string };
+    schoolsYear: { value: string; label: string };
+    teams: Array<{ value: number; label: string }>;
+    throws: { value: string; label: string };
+    weight: number;
+  }) => {
+    updateProfile({
+      variables: {
+        form: {
+          id: profileData.current_profile.id,
+          age: +value.age,
+          bats_hand: value.bats.value,
+          biography: value.biography,
+          facilities: value.facility
+            ? value.facility.map((el) => {
+                return { id: +el.value, u_name: el.label };
+              })
+            : [],
+          feet: +value.feet,
+          first_name: value.firstName,
+          school: { id: value.school.value, name: value.school.label },
+          inches: +value.inches,
+          last_name: value.lastName,
+          position: value.positionOne.value,
+          position2: value.positionTwo.value,
+          school_year: value.schoolsYear.value,
+          teams: value.teams
+            ? value.teams.map((el) => {
+                return { id: +el.value, name: el.label };
+              })
+            : [],
+          throws_hand: value.throws.value,
+          weight: +value.weight,
+        },
+      },
+    });
   };
 
-  const position = [
+  const positions = [
     { value: "catcher", label: "Catcher" },
     { value: "first_base", label: "First Base" },
     { value: "shortstop", label: "Shortstop" },
@@ -37,114 +107,407 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({}) => {
 
   const leftRight = [
     { value: "l", label: "L" },
-    { value: "l", label: "R" },
+    { value: "r", label: "R" },
   ];
+
+  const schoolYear = [
+    { value: "freshman", label: "Freshman" },
+    { value: "sophomore", label: "Sophomore" },
+    { value: "junior", label: "Junior" },
+    { value: "senior", label: "Senior" },
+    { value: "", label: "None" },
+  ];
+
+  if (schoolData) {
+    Object.keys(schoolData.schools.schools).forEach((el) => {
+      schools.push({
+        value: schoolData.schools.schools[+el].id,
+        label: schoolData.schools.schools[+el].name,
+      });
+    });
+  }
+
+  if (teamData) {
+    Object.keys(teamData.teams.teams).forEach((el) => {
+      teams.push({
+        value: teamData.teams.teams[+el].id,
+        label: teamData.teams.teams[+el].name,
+      });
+    });
+  }
+
+  if (facilityData) {
+    Object.keys(facilityData.facilities.facilities).forEach((el) => {
+      facilities.push({
+        value: facilityData.facilities.facilities[+el].id,
+        label: facilityData.facilities.facilities[+el].u_name,
+      });
+    });
+  }
+  const defPosOne: Array<{ value: string | number; label: string }> = [];
+  const defPosTwo: Array<{ value: string | number; label: string }> = [];
+  const defThrow: Array<{ value: string | number; label: string }> = [];
+  const defBats: Array<{ value: string | number; label: string }> = [];
+  const defSchool: Array<{ value: string | number; label: string }> = [];
+  const defSchoolYear: Array<{ value: string | number; label: string }> = [];
+  const defTeams: Array<{ value: string | number; label: string }> = [];
+  const defFacility: Array<{ value: string | number; label: string }> = [];
+  useEffect(() => {
+    console.log("Effect");
+
+    defPosTwo.push({
+      value: profileData.current_profile.position,
+      label: positions.filter(
+        (el) => el.value === profileData.current_profile.position2
+      )[0].label,
+    });
+
+    defPosOne.push({
+      value: profileData.current_profile.position,
+      label: positions.filter(
+        (el) => el.value === profileData.current_profile.position
+      )[0].label,
+    });
+
+    defThrow.push({
+      value: profileData.current_profile.throws_hand,
+      label: leftRight.filter(
+        (el) => el.value === profileData.current_profile.throws_hand
+      )[0].label,
+    });
+
+    defBats.push({
+      value: profileData.current_profile.bats_hand,
+      label: leftRight.filter(
+        (el) => el.value === profileData.current_profile.bats_hand
+      )[0].label,
+    });
+
+    if (profileData.current_profile.school.id) {
+      defSchool.push({
+        value: profileData.current_profile.school.id,
+        label: schools.filter(
+          (el) => el.value === profileData.current_profile.school.id
+        )[0].label,
+      });
+    }
+
+    defSchoolYear.push({
+      value: profileData.current_profile.school_year,
+      label: schoolYear.filter(
+        (el) => el.value === profileData.current_profile.school_year
+      )[0].label,
+    });
+
+    if (profileData.current_profile.teams.length) {
+      profileData.current_profile.teams.forEach((el) => {
+        defTeams.push({
+          value: el.id,
+          label: el.name,
+        });
+      });
+    }
+
+    if (profileData.current_profile.facilities.length) {
+      profileData.current_profile.facilities.forEach((el) => {
+        defFacility.push({
+          value: el.id,
+          label: el.u_name,
+        });
+      });
+    }
+  }, [
+    defPosOne,
+    defPosTwo,
+    defThrow,
+    defBats,
+    defSchool,
+    defSchoolYear,
+    defTeams,
+    defFacility,
+    profileData,
+    positions,
+    leftRight,
+    schools,
+    schoolYear,
+  ]);
 
   return (
     <>
       <Wrapper>
-        <Form
-          onSubmit={profileChangeHandler}
-          render={({ handleSubmit, form }) => (
-            <form onSubmit={handleSubmit}>
-              <TwoInputUberWrapper>
-                <Field name={"firstName"}>
-                  {({ input, meta }) => (
-                    <TwoInputWrapper>
-                      <Input {...input} placeholder={"First Name"} />
-                    </TwoInputWrapper>
+        <ToastContainer />
+        {updateLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Form
+              onSubmit={profileChangeHandler}
+              render={({ handleSubmit, form }) => (
+                <form onSubmit={handleSubmit}>
+                  <TwoInputUberWrapper>
+                    <Field
+                      name={"firstName"}
+                      defaultValue={profileData.current_profile.first_name}
+                    >
+                      {({ input, meta }) => (
+                        <TwoInputWrapper>
+                          <Input {...input} placeholder={"First Name"} />
+                        </TwoInputWrapper>
+                      )}
+                    </Field>
+
+                    <Field
+                      name={"lastName"}
+                      defaultValue={profileData.current_profile.last_name}
+                    >
+                      {({ input, meta }) => (
+                        <TwoInputWrapper>
+                          <Input {...input} placeholder={"Last Name"} />
+                        </TwoInputWrapper>
+                      )}
+                    </Field>
+                  </TwoInputUberWrapper>
+
+                  {defPosTwo.length && (
+                    <>
+                      <Field name={"positionOne"} defaultValue={defPosOne}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={positions}
+                              placeholder={"Position in Game"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
                   )}
-                </Field>
-                <Field name={"lastName"}>
-                  {({ input, meta }) => (
-                    <TwoInputWrapper>
-                      <Input {...input} placeholder={"Last Name"} />
-                    </TwoInputWrapper>
+
+                  {defPosTwo.length && (
+                    <>
+                      <Field name={"positionTwo"} defaultValue={defPosTwo}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={positions}
+                              placeholder={"Secondary position in Game"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
                   )}
-                </Field>
-              </TwoInputUberWrapper>
-              <Field name={"positionOne"}>
-                {({ input, meta }) => (
+
+                  <Title>Personal Info</Title>
+
                   <OneInputWrapper>
-                    <Select
-                      {...input}
-                      options={position}
-                      placeholder={"Position in Game"}
-                    />
+                    <Field<number>
+                      name={"age"}
+                      defaultValue={profileData.current_profile.age}
+                    >
+                      {({ input, meta }) => (
+                        <Input {...input} placeholder={"Age"} />
+                      )}
+                    </Field>
                   </OneInputWrapper>
-                )}
-              </Field>
-              <Field name={"positionTow"}>
-                {({ input, meta }) => (
+
+                  <TwoInputUberWrapper>
+                    <TwoInputWrapper>
+                      <Field
+                        name={"feet"}
+                        defaultValue={profileData.current_profile.feet}
+                      >
+                        {({ input, meta }) => (
+                          <Input {...input} placeholder={"Feet"} />
+                        )}
+                      </Field>
+                    </TwoInputWrapper>
+
+                    <TwoInputWrapper>
+                      <Field
+                        name={"inches"}
+                        defaultValue={profileData.current_profile.inches}
+                      >
+                        {({ input, meta }) => (
+                          <Input {...input} placeholder={"Inches"} />
+                        )}
+                      </Field>
+                    </TwoInputWrapper>
+                  </TwoInputUberWrapper>
+
                   <OneInputWrapper>
-                    <Select
-                      {...input}
-                      options={position}
-                      placeholder={"Secondary position in Game"}
-                    />
+                    <Field
+                      name={"weight"}
+                      defaultValue={profileData.current_profile.weight}
+                    >
+                      {({ input, meta }) => (
+                        <Input {...input} placeholder={"Weight"} />
+                      )}
+                    </Field>
                   </OneInputWrapper>
-                )}
-              </Field>
-              <Title>Personal Info</Title>
-              <OneInputWrapper>
-                <Field name={"age"}>
-                  {({ input, meta }) => (
-                    <Input {...input} placeholder={"Age"} />
+
+                  <TwoInputUberWrapper>
+                    {defThrow.length && (
+                      <>
+                        <Field name={"throws"} defaultValue={defThrow}>
+                          {({ input, meta }) => (
+                            <TwoInputWrapper>
+                              <Select
+                                {...input}
+                                options={leftRight}
+                                placeholder={"Throws"}
+                              />
+                            </TwoInputWrapper>
+                          )}
+                        </Field>
+                      </>
+                    )}
+
+                    {defThrow.length && (
+                      <>
+                        <Field name={"bats"} defaultValue={defBats}>
+                          {({ input, meta }) => (
+                            <TwoInputWrapper>
+                              <Select
+                                {...input}
+                                options={leftRight}
+                                placeholder={"Bats"}
+                              />
+                            </TwoInputWrapper>
+                          )}
+                        </Field>
+                      </>
+                    )}
+                  </TwoInputUberWrapper>
+
+                  <Title>School</Title>
+                  {defSchool.length && (
+                    <>
+                      <Field name={"school"} defaultValue={defSchool[0]}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={schools}
+                              placeholder={"School"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
                   )}
-                </Field>
-              </OneInputWrapper>
-              <TwoInputUberWrapper>
-                <TwoInputWrapper>
-                  <Field name={"feet"}>
+                  {defSchoolYear.length && (
+                    <>
+                      <Field name={"schoolsYear"} defaultValue={defSchoolYear}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={schoolYear}
+                              placeholder={"School Year"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  )}
+                  {defTeams.length ? (
+                    <>
+                      <Field name={"teams"} defaultValue={defTeams}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={teams}
+                              isMulti={true}
+                              placeholder={"Teams"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  ) : (
+                    <>
+                      <Field name={"teams"}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={teams}
+                              isMulti={true}
+                              placeholder={"Teams"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  )}
+
+                  <Title>Facility</Title>
+                  {defFacility.length ? (
+                    <>
+                      <Field name={"facility"} defaultValue={defFacility}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={facilities}
+                              isMulti={true}
+                              placeholder={"Facility"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  ) : (
+                    <>
+                      <Field name={"facility"}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={facilities}
+                              isMulti={true}
+                              placeholder={"Facility"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  )}
+
+                  <Title>About</Title>
+
+                  <Field
+                    name={"biography"}
+                    defaultValue={profileData.current_profile.biography}
+                  >
                     {({ input, meta }) => (
-                      <Input {...input} placeholder={"Feet"} />
+                      <OneInputWrapper>
+                        <Textarea
+                          {...input}
+                          placeholder={"Description yourself"}
+                        />
+                      </OneInputWrapper>
                     )}
                   </Field>
-                </TwoInputWrapper>
-                <TwoInputWrapper>
-                  <Field name={"inches"}>
-                    {({ input, meta }) => (
-                      <Input {...input} placeholder={"Inches"} />
-                    )}
-                  </Field>
-                </TwoInputWrapper>
-              </TwoInputUberWrapper>
-              <OneInputWrapper>
-                <Field name={"wight"}>
-                  {({ input, meta }) => (
-                    <Input {...input} placeholder={"Wight"} />
-                  )}
-                </Field>
-              </OneInputWrapper>
-              <TwoInputUberWrapper>
-                <Field name={"throws"}>
-                  {({ input, meta }) => (
-                    <TwoInputWrapper>
-                      <Select
-                        {...input}
-                        options={leftRight}
-                        placeholder={"Throws"}
-                      />
-                    </TwoInputWrapper>
-                  )}
-                </Field>
-                <Field name={"bats"}>
-                  {({ input, meta }) => (
-                    <TwoInputWrapper>
-                      <Select
-                        {...input}
-                        options={leftRight}
-                        placeholder={"Bats"}
-                      />
-                    </TwoInputWrapper>
-                  )}
-                </Field>
-              </TwoInputUberWrapper>
-              <Title>School</Title>
-              <button type={"submit"}>dewew</button>
-            </form>
-          )}
-        />
+                  <Buttons>
+                    <SaveButton type={"submit"}>Save</SaveButton>
+                    <CloseButton
+                      onClick={() => {
+                        setChanging(false);
+                      }}
+                    >
+                      Close
+                    </CloseButton>
+                  </Buttons>
+                </form>
+              )}
+            />
+          </>
+        )}
       </Wrapper>
     </>
   );
@@ -177,6 +540,7 @@ const OneInputWrapper = styled.div`
 `;
 const Input = styled.input`
   background: #eff1f3;
+  border-radius: 4px;
   width: 100%;
   height: 40px;
   padding: 0 16px;
@@ -186,4 +550,37 @@ const Input = styled.input`
   color: #667784;
 `;
 
-// const Selector = styled(Select)``;
+const Textarea = styled.textarea`
+  display: block;
+  width: 100%;
+  min-height: 110px;
+  resize: none;
+  border-radius: 4px;
+  background-color: #eff1f3;
+  padding: 11px 16px;
+  font-size: 16px;
+  line-height: 1.13;
+  font-weight: 400;
+  color: #667784;
+  border: 1px solid transparent;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+`;
+
+const SaveButton = styled.button`
+  height: 35px;
+  border-radius: 8px;
+  background: green;
+  width: 45%;
+`;
+
+const CloseButton = styled.button`
+  height: 35px;
+  border-radius: 8px;
+  background: red;
+  width: 45%;
+`;

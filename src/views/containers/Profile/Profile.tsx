@@ -40,7 +40,7 @@ const Profile: FC<IProfile> = () => {
                 <Info>
                   <Batting id={data.current_profile.id} />
                   <SessionReports id={data.current_profile.id} />
-                  <ProfileInfo />
+                  <ProfileInfo userId={data.current_profile.id} />
                 </Info>
               </Content>
               <Footer />

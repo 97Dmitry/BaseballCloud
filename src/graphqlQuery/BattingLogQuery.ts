@@ -24,22 +24,28 @@ export const BattingLogQuery = gql`
 
 export interface IBattingLogQuery {
   batting_log: {
-    date: Array<string>;
-    pitcher_name: string;
-    pitcher_handedness: string;
-    pitch_type: string;
-    pitch_call: string;
-    exit_velocity: number;
-    launch_angle: number;
-    direction: string;
-    distance: number;
-    hit_spin_rate: number;
-    hang_time: number;
-    pitcher_datraks_id: number;
+    // date: string;
+    // pitcher_name: string;
+    // pitcher_handedness: string;
+    // pitch_type: string;
+    // pitch_call: string;
+    // exit_velocity: number;
+    // launch_angle: number;
+    // direction: string;
+    // distance: number;
+    // hit_spin_rate: number;
+    // hang_time: number;
+    // pitcher_datraks_id: number;
+    batting_log: [];
+    total_count: number;
   };
-  total_count: number;
 }
 
 export interface IBattingLogQueryVars {
-  input: string;
+  input: {
+    profile_id: number;
+    count: number;
+    offset: number;
+    pitcher_name?: string;
+  };
 }

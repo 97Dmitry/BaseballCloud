@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Form, Field } from "react-final-form";
 import Select from "react-select";
@@ -44,24 +44,29 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
     useMutation<IProfileMutation, IProfileMutationVars>(ProfileMutation, {
       onCompleted() {
         updated();
+        setChanging(false);
       },
     });
 
+  type SelectFormType = { value: string; label: string };
+  type SelectFormTypeWithId = { value: number; label: string };
+  type ArraySelectFormType = Array<{ value: string; label: string }>;
+
   const profileChangeHandler = (value: {
     age: number;
-    bats: { value: string; label: string };
+    bats: SelectFormType;
     biography: string;
-    facility: Array<{ value: string; label: string }>;
+    facility: ArraySelectFormType;
     feet: number;
     firstName: string;
     inches: number;
     lastName: string;
-    positionOne: { value: string; label: string };
-    positionTwo: { value: string; label: string };
-    school: { value: number; label: string };
-    schoolsYear: { value: string; label: string };
-    teams: Array<{ value: number; label: string }>;
-    throws: { value: string; label: string };
+    positionOne: SelectFormType;
+    positionTwo: SelectFormType;
+    school: SelectFormTypeWithId;
+    schoolsYear: SelectFormType;
+    teams: ArraySelectFormType;
+    throws: SelectFormType;
     weight: number;
   }) => {
     updateProfile({
@@ -96,27 +101,36 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
     });
   };
 
-  const positions = [
-    { value: "catcher", label: "Catcher" },
-    { value: "first_base", label: "First Base" },
-    { value: "shortstop", label: "Shortstop" },
-    { value: "third_base", label: "Third Base" },
-    { value: "outfield", label: "Outfield" },
-    { value: "pitcher", label: "Pitcher" },
-  ];
+  const positions = useMemo(
+    () => [
+      { value: "catcher", label: "Catcher" },
+      { value: "first_base", label: "First Base" },
+      { value: "shortstop", label: "Shortstop" },
+      { value: "third_base", label: "Third Base" },
+      { value: "outfield", label: "Outfield" },
+      { value: "pitcher", label: "Pitcher" },
+    ],
+    []
+  );
 
-  const leftRight = [
-    { value: "l", label: "L" },
-    { value: "r", label: "R" },
-  ];
+  const leftRight = useMemo(
+    () => [
+      { value: "l", label: "L" },
+      { value: "r", label: "R" },
+    ],
+    []
+  );
 
-  const schoolYear = [
-    { value: "freshman", label: "Freshman" },
-    { value: "sophomore", label: "Sophomore" },
-    { value: "junior", label: "Junior" },
-    { value: "senior", label: "Senior" },
-    { value: "", label: "None" },
-  ];
+  const schoolYear = useMemo(
+    () => [
+      { value: "freshman", label: "Freshman" },
+      { value: "sophomore", label: "Sophomore" },
+      { value: "junior", label: "Junior" },
+      { value: "senior", label: "Senior" },
+      { value: "", label: "None" },
+    ],
+    []
+  );
 
   if (schoolData) {
     Object.keys(schoolData.schools.schools).forEach((el) => {
@@ -144,14 +158,18 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
       });
     });
   }
-  const defPosOne: Array<{ value: string | number; label: string }> = [];
-  const defPosTwo: Array<{ value: string | number; label: string }> = [];
-  const defThrow: Array<{ value: string | number; label: string }> = [];
-  const defBats: Array<{ value: string | number; label: string }> = [];
-  const defSchool: Array<{ value: string | number; label: string }> = [];
-  const defSchoolYear: Array<{ value: string | number; label: string }> = [];
-  const defTeams: Array<{ value: string | number; label: string }> = [];
-  const defFacility: Array<{ value: string | number; label: string }> = [];
+
+  type DefSelectType = Array<{ value: string | number; label: string }>;
+
+  const defPosOne: DefSelectType = useMemo(() => [], []);
+  const defPosTwo: DefSelectType = useMemo(() => [], []);
+  const defThrow: DefSelectType = useMemo(() => [], []);
+  const defBats: DefSelectType = useMemo(() => [], []);
+  const defSchool: DefSelectType = useMemo(() => [], []);
+  const defSchoolYear: DefSelectType = useMemo(() => [], []);
+  const defTeams: DefSelectType = useMemo(() => [], []);
+  const defFacility: DefSelectType = useMemo(() => [], []);
+
   useEffect(() => {
     console.log("Effect");
 
@@ -166,14 +184,14 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
       value: profileData.current_profile.position,
       label: positions.filter(
         (el) => el.value === profileData.current_profile.position
-      )[0].label,
+      )[0]?.label,
     });
 
     defThrow.push({
       value: profileData.current_profile.throws_hand,
       label: leftRight.filter(
         (el) => el.value === profileData.current_profile.throws_hand
-      )[0].label,
+      )[0]?.label,
     });
 
     defBats.push({

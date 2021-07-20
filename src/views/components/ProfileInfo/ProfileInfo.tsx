@@ -8,16 +8,18 @@ import {
 } from "views/components/ProfileInfoContent";
 import { ProfileInfoBattingButton } from "../ProfileInfoBattingButton";
 
-interface IProfileInfo {}
+interface IProfileInfo {
+  userId: number;
+}
 
-const ProfileInfo: FC<IProfileInfo> = () => {
+const ProfileInfo: FC<IProfileInfo> = ({ userId }) => {
   const [unit, setUnit] = useState(0);
 
   const [battingContent, setBattingContent] = useState(1);
   const contentButton = ["Batting", "Comparison", "SessionReports"];
   const contentArr = [
-    <Batting contentNum={battingContent} />,
-    <SessionReports />,
+    <Batting userId={userId} contentNum={battingContent} />,
+    <SessionReports userId={userId} />,
     <Comparison />,
   ];
 
@@ -33,6 +35,7 @@ const ProfileInfo: FC<IProfileInfo> = () => {
                   SelectedButton={SelectedButton}
                   el={el}
                   id={id}
+                  key={id}
                   setUnit={setUnit}
                   unit={unit}
                   setBattingContent={setBattingContent}

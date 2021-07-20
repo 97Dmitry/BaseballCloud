@@ -26,5 +26,11 @@ export interface IProfileEventsQuery {
 }
 
 export interface IProfileEventsQueryVars {
-  input: { profile_id: number; count: number; offset: number };
+  input: {
+    profile_id: number;
+    count: number;
+    offset: number;
+    date?: string;
+    event_type?: string;
+  };
 }

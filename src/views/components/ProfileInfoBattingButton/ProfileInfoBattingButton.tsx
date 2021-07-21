@@ -34,7 +34,6 @@ const ProfileInfoBattingButton: FC<IProfileInfoBattingButton> = ({
             onClick={() => {
               setUnit(id);
             }}
-            key={id}
           >
             {el}
           </SelectedButton>
@@ -53,9 +52,33 @@ const ProfileInfoBattingButton: FC<IProfileInfoBattingButton> = ({
             onMouseOver={() => setDropdown(true)}
             onMouseLeave={() => setDropdown(false)}
           >
-            <Link onClick={() => setBattingContent(1)}>qdq</Link>
-            <Link onClick={() => setBattingContent(2)}>qwd</Link>
-            <Link onClick={() => setBattingContent(3)}>e1e21e</Link>
+            <Link
+              onClick={() => {
+                setBattingContent(1);
+                setDropdown(false);
+                setBattingDropdown(false);
+              }}
+            >
+              Summary
+            </Link>
+            <Link
+              onClick={() => {
+                setBattingContent(2);
+                setDropdown(false);
+                setBattingDropdown(false);
+              }}
+            >
+              Charts
+            </Link>
+            <Link
+              onClick={() => {
+                setBattingContent(3);
+                setDropdown(false);
+                setBattingDropdown(false);
+              }}
+            >
+              Log
+            </Link>
           </PopUp>
         )}
       </Wrapper>

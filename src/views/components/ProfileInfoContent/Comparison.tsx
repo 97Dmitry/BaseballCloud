@@ -242,7 +242,8 @@ const InputButton = styled.button`
 `;
 
 const UserSearch = styled.input`
-  width: 155px;
+  min-width: 150px;
+  max-width: 175px;
   font-size: 16px;
   line-height: 19px;
   min-height: 38px;

@@ -24,7 +24,6 @@ const SessionReports: FC<ISessionReports> = ({ userId }) => {
   const month = new Date(date).getMonth() + 1;
   const day = new Date(date).getDate();
   const dateString = day + "-" + month + "-" + year;
-  console.log(dateString);
 
   const [drop, setDrop] = useState(false);
 
@@ -45,7 +44,6 @@ const SessionReports: FC<ISessionReports> = ({ userId }) => {
       },
     },
   });
-  console.log(data);
 
   const columns = useMemo(
     () => [

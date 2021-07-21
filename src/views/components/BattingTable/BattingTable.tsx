@@ -1,6 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
 import { useTable } from "react-table";
+
 import { Loading } from "../UI/Loading";
 
 interface IBattingTable {
@@ -23,13 +24,13 @@ const BattingTable: FC<IBattingTable> = ({
         <MainTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <TableRow {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <TableHeader {...column.getHeaderProps()}>
                     {column.render("Header")}
                   </TableHeader>
                 ))}
-              </tr>
+              </TableRow>
             ))}
           </thead>
           {!loading ? (
@@ -81,6 +82,11 @@ const TableHeader = styled.th`
   line-height: 1;
   font-weight: 300;
   color: #667784;
+`;
+
+const TableRow = styled.tr`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const TableBody = styled.tbody`

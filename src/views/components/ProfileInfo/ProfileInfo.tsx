@@ -1,6 +1,8 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
 
+import { ICurrentProfileQuery } from "graphqlQuery/CurrentProfileQuery";
+
 import {
   Batting,
   Comparison,
@@ -9,18 +11,21 @@ import {
 import { ProfileInfoBattingButton } from "../ProfileInfoBattingButton";
 
 interface IProfileInfo {
-  userId: number;
+  userProfile: ICurrentProfileQuery;
 }
 
-const ProfileInfo: FC<IProfileInfo> = ({ userId }) => {
+const ProfileInfo: FC<IProfileInfo> = ({ userProfile }) => {
   const [unit, setUnit] = useState(0);
 
   const [battingContent, setBattingContent] = useState(1);
-  const contentButton = ["Batting", "Comparison", "SessionReports"];
+  const contentButton = ["Batting", "SessionReports", "Comparison"];
   const contentArr = [
-    <Batting userId={userId} contentNum={battingContent} />,
-    <SessionReports userId={userId} />,
-    <Comparison />,
+    <Batting
+      userId={userProfile.current_profile.id}
+      contentNum={battingContent}
+    />,
+    <SessionReports userId={userProfile.current_profile.id} />,
+    <Comparison userProfile={userProfile} />,
   ];
 
   return (

@@ -105,7 +105,7 @@ const Wrapper = styled.div`
   margin: 16px;
   padding: 16px;
   border-radius: 8px;
-  min-height: 420px;
+  /* min-height: 420px; */
 `;
 
 const Buttons = styled.div`

@@ -1,6 +1,5 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import ReactPaginate from "react-paginate";
 
 import { useQuery } from "@apollo/client";
 import {
@@ -21,28 +20,38 @@ import { NetworkSearch } from "views/components/NetworkSearch";
 import { NetworkTable } from "views/components/NetworkTable";
 import { ReactComponent as Heart } from "asset/svg/heart_icon.svg";
 import { ReactComponent as FullHeart } from "asset/svg/full_heart_icon.svg";
+import { Pagination } from "views/components/UI/Pagination";
 
 interface INetwork {}
 
 const Network: FC<INetwork> = ({}) => {
   const [showCount, setShowCount] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
 
   const { data: userProfile, loading: loadingProfile } =
     useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
 
-  const [pageCount, setPageCount] = useState(0);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+
   const { data: profilesData, loading: loadingProfiles } = useQuery<
     IProfilesQuery,
     IProfilesQueryVars
   >(ProfilesQuery, {
-    variables: { input: { offset: pageCount, profiles_count: showCount } },
+    variables: {
+      input: { offset: currentPageIndex, profiles_count: showCount },
+    },
   });
-
-  let pages;
-  if (profilesData) {
-    pages = Math.ceil(profilesData.profiles.total_count / showCount);
-  }
-  console.log(pages);
+  useEffect(() => {
+    if (profilesData) {
+      setTotalPages(Math.ceil(profilesData.profiles.total_count / showCount));
+    }
+  }, [profilesData, showCount, setTotalPages]);
+  // const totalPages = useMemo(() => {
+  //   if (profilesData) {
+  //     return Math.ceil(profilesData.profiles.total_count / showCount);
+  //   }
+  //   return null;
+  // }, [profilesData, showCount]);
 
   const columns = useMemo(
     () => [
@@ -116,32 +125,27 @@ const Network: FC<INetwork> = ({}) => {
                 }
                 userAvatar={userProfile.current_profile.avatar}
               />
-              <NetworkFilter
-                showCount={showCount}
-                setShowCount={setShowCount}
-              />
-              {profilesData ? (
-                <Content>
-                  <NetworkSearch
-                    playersCount={profilesData.profiles.total_count}
-                  />
-                  <NetworkTable
-                    columns={columns}
-                    tableData={tableData}
-                    loading={loadingProfiles}
-                  />
-                </Content>
-              ) : (
-                <Loading />
-              )}
-              {pages && (
-                <ReactPaginate
-                  pageCount={pages}
-                  pageRangeDisplayed={3}
-                  marginPagesDisplayed={3}
-                  previousLabel={<span>{"<<"}</span>}
-                  nextLabel={<span>{">>"}</span>}
-                  onPageChange={(i) => setPageCount(i.selected)}
+              <Content>
+                <NetworkFilter
+                  showCount={showCount}
+                  setShowCount={setShowCount}
+                />
+                <NetworkSearch
+                  playersCount={
+                    profilesData ? profilesData.profiles.total_count : 0
+                  }
+                />
+                <NetworkTable
+                  columns={columns}
+                  tableData={tableData}
+                  loading={loadingProfiles}
+                />
+              </Content>
+              {totalPages && (
+                <Pagination
+                  currentIndex={currentPageIndex}
+                  totalPages={totalPages}
+                  setIndex={setCurrentPageIndex}
                 />
               )}
               <Footer />
@@ -158,19 +162,10 @@ export default Network;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  height: 100vh;
 `;
 
 const Content = styled.div`
   padding: 0 16px;
-`;
-
-const Pagination = styled.div`
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin: 16px 0;
-  position: sticky;
-  bottom: 0;
+  overflow-y: auto;
 `;

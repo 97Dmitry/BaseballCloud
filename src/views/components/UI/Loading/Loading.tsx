@@ -8,7 +8,7 @@ interface ILoading {
 const Loading: FC<ILoading> = ({ fullScreen = false }) => {
   return (
     <>
-      <Wrapper fullScreen>
+      <Wrapper fullScreen={fullScreen}>
         <LoadingElement>
           <div></div>
           <div></div>
@@ -41,6 +41,7 @@ interface IWrapper {
 const Wrapper = styled.div<IWrapper>`
   width: 100%;
   display: flex;
+  height: ${(props) => (props.fullScreen ? "100%" : "auto")};
   justify-content: center;
   align-items: center;
 `;

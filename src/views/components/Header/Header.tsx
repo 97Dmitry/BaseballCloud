@@ -62,10 +62,6 @@ const Header: FC<IHeader> = ({ username, userAvatar }) => {
 export default Header;
 
 const Wrapper = styled.div`
-  position: sticky;
-  top: 0;
-  z-index: 1;
-
   border-bottom: 1px solid #979494;
 
   background: #fff;

@@ -63,7 +63,7 @@ const NetworkTable: FC<INetworkTable> = ({
         ) : null}
         {loading ? (
           <NoData>
-            <Loading />
+            <Loading fullScreen={true} />
           </NoData>
         ) : null}
       </Wrapper>
@@ -73,7 +73,10 @@ const NetworkTable: FC<INetworkTable> = ({
 
 export default NetworkTable;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  height: 100%;
+  flex: 0 1;
+`;
 
 const MainTable = styled.table`
   table-layout: fixed;
@@ -82,19 +85,20 @@ const MainTable = styled.table`
 `;
 
 const TableHeader = styled.th`
+  background: white;
   text-align: start;
   font-size: 14px;
   line-height: 1;
   padding: 15px 15px;
   font-weight: 300;
   color: #667784;
+  position: sticky;
+  top: 0;
 `;
 
 const TableRow = styled.tr``;
 
-const TableBody = styled.tbody`
-  min-height: 300px;
-`;
+const TableBody = styled.tbody``;
 
 const CellWrapper = styled.tr`
   background-color: #cbcccd4e;
@@ -113,7 +117,7 @@ const NoData = styled.div`
   align-items: center;
   display: flex;
   width: 100%;
-  min-height: 300px;
+  min-height: 550px;
   height: 100%;
   color: #667784;
   font-size: 16px;

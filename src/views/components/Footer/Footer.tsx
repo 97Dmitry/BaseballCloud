@@ -32,14 +32,12 @@ const Wrapper = styled.div`
   justify-content: space-between;
   flex: 0 0;
 
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
-
   background: #fff;
   border-top: 1px solid #979494;
 
   padding: 16px;
+  height: 55px;
+
   @media (max-width: 650px) {
     flex-flow: column;
     flex-direction: column-reverse;

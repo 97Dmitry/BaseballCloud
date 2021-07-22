@@ -24,6 +24,7 @@ import { selectorUserToken } from "store/user/userSelector";
 import { Login } from "views/containers/Login";
 import { Registration } from "views/containers/Registration";
 import { Profile } from "views/containers/Profile";
+import { Network } from "views/containers/Network";
 
 import RouterGuard from "utils/RouterGuard";
 
@@ -79,6 +80,14 @@ const App: FC = () => {
               children={
                 <Route path={"/profile"}>
                   <Profile />
+                </Route>
+              }
+              auth={token ? true : false}
+            />
+            <RouterGuard
+              children={
+                <Route path={"/network"}>
+                  <Network />
                 </Route>
               }
               auth={token ? true : false}

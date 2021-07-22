@@ -20,6 +20,7 @@ interface IProfile {}
 const Profile: FC<IProfile> = () => {
   const { data, loading, error } =
     useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
+
   return (
     <>
       {loading ? (
@@ -34,6 +35,7 @@ const Profile: FC<IProfile> = () => {
                   " " +
                   data.current_profile.last_name
                 }
+                userAvatar={data.current_profile.avatar}
               />
               <Content>
                 <SideBar profileData={data} />

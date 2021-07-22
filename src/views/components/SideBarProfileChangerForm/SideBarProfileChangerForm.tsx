@@ -170,6 +170,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
   const defTeams: DefSelectType = useMemo(() => [], []);
   const defFacility: DefSelectType = useMemo(() => [], []);
 
+  //TODO: Сделать функцию
   useEffect(() => {
     console.log("Effect");
 

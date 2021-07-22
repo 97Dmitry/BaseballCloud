@@ -11,9 +11,10 @@ import { ReactComponent as UserProfile } from "asset/svg/user_profile_for_header
 
 interface IHeader {
   username?: string;
+  userAvatar?: string;
 }
 
-const Header: FC<IHeader> = ({ username }) => {
+const Header: FC<IHeader> = ({ username, userAvatar }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectorUserToken);
   const history = useHistory();
@@ -30,8 +31,15 @@ const Header: FC<IHeader> = ({ username }) => {
       {user && (
         <RightUnit>
           <Clickable>Leaderboard</Clickable>
-          <Clickable>Network</Clickable>
-          <UserImg />
+          <Clickable
+            onClick={() => {
+              history.push("/network");
+            }}
+          >
+            Network
+          </Clickable>
+          {userAvatar ? <Avatar src={userAvatar} alt="" /> : <UserImg />}
+
           <ProfileDrop onClick={() => setDrop(!drop)}>
             {username ? username : null}
             <Dropdown drop={drop}>
@@ -121,4 +129,14 @@ const OutsideClick = styled.div`
   z-index: 10;
   height: 100vh;
   width: 100%;
+`;
+
+const Avatar = styled.img`
+  object-fit: cover;
+  display: block;
+
+  width: 32px;
+  height: 32px;
+  margin-right: 15px;
+  border-radius: 50%;
 `;

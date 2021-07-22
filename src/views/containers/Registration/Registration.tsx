@@ -47,8 +47,9 @@ const Registration: FC<IRegistration> = () => {
   };
 
   if (authorized) {
-    dispatch(setAuthorized(false));
-    history.push("/profile");
+    setTimeout(() => {
+      history.push("/profile");
+    }, 100);
   }
 
   const [player, setPlayer] = useState(true);

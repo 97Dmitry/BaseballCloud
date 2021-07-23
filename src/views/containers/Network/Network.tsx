@@ -36,6 +36,12 @@ const Network: FC<INetwork> = ({}) => {
   const [showCount, setShowCount] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [schoolFilter, setSchoolFilter] = useState("");
+  const [teamFilter, setTeamFilter] = useState("");
+  const [ageFilter, setAgeFilter] = useState("");
+  const [favoriteFilter, setFavoriteFilter] = useState<null | 1>(null);
+  const [playerNameFilter, setPlayerNameFilter] = useState<string>("");
+
   const updated = () => toast.success("🦄 Success updated!");
 
   const { data: userProfile, loading: loadingProfile } =
@@ -49,7 +55,16 @@ const Network: FC<INetwork> = ({}) => {
     refetch: refetchProfiles,
   } = useQuery<IProfilesQuery, IProfilesQueryVars>(ProfilesQuery, {
     variables: {
-      input: { offset: currentPageIndex, profiles_count: showCount },
+      input: {
+        offset: currentPageIndex,
+        profiles_count: showCount,
+        school: (() => (schoolFilter.length ? schoolFilter : null))(),
+        team: (() => (teamFilter.length ? teamFilter : null))(),
+        age: (() => (ageFilter.length ? +ageFilter : null))(),
+        favorite: favoriteFilter,
+        player_name: (() =>
+          playerNameFilter.length ? playerNameFilter : null)(),
+      },
     },
   });
 
@@ -171,11 +186,21 @@ const Network: FC<INetwork> = ({}) => {
                 <NetworkFilter
                   showCount={showCount}
                   setShowCount={setShowCount}
+                  schoolFilter={schoolFilter}
+                  setSchoolFilter={setSchoolFilter}
+                  teamFilter={teamFilter}
+                  setTeamFilter={setTeamFilter}
+                  ageFilter={ageFilter}
+                  setAgeFilter={setAgeFilter}
+                  favoriteFilter={favoriteFilter}
+                  setFavoriteFilter={setFavoriteFilter}
                 />
                 <NetworkSearch
                   playersCount={
                     profilesData ? profilesData.profiles.total_count : 0
                   }
+                  playerFilter={playerNameFilter}
+                  setPlayerFilter={setPlayerNameFilter}
                 />
                 <NetworkTable
                   columns={columns}

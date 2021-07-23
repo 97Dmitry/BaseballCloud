@@ -63,5 +63,13 @@ export interface IProfilesQuery {
 }
 
 export interface IProfilesQueryVars {
-  input: { profiles_count: number; offset: number };
+  input: {
+    profiles_count: number;
+    offset: number;
+    school?: string | null;
+    team?: string | null;
+    age?: number | null;
+    favorite?: 1 | null;
+    player_name?: string | null;
+  };
 }

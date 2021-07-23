@@ -7,10 +7,34 @@ import { ReactComponent as UpArrow } from "asset/svg/up-arrow.svg";
 interface INetworkFilter {
   showCount: number;
   setShowCount: any;
+
+  schoolFilter: string;
+  setSchoolFilter: React.Dispatch<React.SetStateAction<string>>;
+  teamFilter: string;
+  setTeamFilter: React.Dispatch<React.SetStateAction<string>>;
+  ageFilter: string;
+  setAgeFilter: React.Dispatch<React.SetStateAction<string>>;
+  favoriteFilter: 1 | null;
+  setFavoriteFilter: React.Dispatch<React.SetStateAction<1 | null>>;
 }
 
-const NetworkFilter: FC<INetworkFilter> = ({ showCount, setShowCount }) => {
-  const [dropCount, setDropCount] = useState(false);
+const NetworkFilter: FC<INetworkFilter> = ({
+  showCount,
+  setShowCount,
+  schoolFilter,
+  setSchoolFilter,
+  teamFilter,
+  setTeamFilter,
+  ageFilter,
+  setAgeFilter,
+  favoriteFilter,
+  setFavoriteFilter,
+}) => {
+  const [showCountDropDown, setShowCountDropDown] = useState(false);
+  const [showFavoriteDropDown, setShowFavoriteDropDown] = useState(false);
+  const [schoolFilterDrop, setSchoolFilterDrop] = useState(false);
+  const [teamFilterDrop, setTeamFilterDrop] = useState(false);
+  const [ageFilterDrop, setAgeFilterDrop] = useState(false);
 
   const Arrow = [
     <DownArrow width={"17px"} height={"17px"} />,
@@ -20,13 +44,95 @@ const NetworkFilter: FC<INetworkFilter> = ({ showCount, setShowCount }) => {
   return (
     <>
       <Wrapper>
-        {dropCount && <OutsideClick onClick={() => setDropCount(!dropCount)} />}
+        {(showCountDropDown || showFavoriteDropDown) && (
+          <OutsideClick
+            onClick={() => {
+              setShowCountDropDown(false);
+              setShowFavoriteDropDown(false);
+            }}
+          />
+        )}
 
         <Titile>Network</Titile>
         <Filters>
-          <CountDropDown onClick={() => setDropCount(!dropCount)}>
-            Show: {showCount} {!dropCount ? Arrow[0] : Arrow[1]}
-            <Dropdown drop={dropCount}>
+          <FiltersUnit>
+            <InputFilterWrapper>
+              <InputFilter
+                placeholder={"School"}
+                value={schoolFilter}
+                onChange={(event) => {
+                  setSchoolFilter(event.target.value);
+                }}
+                onFocus={() => {
+                  setSchoolFilterDrop(true);
+                }}
+                onBlur={() => {
+                  setSchoolFilterDrop(false);
+                }}
+              />
+              {!schoolFilterDrop ? Arrow[0] : Arrow[1]}
+            </InputFilterWrapper>
+            <InputFilterWrapper>
+              <InputFilter
+                placeholder={"Team"}
+                value={teamFilter}
+                onChange={(event) => {
+                  setTeamFilter(event.target.value);
+                }}
+                onFocus={() => {
+                  setTeamFilterDrop(true);
+                }}
+                onBlur={() => {
+                  setTeamFilterDrop(false);
+                }}
+              />
+              {!teamFilterDrop ? Arrow[0] : Arrow[1]}
+            </InputFilterWrapper>
+            <InputFilterWrapper>
+              <InputFilter
+                type={"number"}
+                placeholder={"Age"}
+                value={ageFilter}
+                onChange={(event) => {
+                  setAgeFilter(event.target.value);
+                }}
+                onFocus={() => {
+                  setAgeFilterDrop(true);
+                }}
+                onBlur={() => {
+                  setAgeFilterDrop(false);
+                }}
+              />
+              {!ageFilterDrop ? Arrow[0] : Arrow[1]}
+            </InputFilterWrapper>
+            <DropDownWrapper
+              onClick={() => setShowFavoriteDropDown(!showFavoriteDropDown)}
+            >
+              {favoriteFilter ? "Favorite" : "All"}{" "}
+              {!showFavoriteDropDown ? Arrow[0] : Arrow[1]}
+              <Dropdown drop={showFavoriteDropDown}>
+                <DropdownLink
+                  onClick={() => {
+                    setFavoriteFilter(null);
+                  }}
+                >
+                  All
+                </DropdownLink>
+                <DropdownLink
+                  onClick={() => {
+                    setFavoriteFilter(1);
+                  }}
+                >
+                  Favorite
+                </DropdownLink>
+              </Dropdown>
+            </DropDownWrapper>
+          </FiltersUnit>
+          <DropDownWrapper
+            onClick={() => setShowCountDropDown(!showCountDropDown)}
+          >
+            Show: {showCount} {!showCountDropDown ? Arrow[0] : Arrow[1]}
+            <Dropdown drop={showCountDropDown}>
               <DropdownLink
                 onClick={() => {
                   setShowCount(10);
@@ -49,7 +155,7 @@ const NetworkFilter: FC<INetworkFilter> = ({ showCount, setShowCount }) => {
                 25
               </DropdownLink>
             </Dropdown>
-          </CountDropDown>
+          </DropDownWrapper>
         </Filters>
       </Wrapper>
     </>
@@ -73,8 +179,13 @@ const Filters = styled.div`
   display: flex;
 `;
 
-const CountDropDown = styled.div`
-  justify-self: center;
+const FiltersUnit = styled.div`
+  display: flex;
+  margin-right: 28px;
+`;
+
+const DropDownWrapper = styled.div`
+  align-self: center;
   cursor: pointer;
   position: relative;
 
@@ -107,4 +218,29 @@ const OutsideClick = styled.div`
   z-index: 10;
   height: 100vh;
   width: 100%;
+`;
+
+const InputFilterWrapper = styled.div`
+  width: 120px;
+
+  align-self: center;
+  margin-right: 15px;
+`;
+const InputFilter = styled.input`
+  font-size: 16px;
+  width: 100px;
+  height: 100%;
+
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &::placeholder {
+    font-size: 16px;
+    color: #48bbff;
+  }
+  &::focus {
+    border-bottom: 2px #48bbff solid;
+  }
 `;

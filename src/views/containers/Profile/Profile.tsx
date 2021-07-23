@@ -63,12 +63,19 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100vh;
+  @media (max-width: 700px) {
+    height: 100%;
+  }
 `;
 
 const Content = styled.div`
   display: flex;
   height: 100%;
   overflow: hidden;
+  @media (max-width: 700px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const Info = styled.main`
@@ -80,4 +87,7 @@ const Info = styled.main`
   overflow-y: auto;
 
   background: #788b99;
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;

@@ -210,13 +210,14 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
         )[0].label,
       });
     }
-
-    defSchoolYear.push({
-      value: profileData.current_profile.school_year,
-      label: schoolYear.filter(
-        (el) => el.value === profileData.current_profile.school_year
-      )[0].label,
-    });
+    if (profileData.current_profile.school_year) {
+      defSchoolYear.push({
+        value: profileData.current_profile.school_year,
+        label: schoolYear.filter(
+          (el) => el.value === profileData.current_profile.school_year
+        )[0].label,
+      });
+    }
 
     if (profileData.current_profile.teams.length) {
       profileData.current_profile.teams.forEach((el) => {
@@ -417,9 +418,23 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                       </Field>
                     </>
                   )}
-                  {defSchoolYear.length && (
+                  {defSchoolYear.length ? (
                     <>
                       <Field name={"schoolsYear"} defaultValue={defSchoolYear}>
+                        {({ input, meta }) => (
+                          <OneInputWrapper>
+                            <Select
+                              {...input}
+                              options={schoolYear}
+                              placeholder={"School Year"}
+                            />
+                          </OneInputWrapper>
+                        )}
+                      </Field>
+                    </>
+                  ) : (
+                    <>
+                      <Field name={"schoolsYear"}>
                         {({ input, meta }) => (
                           <OneInputWrapper>
                             <Select

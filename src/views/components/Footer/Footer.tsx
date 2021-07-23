@@ -41,6 +41,8 @@ const Wrapper = styled.div`
   @media (max-width: 650px) {
     flex-flow: column;
     flex-direction: column-reverse;
+
+    height: 85px;
   }
 `;
 

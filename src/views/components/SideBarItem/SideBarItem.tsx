@@ -30,6 +30,10 @@ const Wrapper = styled.div`
   align-items: center;
 
   width: 100%;
+  @media (max-width: 700px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 `;
 
 const LeftUnit = styled.div`

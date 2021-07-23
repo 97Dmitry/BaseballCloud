@@ -128,11 +128,13 @@ const SideBar: FC<ISideBar> = ({ profileData }) => {
                   subtitle={profileData.current_profile.school.name}
                   object={false}
                 />
-                <SideBarTextItem
-                  title={"School Year"}
-                  subtitle={profileData.current_profile.school_year}
-                  object={false}
-                />
+                {profileData.current_profile.school_year.length ? (
+                  <SideBarTextItem
+                    title={"School Year"}
+                    subtitle={profileData.current_profile.school_year}
+                    object={false}
+                  />
+                ) : null}
                 <SideBarTextItem
                   title={"Team"}
                   subtitle={profileData.current_profile.teams}
@@ -171,10 +173,19 @@ const Wrapper = styled.aside`
   overflow-y: auto;
 
   flex: 0 0 298px;
+  @media (max-width: 700px) {
+    display: flex;
+    flex: 0 0 auto;
+    /* flex-direction: column; */
+  }
 `;
 
 const ImgAndName = styled.div`
   position: relative;
+  @media (max-width: 700px) {
+    text-align: center;
+    align-items: flex-start;
+  }
 `;
 const ProfileImg = styled.img`
   object-fit: cover;
@@ -185,6 +196,10 @@ const ProfileImg = styled.img`
   border-radius: 50%;
   background: #000;
   margin: 0 auto;
+  @media (max-width: 700px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const StyledPencil = styled(Pencil)`
@@ -199,6 +214,10 @@ const Name = styled.div`
   margin-top: 15px;
   display: flex;
   justify-content: center;
+  @media (max-width: 700px) {
+    word-wrap: normal;
+    min-width: 150px;
+  }
 `;
 
 const Positions = styled.div`
@@ -211,4 +230,11 @@ const Positions = styled.div`
 const SchoolInfo = styled.div`
   display: flex;
   flex-direction: column;
+  @media (max-width: 700px) {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
+    margin: 0 15px;
+  }
 `;

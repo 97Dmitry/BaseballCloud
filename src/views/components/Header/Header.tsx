@@ -71,6 +71,8 @@ const Wrapper = styled.div`
 
   @media (max-width: 650px) {
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
   grid-area: hd;
   grid-column-end: span 2;

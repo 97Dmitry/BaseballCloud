@@ -55,80 +55,80 @@ const NetworkFilter: FC<INetworkFilter> = ({
 
         <Titile>Network</Titile>
         <Filters>
-          <FiltersUnit>
-            <InputFilterWrapper>
-              <InputFilter
-                placeholder={"School"}
-                value={schoolFilter}
-                onChange={(event) => {
-                  setSchoolFilter(event.target.value);
-                }}
-                onFocus={() => {
-                  setSchoolFilterDrop(true);
-                }}
-                onBlur={() => {
-                  setSchoolFilterDrop(false);
-                }}
-              />
-              {!schoolFilterDrop ? Arrow[0] : Arrow[1]}
-            </InputFilterWrapper>
-            <InputFilterWrapper>
-              <InputFilter
-                placeholder={"Team"}
-                value={teamFilter}
-                onChange={(event) => {
-                  setTeamFilter(event.target.value);
-                }}
-                onFocus={() => {
-                  setTeamFilterDrop(true);
-                }}
-                onBlur={() => {
-                  setTeamFilterDrop(false);
-                }}
-              />
-              {!teamFilterDrop ? Arrow[0] : Arrow[1]}
-            </InputFilterWrapper>
-            <InputFilterWrapper>
-              <InputFilter
-                type={"number"}
-                placeholder={"Age"}
-                value={ageFilter}
-                onChange={(event) => {
-                  setAgeFilter(event.target.value);
-                }}
-                onFocus={() => {
-                  setAgeFilterDrop(true);
-                }}
-                onBlur={() => {
-                  setAgeFilterDrop(false);
-                }}
-              />
-              {!ageFilterDrop ? Arrow[0] : Arrow[1]}
-            </InputFilterWrapper>
-            <DropDownWrapper
-              onClick={() => setShowFavoriteDropDown(!showFavoriteDropDown)}
-            >
-              {favoriteFilter ? "Favorite" : "All"}{" "}
-              {!showFavoriteDropDown ? Arrow[0] : Arrow[1]}
-              <Dropdown drop={showFavoriteDropDown}>
-                <DropdownLink
-                  onClick={() => {
-                    setFavoriteFilter(null);
-                  }}
-                >
-                  All
-                </DropdownLink>
-                <DropdownLink
-                  onClick={() => {
-                    setFavoriteFilter(1);
-                  }}
-                >
-                  Favorite
-                </DropdownLink>
-              </Dropdown>
-            </DropDownWrapper>
-          </FiltersUnit>
+          {/* <FiltersUnit> */}
+          <InputFilterWrapper>
+            <InputFilter
+              placeholder={"School"}
+              value={schoolFilter}
+              onChange={(event) => {
+                setSchoolFilter(event.target.value);
+              }}
+              onFocus={() => {
+                setSchoolFilterDrop(true);
+              }}
+              onBlur={() => {
+                setSchoolFilterDrop(false);
+              }}
+            />
+            {!schoolFilterDrop ? Arrow[0] : Arrow[1]}
+          </InputFilterWrapper>
+          <InputFilterWrapper>
+            <InputFilter
+              placeholder={"Team"}
+              value={teamFilter}
+              onChange={(event) => {
+                setTeamFilter(event.target.value);
+              }}
+              onFocus={() => {
+                setTeamFilterDrop(true);
+              }}
+              onBlur={() => {
+                setTeamFilterDrop(false);
+              }}
+            />
+            {!teamFilterDrop ? Arrow[0] : Arrow[1]}
+          </InputFilterWrapper>
+          <InputFilterWrapper>
+            <InputFilter
+              type={"number"}
+              placeholder={"Age"}
+              value={ageFilter}
+              onChange={(event) => {
+                setAgeFilter(event.target.value);
+              }}
+              onFocus={() => {
+                setAgeFilterDrop(true);
+              }}
+              onBlur={() => {
+                setAgeFilterDrop(false);
+              }}
+            />
+            {!ageFilterDrop ? Arrow[0] : Arrow[1]}
+          </InputFilterWrapper>
           <DropDownWrapper
+            onClick={() => setShowFavoriteDropDown(!showFavoriteDropDown)}
+          >
+            {favoriteFilter ? "Favorite" : "All"}{" "}
+            {!showFavoriteDropDown ? Arrow[0] : Arrow[1]}
+            <Dropdown drop={showFavoriteDropDown}>
+              <DropdownLink
+                onClick={() => {
+                  setFavoriteFilter(null);
+                }}
+              >
+                All
+              </DropdownLink>
+              <DropdownLink
+                onClick={() => {
+                  setFavoriteFilter(1);
+                }}
+              >
+                Favorite
+              </DropdownLink>
+            </Dropdown>
+          </DropDownWrapper>
+          {/* </FiltersUnit> */}
+          <DropDownWrapperMargin
             onClick={() => setShowCountDropDown(!showCountDropDown)}
           >
             Show: {showCount} {!showCountDropDown ? Arrow[0] : Arrow[1]}
@@ -155,7 +155,7 @@ const NetworkFilter: FC<INetworkFilter> = ({
                 25
               </DropdownLink>
             </Dropdown>
-          </DropDownWrapper>
+          </DropDownWrapperMargin>
         </Filters>
       </Wrapper>
     </>
@@ -169,20 +169,34 @@ const Wrapper = styled.div`
   justify-content: space-between;
   height: 70px;
   padding: 16px;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (max-width: 450px) {
+    margin-bottom: 25px;
+  }
 `;
 
 const Titile = styled.h1`
   font-size: 24px;
+  margin-right: 20px;
 `;
 
 const Filters = styled.div`
   display: flex;
+  @media (max-width: 700px) {
+    flex-flow: row wrap;
+    justify-content: center;
+  }
 `;
 
-const FiltersUnit = styled.div`
-  display: flex;
-  margin-right: 28px;
-`;
+// const FiltersUnit = styled.div`
+//   display: flex;
+//   margin-right: 28px;
+// `;
 
 const DropDownWrapper = styled.div`
   align-self: center;
@@ -190,6 +204,10 @@ const DropDownWrapper = styled.div`
   position: relative;
 
   color: #48bbff;
+`;
+
+const DropDownWrapperMargin = styled(DropDownWrapper)`
+  margin-left: 20px;
 `;
 
 interface IDropdown {

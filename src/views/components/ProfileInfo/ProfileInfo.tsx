@@ -18,7 +18,7 @@ const ProfileInfo: FC<IProfileInfo> = ({ userProfile }) => {
   const [unit, setUnit] = useState(0);
 
   const [battingContent, setBattingContent] = useState(1);
-  const contentButton = ["Batting", "SessionReports", "Comparison"];
+  const contentButton = ["Batting", "Session Reports", "Comparison"];
   const contentArr = [
     <Batting
       userId={userProfile.current_profile.id}
@@ -123,6 +123,10 @@ const Button = styled.div`
 
   &:hover {
     background: rgba(102, 119, 132, 0.4);
+  }
+
+  @media (max-width: 700px) {
+    height: 55px;
   }
 `;
 

@@ -8,13 +8,13 @@ import { Loading } from "../UI/Loading";
 interface INetworkTable {
   columns: any;
   tableData: any;
-  loading: boolean;
+  loadingData: boolean;
 }
 
 const NetworkTable: FC<INetworkTable> = ({
   columns,
   tableData = [],
-  loading,
+  loadingData,
 }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     //@ts-ignore
@@ -34,7 +34,7 @@ const NetworkTable: FC<INetworkTable> = ({
               </TableRow>
             ))}
           </thead>
-          {!loading ? (
+          {!loadingData ? (
             tableData.length ? (
               <TableBody {...getTableBodyProps()}>
                 {rows.map((row) => {
@@ -58,10 +58,10 @@ const NetworkTable: FC<INetworkTable> = ({
             ) : null
           ) : null}
         </MainTable>
-        {!tableData.length && !loading ? (
+        {!tableData.length && !loadingData ? (
           <NoData>There's no info yet!</NoData>
         ) : null}
-        {loading ? (
+        {loadingData ? (
           <NoData>
             <Loading fullScreen={true} />
           </NoData>
@@ -102,6 +102,10 @@ const TableBody = styled.tbody``;
 
 const CellWrapper = styled.tr`
   background-color: #cbcccd4e;
+
+  &:hover {
+    background-color: #ecf8ff;
+  }
 `;
 
 const Cell = styled.td`

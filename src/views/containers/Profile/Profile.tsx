@@ -23,33 +23,35 @@ const Profile: FC<IProfile> = () => {
 
   return (
     <>
-      {loading ? (
-        <Loading fullScreen={true} />
-      ) : (
-        <Wrapper>
-          {data && (
-            <>
-              <Header
-                username={
-                  data.current_profile.first_name +
-                  " " +
-                  data.current_profile.last_name
-                }
-                userAvatar={data.current_profile.avatar}
-              />
-              <Content>
-                <SideBar profileData={data} />
-                <Info>
-                  <Batting id={data.current_profile.id} />
-                  <SessionReports id={data.current_profile.id} />
-                  <ProfileInfo userProfile={data} />
-                </Info>
-              </Content>
-              <Footer />
-            </>
-          )}
-        </Wrapper>
-      )}
+      <Wrapper>
+        {loading ? (
+          <Loading fullScreen={true} />
+        ) : (
+          <>
+            {data && (
+              <>
+                <Header
+                  username={
+                    data.current_profile.first_name +
+                    " " +
+                    data.current_profile.last_name
+                  }
+                  userAvatar={data.current_profile.avatar}
+                />
+                <Content>
+                  <SideBar profileData={data} />
+                  <Info>
+                    <Batting id={data.current_profile.id} />
+                    <SessionReports id={data.current_profile.id} />
+                    <ProfileInfo userProfile={data} />
+                  </Info>
+                </Content>
+                <Footer />
+              </>
+            )}
+          </>
+        )}
+      </Wrapper>
     </>
   );
 };

@@ -1,7 +1,10 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { useQuery } from "@apollo/client";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { useMutation, useQuery } from "@apollo/client";
 import {
   CurrentProfileQuery,
   ICurrentProfileQuery,
@@ -11,6 +14,11 @@ import {
   IProfilesQueryVars,
   ProfilesQuery,
 } from "graphqlQuery/ProfilesQuery";
+import {
+  IUpdateFavoriteProfileVars,
+  IUpdateFavoriteProfile,
+  UpdateFavoriteProfile,
+} from "graphqlMutation/UpdateFavoriteProfile";
 
 import { Loading } from "views/components/UI/Loading";
 import { Header } from "views/components/Header";
@@ -28,30 +36,40 @@ const Network: FC<INetwork> = ({}) => {
   const [showCount, setShowCount] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
 
+  const updated = () => toast.success("🦄 Success updated!");
+
   const { data: userProfile, loading: loadingProfile } =
     useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-  const { data: profilesData, loading: loadingProfiles } = useQuery<
-    IProfilesQuery,
-    IProfilesQueryVars
-  >(ProfilesQuery, {
+  const {
+    data: profilesData,
+    loading: loadingProfiles,
+    refetch: refetchProfiles,
+  } = useQuery<IProfilesQuery, IProfilesQueryVars>(ProfilesQuery, {
     variables: {
       input: { offset: currentPageIndex, profiles_count: showCount },
     },
   });
+
+  const [
+    changeFavorite,
+    { data: mutatedFavorite, loading: mutatedFavoriteLoading },
+  ] = useMutation<IUpdateFavoriteProfile, IUpdateFavoriteProfileVars>(
+    UpdateFavoriteProfile,
+    {
+      onCompleted() {
+        updated();
+        refetchProfiles();
+      },
+    }
+  );
   useEffect(() => {
     if (profilesData) {
       setTotalPages(Math.ceil(profilesData.profiles.total_count / showCount));
     }
   }, [profilesData, showCount, setTotalPages]);
-  // const totalPages = useMemo(() => {
-  //   if (profilesData) {
-  //     return Math.ceil(profilesData.profiles.total_count / showCount);
-  //   }
-  //   return null;
-  // }, [profilesData, showCount]);
 
   const columns = useMemo(
     () => [
@@ -96,9 +114,32 @@ const Network: FC<INetwork> = ({}) => {
         Header: "Favorite",
         accessor: (data) => {
           if (data.favorite) {
-            return <FullHeart height={"15px"} />;
+            return (
+              <FullHeartStyled
+                onClick={() => {
+                  changeFavorite({
+                    variables: {
+                      form: { favorite: false, profile_id: data.id },
+                    },
+                  });
+                  refetchProfiles();
+                }}
+                height={"15px"}
+              />
+            );
           }
-          return <Heart height={"15px"} />;
+          return (
+            <HeartStyled
+              onClick={() => {
+                changeFavorite({
+                  variables: {
+                    form: { favorite: true, profile_id: data.id },
+                  },
+                });
+              }}
+              height={"15px"}
+            />
+          );
         },
       },
     ],
@@ -115,6 +156,7 @@ const Network: FC<INetwork> = ({}) => {
         <Loading fullScreen={true} />
       ) : (
         <Wrapper>
+          <ToastContainer />
           {userProfile && (
             <>
               <Header
@@ -138,7 +180,7 @@ const Network: FC<INetwork> = ({}) => {
                 <NetworkTable
                   columns={columns}
                   tableData={tableData}
-                  loading={loadingProfiles}
+                  loadingData={loadingProfiles}
                 />
               </Content>
               {totalPages && (
@@ -168,4 +210,12 @@ const Wrapper = styled.div`
 const Content = styled.div`
   padding: 0 16px;
   overflow-y: auto;
+`;
+
+const FullHeartStyled = styled(FullHeart)`
+  cursor: pointer;
+`;
+
+const HeartStyled = styled(Heart)`
+  cursor: pointer;
 `;

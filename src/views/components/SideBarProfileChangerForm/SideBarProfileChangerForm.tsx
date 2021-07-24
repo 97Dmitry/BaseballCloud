@@ -27,6 +27,21 @@ interface ISideBarProfileChangerForm {
   setChanging: any;
 }
 
+//@ts-ignore
+const ReactSelectAdapter = ({ input, ...rest }) => (
+  <Select {...input} {...rest} searchable />
+);
+
+//@ts-ignore
+const InputAdapter = ({ input, ...rest }) => (
+  <Input {...input} {...rest} searchable />
+);
+
+//@ts-ignore
+const TextareaAdapter = ({ input, ...rest }) => (
+  <Textarea {...input} {...rest} searchable />
+);
+
 const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
   profileData,
   schoolData,
@@ -265,139 +280,120 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
               render={({ handleSubmit, form }) => (
                 <form onSubmit={handleSubmit}>
                   <TwoInputUberWrapper>
-                    <Field
-                      name={"firstName"}
-                      defaultValue={profileData.current_profile.first_name}
-                    >
-                      {({ input, meta }) => (
-                        <TwoInputWrapper>
-                          <Input {...input} placeholder={"First Name"} />
-                        </TwoInputWrapper>
-                      )}
-                    </Field>
+                    <TwoInputWrapper>
+                      <label>First Name</label>
+                      <Field
+                        name={"firstName"}
+                        initialValue={profileData.current_profile.first_name}
+                        component={InputAdapter}
+                      />
+                    </TwoInputWrapper>
 
-                    <Field
-                      name={"lastName"}
-                      defaultValue={profileData.current_profile.last_name}
-                    >
-                      {({ input, meta }) => (
-                        <TwoInputWrapper>
-                          <Input {...input} placeholder={"Last Name"} />
-                        </TwoInputWrapper>
-                      )}
-                    </Field>
+                    <TwoInputWrapper>
+                      <label>Last Name</label>
+                      <Field
+                        name={"lastName"}
+                        initialValue={profileData.current_profile.last_name}
+                        component={InputAdapter}
+                      />
+                    </TwoInputWrapper>
                   </TwoInputUberWrapper>
 
                   {defPosTwo.length && (
                     <>
-                      <Field name={"positionOne"} defaultValue={defPosOne}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={positions}
-                              placeholder={"Position in Game"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
+                      <OneInputWrapper>
+                        <label>Position One</label>
+                        <Field
+                          name={"positionOne"}
+                          initialValue={defPosOne}
+                          component={ReactSelectAdapter}
+                          options={positions}
+                          placeholder={"Position in Game"}
+                        />
+                      </OneInputWrapper>
                     </>
                   )}
 
                   {defPosTwo.length && (
                     <>
-                      <Field name={"positionTwo"} defaultValue={defPosTwo}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={positions}
-                              placeholder={"Secondary position in Game"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
+                      <OneInputWrapper>
+                        <label>Position Two</label>
+                        <Field
+                          name={"positionTwo"}
+                          initialValue={defPosTwo}
+                          component={ReactSelectAdapter}
+                          options={positions}
+                        />
+                      </OneInputWrapper>
                     </>
                   )}
 
                   <Title>Personal Info</Title>
 
                   <OneInputWrapper>
+                    <label>Age</label>
                     <Field<number>
                       name={"age"}
-                      defaultValue={profileData.current_profile.age}
-                    >
-                      {({ input, meta }) => (
-                        <Input {...input} placeholder={"Age"} />
-                      )}
-                    </Field>
+                      initialValue={profileData.current_profile.age}
+                      component={InputAdapter}
+                    />
                   </OneInputWrapper>
 
                   <TwoInputUberWrapper>
                     <TwoInputWrapper>
+                      <label>Feet</label>
                       <Field
                         name={"feet"}
-                        defaultValue={profileData.current_profile.feet}
-                      >
-                        {({ input, meta }) => (
-                          <Input {...input} placeholder={"Feet"} />
-                        )}
-                      </Field>
+                        initialValue={profileData.current_profile.feet}
+                        component={InputAdapter}
+                      />
                     </TwoInputWrapper>
 
                     <TwoInputWrapper>
+                      <label>Inches</label>
                       <Field
                         name={"inches"}
-                        defaultValue={profileData.current_profile.inches}
-                      >
-                        {({ input, meta }) => (
-                          <Input {...input} placeholder={"Inches"} />
-                        )}
-                      </Field>
+                        initialValue={profileData.current_profile.inches}
+                        component={InputAdapter}
+                      />
                     </TwoInputWrapper>
                   </TwoInputUberWrapper>
 
                   <OneInputWrapper>
+                    <label>Weight</label>
                     <Field
                       name={"weight"}
-                      defaultValue={profileData.current_profile.weight}
-                    >
-                      {({ input, meta }) => (
-                        <Input {...input} placeholder={"Weight"} />
-                      )}
-                    </Field>
+                      initialValue={profileData.current_profile.weight}
+                      component={InputAdapter}
+                    />
                   </OneInputWrapper>
 
                   <TwoInputUberWrapper>
                     {defThrow.length && (
                       <>
-                        <Field name={"throws"} defaultValue={defThrow}>
-                          {({ input, meta }) => (
-                            <TwoInputWrapper>
-                              <Select
-                                {...input}
-                                options={leftRight}
-                                placeholder={"Throws"}
-                              />
-                            </TwoInputWrapper>
-                          )}
-                        </Field>
+                        <TwoInputWrapper>
+                          <label>Throws</label>
+                          <Field
+                            name={"throws"}
+                            initialValue={defThrow}
+                            component={ReactSelectAdapter}
+                            options={leftRight}
+                          />
+                        </TwoInputWrapper>
                       </>
                     )}
 
                     {defThrow.length && (
                       <>
-                        <Field name={"bats"} defaultValue={defBats}>
-                          {({ input, meta }) => (
-                            <TwoInputWrapper>
-                              <Select
-                                {...input}
-                                options={leftRight}
-                                placeholder={"Bats"}
-                              />
-                            </TwoInputWrapper>
-                          )}
-                        </Field>
+                        <TwoInputWrapper>
+                          <label>Bats</label>
+                          <Field
+                            name={"bats"}
+                            initialValue={defBats}
+                            component={ReactSelectAdapter}
+                            options={leftRight}
+                          />
+                        </TwoInputWrapper>
                       </>
                     )}
                   </TwoInputUberWrapper>
@@ -405,128 +401,68 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   <Title>School</Title>
                   {defSchool.length && (
                     <>
-                      <Field name={"school"} defaultValue={defSchool[0]}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={schools}
-                              placeholder={"School"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
+                      <OneInputWrapper>
+                        <Field
+                          name={"school"}
+                          initialValue={defSchool[0]}
+                          component={ReactSelectAdapter}
+                          options={schools}
+                        />
+                      </OneInputWrapper>
                     </>
                   )}
-                  {defSchoolYear.length ? (
+                  {defSchoolYear.length && (
                     <>
-                      <Field name={"schoolsYear"} defaultValue={defSchoolYear}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={schoolYear}
-                              placeholder={"School Year"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
-                    </>
-                  ) : (
-                    <>
-                      <Field name={"schoolsYear"}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={schoolYear}
-                              placeholder={"School Year"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
+                      <OneInputWrapper>
+                        <label>School Year</label>
+                        <Field
+                          name={"schoolsYear"}
+                          initialValue={defSchoolYear}
+                          component={ReactSelectAdapter}
+                          options={schoolYear}
+                        />
+                      </OneInputWrapper>
                     </>
                   )}
-                  {defTeams.length ? (
+                  {defTeams.length && (
                     <>
-                      <Field name={"teams"} defaultValue={defTeams}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={teams}
-                              isMulti={true}
-                              placeholder={"Teams"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
-                    </>
-                  ) : (
-                    <>
-                      <Field name={"teams"}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={teams}
-                              isMulti={true}
-                              placeholder={"Teams"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
+                      <OneInputWrapper>
+                        <label>Teams</label>
+                        <Field
+                          name={"teams"}
+                          initialValue={defTeams}
+                          component={ReactSelectAdapter}
+                          options={teams}
+                          isMulti={true}
+                        />
+                      </OneInputWrapper>
                     </>
                   )}
 
                   <Title>Facility</Title>
-                  {defFacility.length ? (
+                  {defFacility.length && (
                     <>
-                      <Field name={"facility"} defaultValue={defFacility}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={facilities}
-                              isMulti={true}
-                              placeholder={"Facility"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
-                    </>
-                  ) : (
-                    <>
-                      <Field name={"facility"}>
-                        {({ input, meta }) => (
-                          <OneInputWrapper>
-                            <Select
-                              {...input}
-                              options={facilities}
-                              isMulti={true}
-                              placeholder={"Facility"}
-                            />
-                          </OneInputWrapper>
-                        )}
-                      </Field>
+                      <OneInputWrapper>
+                        <Field
+                          name={"facility"}
+                          initialValue={defFacility}
+                          component={ReactSelectAdapter}
+                          options={facilities}
+                          isMulti={true}
+                        />
+                      </OneInputWrapper>
                     </>
                   )}
 
                   <Title>About</Title>
-
-                  <Field
-                    name={"biography"}
-                    defaultValue={profileData.current_profile.biography}
-                  >
-                    {({ input, meta }) => (
-                      <OneInputWrapper>
-                        <Textarea
-                          {...input}
-                          placeholder={"Description yourself"}
-                        />
-                      </OneInputWrapper>
-                    )}
-                  </Field>
+                  <OneInputWrapper>
+                    <Field
+                      name={"biography"}
+                      initialValue={profileData.current_profile.biography}
+                      component={TextareaAdapter}
+                      placeholder={"Description yourself"}
+                    />
+                  </OneInputWrapper>
                   <Buttons>
                     <SaveButton type={"submit"}>Save</SaveButton>
                     <CloseButton

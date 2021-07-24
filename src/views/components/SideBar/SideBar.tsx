@@ -30,12 +30,16 @@ import { Loading } from "../UI/Loading";
 import { SideBarTextItem } from "../SideBarTextItem";
 import { SideBarProfileChangerForm } from "../SideBarProfileChangerForm";
 
+import useWindowDimensions from "utils/useWindowDimensions";
+
 interface ISideBar {
   profileData: ICurrentProfileQuery;
 }
 
 const SideBar: FC<ISideBar> = ({ profileData }) => {
   const [changing, setChanging] = useState(false);
+
+  const { width, height } = useWindowDimensions();
 
   const { data: schoolData, loading: schoolLoading } = useQuery<
     ISchoolQuery,
@@ -96,6 +100,7 @@ const SideBar: FC<ISideBar> = ({ profileData }) => {
                 icon={<Age />}
                 label={"Age"}
                 value={profileData.current_profile.age}
+                width={width}
               />
               <SideBarItem
                 icon={<Height />}
@@ -106,21 +111,25 @@ const SideBar: FC<ISideBar> = ({ profileData }) => {
                   profileData.current_profile.inches +
                   " in"
                 }
+                width={width}
               />
               <SideBarItem
                 icon={<Weight />}
                 label={"Weight"}
                 value={profileData.current_profile.weight + " lbs"}
+                width={width}
               />
               <SideBarItem
                 icon={<Throws />}
                 label={"Throws"}
                 value={profileData.current_profile.throws_hand}
+                width={width}
               />
               <SideBarItem
                 icon={<Bats />}
                 label={"Bats"}
                 value={profileData.current_profile.bats_hand}
+                width={width}
               />
               <SchoolInfo>
                 <SideBarTextItem

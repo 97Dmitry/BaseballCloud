@@ -21,12 +21,13 @@ import httpClient from "api/server";
 import { useAppSelector } from "store/hooks";
 import { selectorUserToken } from "store/user/userSelector";
 
-import { Login } from "views/containers/Login";
-import { Registration } from "views/containers/Registration";
-import { Profile } from "views/containers/Profile";
-import { Network } from "views/containers/Network";
+import MainLayout from "./layouts/MainLayouts";
+import { Login } from "pages/Login";
+import { Registration } from "pages/Registration";
+import { Profile } from "pages/Profile";
+import { Network } from "pages/Network";
 
-import RouterGuard from "utils/RouterGuard";
+import RouterGuard from "routes/RouterGuard";
 
 const App: FC = () => {
   const { token, clientToken, email } = useAppSelector(selectorUserToken);
@@ -72,7 +73,7 @@ const App: FC = () => {
     <ApolloProvider client={client}>
       <Router>
         <Switch>
-          <Wrapper>
+          <MainLayout>
             <Route path={"/"}>
               <Redirect to={"/profile"} />
             </Route>
@@ -98,7 +99,7 @@ const App: FC = () => {
             <Route path={"/registration"}>
               <Registration />
             </Route>
-          </Wrapper>
+          </MainLayout>
         </Switch>
       </Router>
     </ApolloProvider>
@@ -108,7 +109,11 @@ const App: FC = () => {
 export default App;
 
 const Wrapper = styled.div`
-  display: flex;
-  min-height: 100vh;
-  height: 100%;
+  //display: flex;
+  //min-height: 100vh;
+  //height: 100%;
+  //@media (max-width: 700px) {
+  //  width: 100%;
+  //  min-height: 100%;
+  //}
 `;

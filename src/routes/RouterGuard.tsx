@@ -4,7 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 import MainLayout from "../layouts/MainLayouts";
 
 interface IGuardedRoute {
-  component: FC;
+  component: FC<any>;
   auth: boolean;
   [x: string]: any;
 }
@@ -19,7 +19,7 @@ const RouterGuard: FC<IGuardedRoute> = ({
       render={(props) =>
         auth ? (
           <MainLayout>
-            <Component />
+            <Component {...props} />
           </MainLayout>
         ) : (
           <Redirect to="/login" push={true} />

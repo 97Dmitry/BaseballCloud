@@ -1,1 +1,1 @@
-export { default as SideBarProfileChangerForm } from "./SideBarProfileChangerForm";
+export { default as SideBarProfileChangerForm } from "./SideBarProfileChangerFormContainer";

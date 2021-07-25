@@ -6,6 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import styled from "styled-components";
+import { ToastContainer } from "react-toastify";
 
 import {
   ApolloClient,
@@ -21,7 +22,6 @@ import httpClient from "api/server";
 import { useAppSelector } from "store/hooks";
 import { selectorUserToken } from "store/user/userSelector";
 
-import MainLayout from "layouts/MainLayouts";
 import AuthLayout from "./layouts/AuthLayout";
 import { Login } from "pages/Login";
 import { Registration } from "pages/Registration";
@@ -61,23 +61,29 @@ const App: FC = () => {
 
   return (
     <ApolloProvider client={client}>
+      <ToastContainer />
+
       <Router>
         <Switch>
-          <Route path={"/login"}>
-            <AuthLayout>
-              <Login />
-            </AuthLayout>
-          </Route>
-          <Route path={"/registration"}>
-            <AuthLayout>
-              <Registration />
-            </AuthLayout>
-          </Route>
-          <Route path={"/"}>
-            <Redirect to={"/profile"} />
-          </Route>
+          <Redirect exact from={"/"} to={"/profile"} />
           <RouterGuard path={"/profile"} component={Profile} auth={!!token} />
           <RouterGuard path={"/network"} component={Network} auth={!!token} />
+          <Route
+            path={"/login"}
+            render={() => (
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
+            )}
+          ></Route>
+          <Route
+            path={"/registration"}
+            render={() => (
+              <AuthLayout>
+                <Registration />
+              </AuthLayout>
+            )}
+          ></Route>
         </Switch>
       </Router>
     </ApolloProvider>
@@ -85,13 +91,3 @@ const App: FC = () => {
 };
 
 export default App;
-
-const Wrapper = styled.div`
-  //display: flex;
-  //min-height: 100vh;
-  //height: 100%;
-  //@media (max-width: 700px) {
-  //  width: 100%;
-  //  min-height: 100%;
-  //}
-`;

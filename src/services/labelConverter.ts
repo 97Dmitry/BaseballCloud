@@ -14,7 +14,7 @@ export const labelConverterArray = (
     name?: string;
     u_name?: string;
   }>,
-  pushObject: { value: number; label: string }[]
+  pushObject: { value: string | number; label: string }[]
 ) => {
   Object.keys(data).forEach((el) => {
     pushObject.push({

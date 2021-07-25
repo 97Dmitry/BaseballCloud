@@ -9,13 +9,16 @@ import positionConst from "constants/positionConst";
 import leftRightConst from "constants/leftRightConst";
 import schoolYearConst from "constants/schoolYearConst";
 import IProfileChangeHandler from "interfaces/IProfileChangeHandler";
+import IInitialValueSideBarForm, {
+  DefSelectType,
+} from "interfaces/IInitialValueSideBarForm";
 
 interface ISideBarProfileChangerForm {
   profileData: ICurrentProfileQuery;
-  sideBarFormInitialValue: any;
-  facilities: any;
-  teams: any;
-  schools: any;
+  sideBarFormInitialValue: IInitialValueSideBarForm;
+  facilities: DefSelectType;
+  teams: DefSelectType;
+  schools: DefSelectType;
   profileChangeHandler: (value: IProfileChangeHandler) => void;
   setChanging: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -75,8 +78,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                 </TwoInputWrapper>
               </TwoInputUberWrapper>
 
-              {/* {defPosTwo.length && (
-                <> */}
               <OneInputWrapper>
                 <label>Position One</label>
                 <Field
@@ -87,11 +88,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   placeholder={"Position in Game"}
                 />
               </OneInputWrapper>
-              {/* </>
-              )} */}
-
-              {/* {defPosTwo.length && (
-                <> */}
               <OneInputWrapper>
                 <label>Position Two</label>
                 <Field
@@ -101,8 +97,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   options={positions}
                 />
               </OneInputWrapper>
-              {/* </>
-              )} */}
 
               <Title>Personal Info</Title>
 
@@ -145,8 +139,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
               </OneInputWrapper>
 
               <TwoInputUberWrapper>
-                {/* {defThrow.length && (
-                  <> */}
                 <TwoInputWrapper>
                   <label>Throws</label>
                   <Field
@@ -156,11 +148,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                     options={leftRight}
                   />
                 </TwoInputWrapper>
-                {/* </>
-                )} */}
-
-                {/* {defBats.length && (
-                  <> */}
                 <TwoInputWrapper>
                   <label>Bats</label>
                   <Field
@@ -170,13 +157,9 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                     options={leftRight}
                   />
                 </TwoInputWrapper>
-                {/* </>
-                )} */}
               </TwoInputUberWrapper>
 
               <Title>School</Title>
-              {/* {defSchool.length && (
-                <> */}
               <OneInputWrapper>
                 <Field
                   name={"school"}
@@ -185,10 +168,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   options={schools}
                 />
               </OneInputWrapper>
-              {/* </>
-              )} */}
-              {/* {defSchoolYear.length && (
-                <> */}
               <OneInputWrapper>
                 <label>School Year</label>
                 <Field
@@ -198,10 +177,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   options={schoolYear}
                 />
               </OneInputWrapper>
-              {/* </>
-              )} */}
-              {/* {defTeams.length && (
-                <> */}
               <OneInputWrapper>
                 <label>Teams</label>
                 <Field
@@ -212,12 +187,8 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   isMulti={true}
                 />
               </OneInputWrapper>
-              {/* </>
-              )} */}
 
               <Title>Facility</Title>
-              {/* {defFacility.length && (
-                <> */}
               <OneInputWrapper>
                 <Field
                   name={"facility"}
@@ -227,8 +198,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
                   isMulti={true}
                 />
               </OneInputWrapper>
-              {/* </>
-              )} */}
 
               <Title>About</Title>
               <OneInputWrapper>

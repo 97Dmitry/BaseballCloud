@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { useTable } from "react-table";
 
-import { Loading } from "../../../../UIComponents/Loading";
+import { Loading } from "UIComponents/Loading";
 
 interface INetworkTable {
   columns: any;

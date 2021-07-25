@@ -21,7 +21,8 @@ import httpClient from "api/server";
 import { useAppSelector } from "store/hooks";
 import { selectorUserToken } from "store/user/userSelector";
 
-import MainLayout from "./layouts/MainLayouts";
+import MainLayout from "layouts/MainLayouts";
+import AuthLayout from "./layouts/AuthLayout";
 import { Login } from "pages/Login";
 import { Registration } from "pages/Registration";
 import { Profile } from "pages/Profile";
@@ -39,17 +40,6 @@ const App: FC = () => {
   const httpLink = createHttpLink({
     uri: "https://baseballcloud-back.herokuapp.com/api/v1/graphql",
   });
-
-  // const authLink = setContext((_, { headers }) => {
-  //   return {
-  //     headers: {
-  //       ...headers,
-  //       Authorization: token ? `Bearer ${token}` : "",
-  //       "Access-Token": token ? token : "",
-  //       Client: clientToken,
-  //     },
-  //   };
-  // });
 
   const authMiddleware = new ApolloLink((operation, forward) => {
     operation.setContext(({ headers = {} }) => ({
@@ -73,33 +63,21 @@ const App: FC = () => {
     <ApolloProvider client={client}>
       <Router>
         <Switch>
-          <MainLayout>
-            <Route path={"/"}>
-              <Redirect to={"/profile"} />
-            </Route>
-            <RouterGuard
-              children={
-                <Route path={"/profile"}>
-                  <Profile />
-                </Route>
-              }
-              auth={token ? true : false}
-            />
-            <RouterGuard
-              children={
-                <Route path={"/network"}>
-                  <Network />
-                </Route>
-              }
-              auth={token ? true : false}
-            />
-            <Route path={"/login"}>
+          <Route path={"/login"}>
+            <AuthLayout>
               <Login />
-            </Route>
-            <Route path={"/registration"}>
+            </AuthLayout>
+          </Route>
+          <Route path={"/registration"}>
+            <AuthLayout>
               <Registration />
-            </Route>
-          </MainLayout>
+            </AuthLayout>
+          </Route>
+          <Route path={"/"}>
+            <Redirect to={"/profile"} />
+          </Route>
+          <RouterGuard path={"/profile"} component={Profile} auth={!!token} />
+          <RouterGuard path={"/network"} component={Network} auth={!!token} />
         </Switch>
       </Router>
     </ApolloProvider>

@@ -2,10 +2,11 @@ import styled from "styled-components";
 import background from "../asset/img/AuthBack.webp";
 
 export const AuthContent = styled.div`
+  height: 100%;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1 1 auto;
 
   padding: 16px;
 

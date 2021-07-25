@@ -4,15 +4,13 @@ import { Link, useHistory } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { authorization, setAuthorized } from "store/user/userSlice";
+import { authorization } from "store/user/userSlice";
 import {
   selectorAuthorized,
   selectorErrors,
   selectorLoading,
 } from "store/user/userSelector";
 
-import { Footer } from "UIComponents/Footer";
-import { Header } from "UIComponents/Header";
 import Required, { required } from "UIComponents/Required";
 
 import {
@@ -45,73 +43,63 @@ const Login: FC<ILogin> = () => {
   }
 
   return (
-    <Wrapper>
-      <Header />
-      <AuthContent>
-        <AuthFormWrapper>
-          <FormContent>
-            <FormTitle>
-              <Title>Welcome to BaseballCloud!</Title>
-              <Subtitle>Sign into your account here:</Subtitle>
-            </FormTitle>
-            <Form
-              onSubmit={loginHandler}
-              render={({ handleSubmit, form }) => (
-                <form onSubmit={handleSubmit}>
-                  <Field name={"email"} validate={required}>
-                    {({ input, meta }) => (
-                      <InputWrapper>
-                        <AuthInput
-                          {...input}
-                          placeholder={"Email"}
-                          bgPath={UserIcon}
-                        />
-                        <Required metaData={meta} />
-                      </InputWrapper>
-                    )}
-                  </Field>
-                  <Field name={"password"} validate={required}>
-                    {({ input, meta }) => (
-                      <InputWrapper>
-                        <AuthInput
-                          {...input}
-                          type={"password"}
-                          placeholder={"Password"}
-                          bgPath={LockIcon}
-                        />
-                        <Required metaData={meta} />
-                      </InputWrapper>
-                    )}
-                  </Field>
-                  {errors && <p>{errors}</p>}
-                  <AuthSubmitButton disabled={loading} type={"submit"}>
-                    Sing In
-                  </AuthSubmitButton>
-                </form>
-              )}
-            />
-            <ForgottenPassword>
-              <Link to="#">Forgotten password?</Link>
-            </ForgottenPassword>
-            <SingUpLink>
-              <span>Don’t have an account?</span>
-              <Link to="/registration"> Sign Up</Link>
-            </SingUpLink>
-          </FormContent>
-        </AuthFormWrapper>
-      </AuthContent>
-      <Footer />
-    </Wrapper>
+    <AuthContent>
+      <AuthFormWrapper>
+        <FormContent>
+          <FormTitle>
+            <Title>Welcome to BaseballCloud!</Title>
+            <Subtitle>Sign into your account here:</Subtitle>
+          </FormTitle>
+          <Form
+            onSubmit={loginHandler}
+            render={({ handleSubmit, form }) => (
+              <form onSubmit={handleSubmit}>
+                <Field name={"email"} validate={required}>
+                  {({ input, meta }) => (
+                    <InputWrapper>
+                      <AuthInput
+                        {...input}
+                        placeholder={"Email"}
+                        bgPath={UserIcon}
+                      />
+                      <Required metaData={meta} />
+                    </InputWrapper>
+                  )}
+                </Field>
+                <Field name={"password"} validate={required}>
+                  {({ input, meta }) => (
+                    <InputWrapper>
+                      <AuthInput
+                        {...input}
+                        type={"password"}
+                        placeholder={"Password"}
+                        bgPath={LockIcon}
+                      />
+                      <Required metaData={meta} />
+                    </InputWrapper>
+                  )}
+                </Field>
+                {errors && <p>{errors}</p>}
+                <AuthSubmitButton disabled={loading} type={"submit"}>
+                  Sing In
+                </AuthSubmitButton>
+              </form>
+            )}
+          />
+          <ForgottenPassword>
+            <Link to="#">Forgotten password?</Link>
+          </ForgottenPassword>
+          <SingUpLink>
+            <span>Don’t have an account?</span>
+            <Link to="/registration"> Sign Up</Link>
+          </SingUpLink>
+        </FormContent>
+      </AuthFormWrapper>
+    </AuthContent>
   );
 };
 
 export default Login;
-
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
 
 const FormContent = styled.div``;
 

@@ -1,14 +1,32 @@
 import { FC } from "react";
 import { Route, Redirect } from "react-router-dom";
 
-interface IGuardedRoute {
-  children: React.ReactNode;
-  auth: boolean;
-}
-const GuardedRoute: FC<IGuardedRoute> = ({ children, auth }) => (
-  <Route>
-    {auth === true ? children : <Redirect to="/login" push={true} />}
-  </Route>
-);
+import MainLayout from "../layouts/MainLayouts";
 
-export default GuardedRoute;
+interface IGuardedRoute {
+  component: FC;
+  auth: boolean;
+  [x: string]: any;
+}
+const RouterGuard: FC<IGuardedRoute> = ({
+  component: Component,
+  auth,
+  ...rest
+}) => {
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        auth ? (
+          <MainLayout>
+            <Component />
+          </MainLayout>
+        ) : (
+          <Redirect to="/login" push={true} />
+        )
+      }
+    />
+  );
+};
+
+export default RouterGuard;

@@ -57,4 +57,5 @@ const Wrapper = styled.div`
 const Content = styled.main`
   flex: 1;
   overflow-y: auto;
+  height: 100%;
 `;

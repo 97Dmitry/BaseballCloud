@@ -3,9 +3,6 @@ import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { Field, Form } from "react-final-form";
 
-import { Header } from "UIComponents/Header";
-import { Footer } from "UIComponents/Footer";
-
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { registration, setAuthorized } from "store/user/userSlice";
 import {
@@ -55,134 +52,124 @@ const Registration: FC<IRegistration> = () => {
   const [player, setPlayer] = useState(true);
   const [scout, setScout] = useState(false);
   return (
-    <Wrapper>
-      <Header />
-      <AuthContent>
-        <AuthFormWrapper>
-          <ToggleWrapper>
-            <SingAsPlayer
-              toggle={player}
-              onClick={() => {
-                setPlayer(true);
-                setScout(false);
-              }}
-            >
-              {player && <ConfirmToggleIcon />} Sign Up as Player
-            </SingAsPlayer>
-            <SingAsScout
-              toggle={scout}
-              onClick={() => {
-                setPlayer(false);
-                setScout(true);
-              }}
-            >
-              {scout && <ConfirmToggleIcon />} Sign Up as Scout
-            </SingAsScout>
-          </ToggleWrapper>
-          <Description>
-            <Title>{player ? "Players" : "Scouts"}</Title>
-            <Subtitle>
-              {player
-                ? "Players have their own profile within" +
-                  " the system and plan on having data collected."
-                : "Coaches and scouts can view players in the system but do not have" +
-                  " their own profile."}
-            </Subtitle>
-          </Description>
-          <Form
-            onSubmit={registrationHandler}
-            validate={(values) => {
-              const errors: Record<string, string> = {};
-              if (!values.email) {
-                errors.email = "Must be required";
-              }
-              if (!values.password) {
-                errors.password = "Must be required";
-              } else if (values.password.length < 8) {
-                errors.password = "Must contain more than 8 characters";
-              }
-              if (!values.confirmPassword) {
-                errors.confirmPassword = "Must be required";
-              } else if (values.confirmPassword !== values.password) {
-                errors.confirmPassword = "Must match";
-              }
-              return errors;
+    <AuthContent>
+      <AuthFormWrapper>
+        <ToggleWrapper>
+          <SingAsPlayer
+            toggle={player}
+            onClick={() => {
+              setPlayer(true);
+              setScout(false);
             }}
-            render={({ handleSubmit, form }) => (
-              <form onSubmit={handleSubmit}>
-                <Field name={"email"}>
-                  {({ input, meta }) => (
-                    <InputWrapper>
-                      <AuthInput
-                        {...input}
-                        placeholder={"Email"}
-                        bgPath={UserIcon}
-                      />
-                      {meta.error && meta.touched && (
-                        <ConfirmError>{meta.error}</ConfirmError>
-                      )}
-                    </InputWrapper>
-                  )}
-                </Field>
-                <Field name={"password"}>
-                  {({ input, meta }) => (
-                    <InputWrapper>
-                      <AuthInput
-                        {...input}
-                        type={"password"}
-                        placeholder={"Password"}
-                        bgPath={LockIcon}
-                      />
-                      {meta.error && meta.touched && (
-                        <ConfirmError>{meta.error}</ConfirmError>
-                      )}
-                    </InputWrapper>
-                  )}
-                </Field>
-                <Field name={"confirmPassword"}>
-                  {({ input, meta }) => (
-                    <InputWrapper>
-                      <AuthInput
-                        {...input}
-                        type={"password"}
-                        placeholder={"Confirm Password"}
-                        bgPath={ConfirmIcon}
-                      />
-                      {meta.error && meta.touched && (
-                        <ConfirmError>{meta.error}</ConfirmError>
-                      )}
-                    </InputWrapper>
-                  )}
-                </Field>
-                {errors && <p>{errors}</p>}
-                <Rules>
-                  By clicking Sign Up, you agree to our
-                  <StyledLink to={""}> Terms of Service</StyledLink> and
-                  <StyledLink to={""}> Privacy Policy</StyledLink>.
-                </Rules>
-                <AuthSubmitButton disabled={loading} type={"submit"}>
-                  Sing Up
-                </AuthSubmitButton>
-              </form>
-            )}
-          />
-          <SingInLink>
-            Already registered? <StyledLink to={"/login"}>Sing In</StyledLink>
-          </SingInLink>
-        </AuthFormWrapper>
-      </AuthContent>
-      <Footer />
-    </Wrapper>
+          >
+            {player && <ConfirmToggleIcon />} Sign Up as Player
+          </SingAsPlayer>
+          <SingAsScout
+            toggle={scout}
+            onClick={() => {
+              setPlayer(false);
+              setScout(true);
+            }}
+          >
+            {scout && <ConfirmToggleIcon />} Sign Up as Scout
+          </SingAsScout>
+        </ToggleWrapper>
+        <Description>
+          <Title>{player ? "Players" : "Scouts"}</Title>
+          <Subtitle>
+            {player
+              ? "Players have their own profile within" +
+                " the system and plan on having data collected."
+              : "Coaches and scouts can view players in the system but do not have" +
+                " their own profile."}
+          </Subtitle>
+        </Description>
+        <Form
+          onSubmit={registrationHandler}
+          validate={(values) => {
+            const errors: Record<string, string> = {};
+            if (!values.email) {
+              errors.email = "Must be required";
+            }
+            if (!values.password) {
+              errors.password = "Must be required";
+            } else if (values.password.length < 8) {
+              errors.password = "Must contain more than 8 characters";
+            }
+            if (!values.confirmPassword) {
+              errors.confirmPassword = "Must be required";
+            } else if (values.confirmPassword !== values.password) {
+              errors.confirmPassword = "Must match";
+            }
+            return errors;
+          }}
+          render={({ handleSubmit, form }) => (
+            <form onSubmit={handleSubmit}>
+              <Field name={"email"}>
+                {({ input, meta }) => (
+                  <InputWrapper>
+                    <AuthInput
+                      {...input}
+                      placeholder={"Email"}
+                      bgPath={UserIcon}
+                    />
+                    {meta.error && meta.touched && (
+                      <ConfirmError>{meta.error}</ConfirmError>
+                    )}
+                  </InputWrapper>
+                )}
+              </Field>
+              <Field name={"password"}>
+                {({ input, meta }) => (
+                  <InputWrapper>
+                    <AuthInput
+                      {...input}
+                      type={"password"}
+                      placeholder={"Password"}
+                      bgPath={LockIcon}
+                    />
+                    {meta.error && meta.touched && (
+                      <ConfirmError>{meta.error}</ConfirmError>
+                    )}
+                  </InputWrapper>
+                )}
+              </Field>
+              <Field name={"confirmPassword"}>
+                {({ input, meta }) => (
+                  <InputWrapper>
+                    <AuthInput
+                      {...input}
+                      type={"password"}
+                      placeholder={"Confirm Password"}
+                      bgPath={ConfirmIcon}
+                    />
+                    {meta.error && meta.touched && (
+                      <ConfirmError>{meta.error}</ConfirmError>
+                    )}
+                  </InputWrapper>
+                )}
+              </Field>
+              {errors && <p>{errors}</p>}
+              <Rules>
+                By clicking Sign Up, you agree to our
+                <StyledLink to={""}> Terms of Service</StyledLink> and
+                <StyledLink to={""}> Privacy Policy</StyledLink>.
+              </Rules>
+              <AuthSubmitButton disabled={loading} type={"submit"}>
+                Sing Up
+              </AuthSubmitButton>
+            </form>
+          )}
+        />
+        <SingInLink>
+          Already registered? <StyledLink to={"/login"}>Sing In</StyledLink>
+        </SingInLink>
+      </AuthFormWrapper>
+    </AuthContent>
   );
 };
 
 export default Registration;
-
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
 
 const InputWrapper = styled.div`
   margin-bottom: 15px;

@@ -17,7 +17,11 @@ import { ITeamsQuery } from "graphqlQuery/TeamsQuery";
 import { IFacilityQuery } from "graphqlQuery/FacilityQuery";
 import { ICurrentProfileQuery } from "graphqlQuery/CurrentProfileQuery";
 
-import { Loading } from "../../../Loading";
+import { Loading } from "UIComponents/Loading";
+import positionConst from "constants/positionConst";
+import leftRightConst from "constants/leftRightConst";
+import schoolYearConst from "constants/schoolYearConst";
+import { labelConverter, labelConverterArray } from "services/labelConverter";
 
 interface ISideBarProfileChangerForm {
   profileData: ICurrentProfileQuery;
@@ -49,10 +53,6 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
   facilityData,
   setChanging,
 }) => {
-  const schools: { value: number; label: string }[] = [];
-  const teams: { value: number; label: string }[] = [];
-  const facilities: { value: number; label: string }[] = [];
-
   const updated = () => toast.success("🦄 Success updated!");
 
   const [updateProfile, { data: updatedProfileData, loading: updateLoading }] =
@@ -116,62 +116,23 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
     });
   };
 
-  const positions = useMemo(
-    () => [
-      { value: "catcher", label: "Catcher" },
-      { value: "first_base", label: "First Base" },
-      { value: "shortstop", label: "Shortstop" },
-      { value: "third_base", label: "Third Base" },
-      { value: "outfield", label: "Outfield" },
-      { value: "pitcher", label: "Pitcher" },
-    ],
-    []
-  );
-
-  const leftRight = useMemo(
-    () => [
-      { value: "l", label: "L" },
-      { value: "r", label: "R" },
-    ],
-    []
-  );
-
-  const schoolYear = useMemo(
-    () => [
-      { value: "freshman", label: "Freshman" },
-      { value: "sophomore", label: "Sophomore" },
-      { value: "junior", label: "Junior" },
-      { value: "senior", label: "Senior" },
-      { value: "", label: "None" },
-    ],
-    []
-  );
+  const positions = useMemo(() => positionConst, []);
+  const leftRight = useMemo(() => leftRightConst, []);
+  const schoolYear = useMemo(() => schoolYearConst, []);
+  const schools: { value: number; label: string }[] = [];
+  const teams: { value: number; label: string }[] = [];
+  const facilities: { value: number; label: string }[] = [];
 
   if (schoolData) {
-    Object.keys(schoolData.schools.schools).forEach((el) => {
-      schools.push({
-        value: schoolData.schools.schools[+el].id,
-        label: schoolData.schools.schools[+el].name,
-      });
-    });
+    labelConverterArray(schoolData.schools.schools, schools);
   }
 
   if (teamData) {
-    Object.keys(teamData.teams.teams).forEach((el) => {
-      teams.push({
-        value: teamData.teams.teams[+el].id,
-        label: teamData.teams.teams[+el].name,
-      });
-    });
+    labelConverterArray(teamData.teams.teams, teams);
   }
 
   if (facilityData) {
-    Object.keys(facilityData.facilities.facilities).forEach((el) => {
-      facilities.push({
-        value: facilityData.facilities.facilities[+el].id,
-        label: facilityData.facilities.facilities[+el].u_name,
-      });
-    });
+    labelConverterArray(facilityData.facilities.facilities, facilities);
   }
 
   type DefSelectType = Array<{ value: string | number; label: string }>;
@@ -189,52 +150,35 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
   useEffect(() => {
     console.log("Effect");
 
-    defPosTwo.push({
-      value: profileData.current_profile.position,
-      label: positions.filter(
-        (el) => el.value === profileData.current_profile.position2
-      )[0].label,
-    });
+    defPosTwo.push(
+      labelConverter(profileData.current_profile.position2, positions)
+    );
 
-    defPosOne.push({
-      value: profileData.current_profile.position,
-      label: positions.filter(
-        (el) => el.value === profileData.current_profile.position
-      )[0]?.label,
-    });
+    defPosOne.push(
+      labelConverter(profileData.current_profile.position, positions)
+    );
 
-    defThrow.push({
-      value: profileData.current_profile.throws_hand,
-      label: leftRight.filter(
-        (el) => el.value === profileData.current_profile.throws_hand
-      )[0]?.label,
-    });
+    defThrow.push(
+      labelConverter(profileData.current_profile.throws_hand, leftRight)
+    );
 
-    defBats.push({
-      value: profileData.current_profile.bats_hand,
-      label: leftRight.filter(
-        (el) => el.value === profileData.current_profile.bats_hand
-      )[0].label,
-    });
+    defBats.push(
+      labelConverter(profileData.current_profile.bats_hand, leftRight)
+    );
 
     if (profileData.current_profile.school.id) {
-      defSchool.push({
-        value: profileData.current_profile.school.id,
-        label: schools.filter(
-          (el) => el.value === profileData.current_profile.school.id
-        )[0].label,
-      });
+      defSchool.push(
+        labelConverter(profileData.current_profile.school.id, schools)
+      );
     }
     if (profileData.current_profile.school_year) {
-      defSchoolYear.push({
-        value: profileData.current_profile.school_year,
-        label: schoolYear.filter(
-          (el) => el.value === profileData.current_profile.school_year
-        )[0].label,
-      });
+      defSchoolYear.push(
+        labelConverter(profileData.current_profile.school_year, schoolYear)
+      );
     }
 
     if (profileData.current_profile.teams.length) {
+      // labelConverterArray(profileData.current_profile.teams, defTeams);
       profileData.current_profile.teams.forEach((el) => {
         defTeams.push({
           value: el.id,
@@ -244,6 +188,7 @@ const SideBarProfileChangerForm: FC<ISideBarProfileChangerForm> = ({
     }
 
     if (profileData.current_profile.facilities.length) {
+      // labelConverterArray(profileData.current_profile.facilities, defFacility);
       profileData.current_profile.facilities.forEach((el) => {
         defFacility.push({
           value: el.id,

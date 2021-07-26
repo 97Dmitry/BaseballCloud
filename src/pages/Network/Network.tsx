@@ -116,6 +116,9 @@ const Network: FC<INetwork> = ({}) => {
       {
         Header: "Teams",
         accessor: (data: any) => {
+          if (!data.teams.length) {
+            return "-";
+          }
           return data.teams.map((el: any) => el.name).join(", ");
         },
       },

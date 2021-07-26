@@ -66,4 +66,8 @@ export const AuthSubmitButton = styled.button`
   &:active {
     background-color: #246991;
   }
+
+  &:disabled {
+    background-color: #1a4d68;
+  }
 `;

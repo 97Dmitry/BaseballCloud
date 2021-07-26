@@ -23,7 +23,7 @@ const NetworkTable: FC<INetworkTable> = ({
     <>
       <Wrapper>
         <MainTable {...getTableProps()}>
-          <thead>
+          <Thead>
             {headerGroups.map((headerGroup) => (
               <TableRow {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
@@ -33,7 +33,7 @@ const NetworkTable: FC<INetworkTable> = ({
                 ))}
               </TableRow>
             ))}
-          </thead>
+          </Thead>
           {!loadingData ? (
             tableData.length ? (
               <TableBody {...getTableBodyProps()}>
@@ -76,12 +76,33 @@ export default NetworkTable;
 const Wrapper = styled.div`
   height: 100%;
   flex: 0 1;
+
+  @media (max-width: 700px) {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+  } ;
 `;
 
 const MainTable = styled.table`
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
+`;
+
+const Thead = styled.thead`
+  @media (max-width: 700px) {
+    tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+  }
 `;
 
 const TableHeader = styled.th`
@@ -100,7 +121,9 @@ const TableHeader = styled.th`
   }
 `;
 
-const TableRow = styled.tr``;
+const TableRow = styled.tr`
+  /* margin: 0 0 1rem 0; */
+`;
 
 const TableBody = styled.tbody``;
 
@@ -113,7 +136,44 @@ const CellWrapper = styled.tr`
 `;
 
 const Cell = styled.td`
-  padding: 15px 15px;
+  padding: 5px 15px;
+
+  @media (max-width: 700px) {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 30%;
+    &:nth-of-type(1):before {
+      content: "First Name";
+    }
+    &:nth-of-type(2):before {
+      content: "Sessions";
+    }
+    &:nth-of-type(3):before {
+      content: "School";
+    }
+    &:nth-of-type(4):before {
+      content: "Teams";
+    }
+    &:nth-of-type(5):before {
+      content: "Age";
+    }
+    &:nth-of-type(6):before {
+      content: "Favorite";
+    }
+  }
+  &:before {
+    @media (max-width: 700px) {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 0;
+      left: 6px;
+      width: 25%;
+      padding: 5px 15px;
+      white-space: nowrap;
+    }
+  }
 `;
 const BetweenCell = styled.div`
   height: 4px;

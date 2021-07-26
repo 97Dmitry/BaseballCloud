@@ -30,6 +30,7 @@ export function* handleSingIn(
         role: data.role,
       })
     );
+
     yield put(setLoading(false));
     yield put(setAuthorized(true));
   } catch (e) {
@@ -46,8 +47,6 @@ export function* handleSingUp(
   }>
 ): any {
   try {
-    console.log("qwe");
-
     yield put(setErrors(null));
     yield put(setLoading(true));
     const response = yield call(singUp, { ...action.payload });
@@ -61,8 +60,6 @@ export function* handleSingUp(
       })
     );
     yield put(setLoading(false));
-    console.log("asd");
-
     yield put(setAuthorized(true));
   } catch (e) {
     yield put(setLoading(false));

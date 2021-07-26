@@ -64,7 +64,7 @@ const SideBar: FC<ISideBar> = ({ profileData }) => {
 
   return (
     <>
-      <Wrapper>
+      <Wrapper formActive={changing}>
         {schoolLoading && teamLoading && facilityLoading ? (
           <Loading />
         ) : (
@@ -175,7 +175,11 @@ const SideBar: FC<ISideBar> = ({ profileData }) => {
 
 export default SideBar;
 
-const Wrapper = styled.aside`
+interface IWrapper {
+  formActive: boolean;
+}
+
+const Wrapper = styled.aside<IWrapper>`
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   padding: 15px;
 
@@ -184,8 +188,10 @@ const Wrapper = styled.aside`
   flex: 0 0 298px;
   @media (max-width: 700px) {
     display: flex;
-    flex: 0 0 auto;
-    /* flex-direction: column; */
+    flex: ${(props) => (props.formActive ? "1 1 auto" : "0 0 auto")};
+    min-height: ${(props) => (props.formActive ? "100%" : "auto")};
+    padding: ${(props) =>
+      props.formActive ? "15px 15px 25px 15px" : null} !important;
   }
 `;
 

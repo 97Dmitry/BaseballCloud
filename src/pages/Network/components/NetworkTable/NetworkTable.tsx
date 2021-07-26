@@ -98,9 +98,7 @@ const MainTable = styled.table`
 const Thead = styled.thead`
   @media (max-width: 700px) {
     tr {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
+      display: none;
     }
   }
 `;
@@ -121,9 +119,7 @@ const TableHeader = styled.th`
   }
 `;
 
-const TableRow = styled.tr`
-  /* margin: 0 0 1rem 0; */
-`;
+const TableRow = styled.tr``;
 
 const TableBody = styled.tbody``;
 
@@ -164,9 +160,7 @@ const Cell = styled.td`
   }
   &:before {
     @media (max-width: 700px) {
-      /* Now like a table header */
       position: absolute;
-      /* Top/left values mimic padding */
       top: 0;
       left: 6px;
       width: 25%;

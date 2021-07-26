@@ -5,8 +5,8 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import styled from "styled-components";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   ApolloClient,
@@ -26,6 +26,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import { Login } from "pages/Login";
 import { Registration } from "pages/Registration";
 import { Profile } from "pages/Profile";
+import { UserProfile } from "pages/UserProfile";
 import { Network } from "pages/Network";
 
 import RouterGuard from "routes/RouterGuard";
@@ -66,7 +67,18 @@ const App: FC = () => {
       <Router>
         <Switch>
           <Redirect exact from={"/"} to={"/profile"} />
-          <RouterGuard path={"/profile"} component={Profile} auth={!!token} />
+          <RouterGuard
+            exact
+            path={"/profile"}
+            component={Profile}
+            auth={!!token}
+          />
+          <RouterGuard
+            exact
+            path={"/profile/:id"}
+            component={UserProfile}
+            auth={!!token}
+          />
           <RouterGuard path={"/network"} component={Network} auth={!!token} />
           <Route
             path={"/login"}

@@ -4,13 +4,13 @@ import { useTable } from "react-table";
 
 import { Loading } from "UIComponents/Loading";
 
-interface ISessionReportsTable {
+interface IBattingTable {
   columns: any;
   tableData: any;
   loading: boolean;
 }
 
-const SessionReportsTable: FC<ISessionReportsTable> = ({
+const BattingTable: FC<IBattingTable> = ({
   columns,
   tableData = [],
   loading,
@@ -18,7 +18,6 @@ const SessionReportsTable: FC<ISessionReportsTable> = ({
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     //@ts-ignore
     useTable({ columns, data: tableData });
-
   return (
     <>
       <Wrapper>
@@ -27,9 +26,9 @@ const SessionReportsTable: FC<ISessionReportsTable> = ({
             {headerGroups.map((headerGroup) => (
               <TableRow {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <TableTitle {...column.getHeaderProps()}>
+                  <TableHeader {...column.getHeaderProps()}>
                     {column.render("Header")}
-                  </TableTitle>
+                  </TableHeader>
                 ))}
               </TableRow>
             ))}
@@ -68,27 +67,26 @@ const SessionReportsTable: FC<ISessionReportsTable> = ({
   );
 };
 
-export default SessionReportsTable;
+export default BattingTable;
 
 const Wrapper = styled.div``;
 
 const MainTable = styled.table`
   position: sticky;
-
   width: 100%;
 `;
 
-const TableRow = styled.tr`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const TableTitle = styled.th`
+const TableHeader = styled.th`
   text-align: start;
   font-size: 14px;
   line-height: 1;
   font-weight: 300;
   color: #667784;
+`;
+
+const TableRow = styled.tr`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const TableBody = styled.tbody`

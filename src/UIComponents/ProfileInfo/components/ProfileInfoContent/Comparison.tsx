@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import styled from "styled-components";
 
 import { useQuery } from "@apollo/client";
-import { ICurrentProfileQuery } from "graphqlQuery/CurrentProfileQuery";
 import {
   ProfileNames,
   IProfileNames,
@@ -16,13 +15,29 @@ import {
 
 import { ReactComponent as Lupa } from "asset/svg/lupa_icon.svg";
 import { ReactComponent as DefaultProfileImg } from "asset/svg/user_profile_for_header.svg";
-import { ComparsionDropDownLink } from "./components/ComparsionDropDownLink";
+import { ComparsionDropDownLink } from "./ComparsionDropDownLink";
 
 interface IComparison {
-  userProfile: ICurrentProfileQuery;
+  position: string;
+  avatar: string;
+  first_name: string;
+  last_name: string;
+  age: number;
+  feet: number;
+  inches: number;
+  weight: number;
 }
 
-const Comparison: FC<IComparison> = ({ userProfile }) => {
+const Comparison: FC<IComparison> = ({
+  avatar,
+  first_name,
+  last_name,
+  position,
+  age,
+  feet,
+  inches,
+  weight,
+}) => {
   const [nameDropDown, setNameDropDown] = useState(false);
   const [filterDropDown, setFilterDropDown] = useState(false);
   const [filterValue, setFilterValue] = useState(0);
@@ -36,7 +51,7 @@ const Comparison: FC<IComparison> = ({ userProfile }) => {
     variables: {
       input: {
         player_name: searchInput,
-        position: userProfile.current_profile.position,
+        position: position,
       },
     },
   });
@@ -61,12 +76,8 @@ const Comparison: FC<IComparison> = ({ userProfile }) => {
         )}
         <UserWrpper>
           <UserUnit>
-            <UserImg src={userProfile.current_profile.avatar} alt={""} />
-            <UserName>
-              {userProfile.current_profile.first_name +
-                " " +
-                userProfile.current_profile.last_name}
-            </UserName>
+            <UserImg src={avatar} alt={""} />
+            <UserName>{first_name + " " + last_name}</UserName>
           </UserUnit>
           <UserUnit>
             {fetchedUser?.profile.avatar ? (
@@ -114,17 +125,11 @@ const Comparison: FC<IComparison> = ({ userProfile }) => {
         </UserWrpper>
         <Table>
           <TableUnit>
-            <div>Age: {userProfile.current_profile.age}</div>
+            <div>Age: {age}</div>
             <div>Age: {fetchedUser ? fetchedUser.profile.age : "-"}</div>
           </TableUnit>
           <TableUnit>
-            <div>
-              Height:{" "}
-              {userProfile.current_profile.feet +
-                " ft " +
-                userProfile.current_profile.inches +
-                " in "}
-            </div>
+            <div>Height: {feet + " ft " + inches + " in "}</div>
             <div>
               Height:{" "}
               {fetchedUser
@@ -136,7 +141,7 @@ const Comparison: FC<IComparison> = ({ userProfile }) => {
             </div>
           </TableUnit>
           <TableUnit>
-            <div>Weight: {userProfile.current_profile.weight + " lbs"}</div>
+            <div>Weight: {weight + " lbs"}</div>
             <div>
               Weight: {fetchedUser ? fetchedUser.profile.weight + " lbs" : "-"}
             </div>
@@ -331,7 +336,6 @@ const DropdownLink = styled.p`
 const OutsideClick = styled.div`
   position: absolute;
   left: 0;
-  /* right: 0; */
   top: 0;
   bottom: 0;
   z-index: 10;

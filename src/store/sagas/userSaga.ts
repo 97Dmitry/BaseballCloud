@@ -30,6 +30,7 @@ export function* handleSingIn(
         role: data.role,
       })
     );
+
     yield put(setLoading(false));
     yield put(setAuthorized(true));
   } catch (e) {

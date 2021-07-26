@@ -6,6 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import styled from "styled-components";
+import { ToastContainer } from "react-toastify";
 
 import {
   ApolloClient,
@@ -21,11 +22,13 @@ import httpClient from "api/server";
 import { useAppSelector } from "store/hooks";
 import { selectorUserToken } from "store/user/userSelector";
 
-import { Login } from "views/containers/Login";
-import { Registration } from "views/containers/Registration";
-import { Profile } from "views/containers/Profile";
+import AuthLayout from "./layouts/AuthLayout";
+import { Login } from "pages/Login";
+import { Registration } from "pages/Registration";
+import { Profile } from "pages/Profile";
+import { Network } from "pages/Network";
 
-import RouterGuard from "utils/RouterGuard";
+import RouterGuard from "routes/RouterGuard";
 
 const App: FC = () => {
   const { token, clientToken, email } = useAppSelector(selectorUserToken);
@@ -37,17 +40,6 @@ const App: FC = () => {
   const httpLink = createHttpLink({
     uri: "https://baseballcloud-back.herokuapp.com/api/v1/graphql",
   });
-
-  // const authLink = setContext((_, { headers }) => {
-  //   return {
-  //     headers: {
-  //       ...headers,
-  //       Authorization: token ? `Bearer ${token}` : "",
-  //       "Access-Token": token ? token : "",
-  //       Client: clientToken,
-  //     },
-  //   };
-  // });
 
   const authMiddleware = new ApolloLink((operation, forward) => {
     operation.setContext(({ headers = {} }) => ({
@@ -69,27 +61,29 @@ const App: FC = () => {
 
   return (
     <ApolloProvider client={client}>
+      <ToastContainer />
+
       <Router>
         <Switch>
-          <Wrapper>
-            <Route path={"/"}>
-              <Redirect to={"/profile"} />
-            </Route>
-            <RouterGuard
-              children={
-                <Route path={"/profile"}>
-                  <Profile />
-                </Route>
-              }
-              auth={token ? true : false}
-            />
-            <Route path={"/login"}>
-              <Login />
-            </Route>
-            <Route path={"/registration"}>
-              <Registration />
-            </Route>
-          </Wrapper>
+          <Redirect exact from={"/"} to={"/profile"} />
+          <RouterGuard path={"/profile"} component={Profile} auth={!!token} />
+          <RouterGuard path={"/network"} component={Network} auth={!!token} />
+          <Route
+            path={"/login"}
+            render={() => (
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
+            )}
+          ></Route>
+          <Route
+            path={"/registration"}
+            render={() => (
+              <AuthLayout>
+                <Registration />
+              </AuthLayout>
+            )}
+          ></Route>
         </Switch>
       </Router>
     </ApolloProvider>
@@ -97,9 +91,3 @@ const App: FC = () => {
 };
 
 export default App;
-
-const Wrapper = styled.div`
-  display: flex;
-  min-height: 100vh;
-  height: 100%;
-`;

@@ -93,9 +93,9 @@ export interface IProfileByIdQuery {
     bats_hand: string;
     biography: string;
     school_year: string;
-    feet: string;
-    inches: string;
-    weight: string;
+    feet: number;
+    inches: number;
+    weight: number;
     age: number;
     recent_events: {
       id: number;
@@ -144,15 +144,15 @@ export interface IProfileByIdQuery {
       id: number;
       name: string;
     };
-    teams: {
+    teams: Array<{
       id: number;
       name: string;
-    };
-    facilities: {
+    }>;
+    facilities: Array<{
       id: number;
       name: string;
       u_name: string;
-    };
+    }>;
     favorite: string;
     events_opened: string;
     paid: string;

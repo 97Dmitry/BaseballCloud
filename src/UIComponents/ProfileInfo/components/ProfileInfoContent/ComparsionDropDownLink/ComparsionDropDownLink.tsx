@@ -36,7 +36,6 @@ export default ComparsionDropDownLink;
 const Wrapper = styled.div`
   cursor: pointer;
   padding: 10px 15px;
-
   &:hover {
     background: #5888b3b5;
   }

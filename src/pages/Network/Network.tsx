@@ -1,8 +1,7 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -27,6 +26,7 @@ import { NetworkTable } from "pages/Network/components/NetworkTable";
 import { ReactComponent as Heart } from "asset/svg/heart_icon.svg";
 import { ReactComponent as FullHeart } from "asset/svg/full_heart_icon.svg";
 import { Pagination } from "UIComponents/Pagination";
+import { Link } from "react-router-dom";
 
 interface INetwork {}
 
@@ -88,7 +88,11 @@ const Network: FC<INetwork> = ({}) => {
     () => [
       {
         Header: "Player Name",
-        accessor: (data: any) => `${data.first_name} ${data.last_name}`,
+        accessor: (data: any) => (
+          <Link to={`/profile/${data.id}`}>
+            {data.first_name + data.last_name}
+          </Link>
+        ),
       },
       {
         Header: "Sessions",
@@ -172,7 +176,6 @@ const Network: FC<INetwork> = ({}) => {
         <Loading fullScreen={true} />
       ) : (
         <Wrapper>
-          <ToastContainer />
           {userProfile && (
             <>
               <Content>

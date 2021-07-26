@@ -8,7 +8,7 @@ import {
   IBattingLogQueryVars,
 } from "graphqlQuery/BattingLogQuery";
 
-import { BattingTable } from "./components/BattingTable";
+import { BattingTable } from "./BattingTable";
 import { ReactComponent as Lupa } from "asset/svg/lupa_icon.svg";
 
 interface IBatting {
@@ -87,17 +87,12 @@ const Batting: FC<IBatting> = ({ contentNum, userId }) => {
               onChange={(event) => setInputData(event.target.value)}
             />
           </InputWrapper>
-          {/* {tableData ? (
-            <> */}
+
           <BattingTable
             columns={columns}
             tableData={tableData}
             loading={loading}
           />
-          {/* </>
-          ) : (
-            <Loading />
-          )} */}
         </>
       ) : null}
     </>

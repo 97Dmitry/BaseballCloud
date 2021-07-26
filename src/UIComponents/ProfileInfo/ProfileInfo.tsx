@@ -1,31 +1,53 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
 
-import { ICurrentProfileQuery } from "graphqlQuery/CurrentProfileQuery";
-
 import {
   Batting,
   Comparison,
   SessionReports,
-} from "pages/Profile/components/ProfileInfoContent";
-import { ProfileInfoBattingButton } from "../ProfileInfoBattingButton";
+} from "./components/ProfileInfoContent";
+import { ProfileInfoBattingButton } from "./components/ProfileInfoBattingButton";
 
 interface IProfileInfo {
-  userProfile: ICurrentProfileQuery;
+  userId: number;
+  position: string;
+  avatar: string;
+  first_name: string;
+  last_name: string;
+  age: number;
+  feet: number;
+  inches: number;
+  weight: number;
 }
 
-const ProfileInfo: FC<IProfileInfo> = ({ userProfile }) => {
+const ProfileInfo: FC<IProfileInfo> = ({
+  userId,
+  avatar,
+  first_name,
+  last_name,
+  position,
+  age,
+  feet,
+  inches,
+  weight,
+}) => {
   const [unit, setUnit] = useState(0);
 
   const [battingContent, setBattingContent] = useState(1);
   const contentButton = ["Batting", "Session Reports", "Comparison"];
   const contentArr = [
-    <Batting
-      userId={userProfile.current_profile.id}
-      contentNum={battingContent}
+    <Batting userId={userId} contentNum={battingContent} />,
+    <SessionReports userId={userId} />,
+    <Comparison
+      age={age}
+      avatar={avatar}
+      feet={feet}
+      first_name={first_name}
+      inches={inches}
+      weight={weight}
+      last_name={last_name}
+      position={position}
     />,
-    <SessionReports userId={userProfile.current_profile.id} />,
-    <Comparison userProfile={userProfile} />,
   ];
 
   return (
@@ -70,27 +92,6 @@ const ProfileInfo: FC<IProfileInfo> = ({ userProfile }) => {
               </Button>
             );
           })}
-          {/* <Button
-            onClick={() => {
-              setUnit(0);
-            }}
-          >
-            Batting
-          </Button>
-          <Button
-            onClick={() => {
-              setUnit(1);
-            }}
-          >
-            Session Reports
-          </Button>
-          <Button
-            onClick={() => {
-              setUnit(2);
-            }}
-          >
-            Comparison
-          </Button> */}
         </Buttons>
         <Content>{contentArr[unit]}</Content>
       </Wrapper>
@@ -105,7 +106,6 @@ const Wrapper = styled.div`
   margin: 16px;
   padding: 16px;
   border-radius: 8px;
-  /* min-height: 420px; */
   @media (max-width: 700px) {
     padding: 5px;
   }

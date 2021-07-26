@@ -10,7 +10,7 @@ import {
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { SessionReportsTable } from "./components/SessionReportsTable";
+import SessionReportsTable from "./SessionReportsTable";
 
 interface ISessionReports {
   userId: number;

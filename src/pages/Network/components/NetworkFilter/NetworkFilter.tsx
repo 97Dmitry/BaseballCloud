@@ -55,7 +55,6 @@ const NetworkFilter: FC<INetworkFilter> = ({
 
         <Titile>Network</Titile>
         <Filters>
-          {/* <FiltersUnit> */}
           <InputFilterWrapper>
             <InputFilter
               placeholder={"School"}
@@ -127,7 +126,6 @@ const NetworkFilter: FC<INetworkFilter> = ({
               </DropdownLink>
             </Dropdown>
           </DropDownWrapper>
-          {/* </FiltersUnit> */}
           <DropDownWrapperMargin
             onClick={() => setShowCountDropDown(!showCountDropDown)}
           >
@@ -192,11 +190,6 @@ const Filters = styled.div`
     justify-content: center;
   }
 `;
-
-// const FiltersUnit = styled.div`
-//   display: flex;
-//   margin-right: 28px;
-// `;
 
 const DropDownWrapper = styled.div`
   align-self: center;

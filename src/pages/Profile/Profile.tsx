@@ -7,9 +7,7 @@ import {
   ICurrentProfileQuery,
 } from "graphqlQuery/CurrentProfileQuery";
 
-// import { Header } from "UIComponents/Header";
-// import { Footer } from "UIComponents/Footer";
-import { ProfileInfo } from "./components/ProfileInfo";
+import { ProfileInfo } from "UIComponents/ProfileInfo";
 import { Batting } from "./components/Batting";
 import { SessionReports } from "./components/SessionReports";
 import { SideBar } from "UIComponents/SideBar";
@@ -30,7 +28,17 @@ const Profile: FC<IProfile> = () => {
               <Info>
                 <Batting id={data.current_profile.id} />
                 <SessionReports id={data.current_profile.id} />
-                <ProfileInfo userProfile={data} />
+                <ProfileInfo
+                  age={data.current_profile.age}
+                  avatar={data.current_profile.avatar}
+                  feet={data.current_profile.feet}
+                  first_name={data.current_profile.first_name}
+                  inches={data.current_profile.inches}
+                  last_name={data.current_profile.last_name}
+                  position={data.current_profile.position}
+                  weight={data.current_profile.weight}
+                  userId={data.current_profile.id}
+                />
               </Info>
             </Content>
           </>
@@ -43,13 +51,7 @@ const Profile: FC<IProfile> = () => {
 export default Profile;
 
 const Wrapper = styled.div`
-  //display: flex;
-  //flex-direction: column;
-  //width: 100%;
   height: 100%;
-  //@media (max-width: 700px) {
-  //  height: 100%;
-  //}
 `;
 
 const Content = styled.div`

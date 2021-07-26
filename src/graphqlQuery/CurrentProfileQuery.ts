@@ -62,9 +62,9 @@ export interface ICurrentProfileQuery {
     bats_hand: string;
     biography: string;
     school_year: string;
-    feet: string;
-    inches: string;
-    weight: string;
+    feet: number;
+    inches: number;
+    weight: number;
     age: number;
     school: ISchool;
     teams: Array<ITeams>;

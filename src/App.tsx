@@ -28,8 +28,9 @@ import { Registration } from "pages/Registration";
 import { Profile } from "pages/Profile";
 import { UserProfile } from "pages/UserProfile";
 import { Network } from "pages/Network";
+import { LeaderBoard } from "pages/LeaderBoard";
 
-import RouterGuard from "routes/RouterGuard";
+import AuthProtectedRoute from "routes/AuthProtectedRoute";
 
 const App: FC = () => {
   const { token, clientToken, email } = useAppSelector(selectorUserToken);
@@ -67,19 +68,28 @@ const App: FC = () => {
       <Router>
         <Switch>
           <Redirect exact from={"/"} to={"/profile"} />
-          <RouterGuard
+          <AuthProtectedRoute
             exact
             path={"/profile"}
             component={Profile}
             auth={!!token}
           />
-          <RouterGuard
+          <AuthProtectedRoute
             exact
             path={"/profile/:id"}
             component={UserProfile}
             auth={!!token}
           />
-          <RouterGuard path={"/network"} component={Network} auth={!!token} />
+          <AuthProtectedRoute
+            path={"/network"}
+            component={Network}
+            auth={!!token}
+          />
+          <AuthProtectedRoute
+            path={"/leaderboard"}
+            component={LeaderBoard}
+            auth={!!token}
+          />
           <Route
             path={"/login"}
             render={() => (

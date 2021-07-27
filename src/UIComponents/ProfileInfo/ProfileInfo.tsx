@@ -7,6 +7,7 @@ import {
   SessionReports,
 } from "./components/ProfileInfoContent";
 import { ProfileInfoBattingButton } from "./components/ProfileInfoBattingButton";
+import { Button, SelectedButton } from "styles/generalStyle";
 
 interface IProfileInfo {
   userId: number;
@@ -113,29 +114,6 @@ const Wrapper = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-`;
-
-const Button = styled.div`
-  padding: 8px;
-  margin: 8px;
-  color: #667784;
-  font-weight: 700;
-  border: 2px solid #667784;
-  border-radius: 40px;
-  cursor: pointer;
-
-  &:hover {
-    background: rgba(102, 119, 132, 0.4);
-  }
-
-  @media (max-width: 700px) {
-    height: 55px;
-  }
-`;
-
-const SelectedButton = styled(Button)`
-  color: white;
-  background: #667784;
 `;
 
 const Content = styled.div``;

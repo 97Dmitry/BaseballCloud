@@ -39,7 +39,7 @@ const SessionReports: FC<ISessionReports> = ({ userId }) => {
         profile_id: userId,
         count: 10,
         offset: 0,
-        date: dateString,
+        date: (() => (dateString.length ? dateString : null))(),
         event_type: eventType[eventTypeI],
       },
     },

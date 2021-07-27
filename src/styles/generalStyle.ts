@@ -71,3 +71,66 @@ export const AuthSubmitButton = styled.button`
     background-color: #1a4d68;
   }
 `;
+
+export const Button = styled.div`
+  padding: 8px;
+  margin: 8px;
+  color: #667784;
+  font-weight: 700;
+  border: 2px solid #667784;
+  border-radius: 40px;
+  cursor: pointer;
+
+  text-align: center;
+
+  &:hover {
+    background: rgba(102, 119, 132, 0.4);
+  }
+
+  @media (max-width: 700px) {
+    height: 55px;
+  }
+`;
+
+export const SelectedButton = styled(Button)`
+  color: white;
+  background: #667784;
+`;
+
+// Dropdown
+
+export const DropDownWrapper = styled.div`
+  align-self: center;
+  cursor: pointer;
+  position: relative;
+
+  color: #48bbff;
+`;
+
+interface IDropdown {
+  drop: boolean;
+}
+export const Dropdown = styled.div<IDropdown>`
+  display: ${(props) => (props.drop ? "block" : "none")};
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  margin-top: 10px;
+  z-index: 200;
+`;
+
+export const DropdownLink = styled.p`
+  cursor: pointer;
+  margin: 10px 5px 5px;
+`;
+
+export const OutsideClick = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  height: 100vh;
+  width: 100%;
+`;

@@ -22,19 +22,21 @@ export const BattingSummaryQuery = gql`
 `;
 
 export interface IBattingSummaryQuery {
-  top_values: {
-    id: number;
-    distance: number;
-    pitch_type: string;
-    launch_angle: number;
-    exit_velocity: number;
-  };
-  average_values: {
-    id: number;
-    distance: number;
-    pitch_type: string;
-    launch_angle: number;
-    exit_velocity: number;
+  batting_summary: {
+    top_values: Array<{
+      id: number;
+      distance: number;
+      pitch_type: string;
+      launch_angle: number;
+      exit_velocity: number;
+    }>;
+    average_values: Array<{
+      id: number;
+      distance: number;
+      pitch_type: string;
+      launch_angle: number;
+      exit_velocity: number;
+    }>;
   };
 }
 

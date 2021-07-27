@@ -3,12 +3,12 @@ import { Route, Redirect } from "react-router-dom";
 
 import MainLayout from "../layouts/MainLayouts";
 
-interface IGuardedRoute {
+interface IAuthProtectedRoute {
   component: FC<any>;
   auth: boolean;
   [x: string]: any;
 }
-const RouterGuard: FC<IGuardedRoute> = ({
+const AuthProtectedRoute: FC<IAuthProtectedRoute> = ({
   component: Component,
   auth,
   ...rest
@@ -29,4 +29,4 @@ const RouterGuard: FC<IGuardedRoute> = ({
   );
 };
 
-export default RouterGuard;
+export default AuthProtectedRoute;

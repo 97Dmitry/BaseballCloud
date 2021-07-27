@@ -10,7 +10,6 @@ import {
 } from "graphqlQuery/ProfileByIdQuery";
 
 import { Batting } from "pages/Profile/components/Batting";
-import { SessionReports } from "pages/Profile/components/SessionReports";
 import { ProfileInfo } from "UIComponents/ProfileInfo";
 import { SideBarLight } from "./components/SideBarLight";
 
@@ -34,7 +33,6 @@ const UserProfile: FC<IUserProfile> = ({}) => {
               <SideBarLight userProfile={data} />
               <Info>
                 <Batting id={data.profile.id} />
-                <SessionReports id={data.profile.id} />
                 <ProfileInfo
                   age={data.profile.age}
                   avatar={data.profile.avatar}

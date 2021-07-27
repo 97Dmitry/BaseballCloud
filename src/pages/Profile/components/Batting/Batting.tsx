@@ -24,6 +24,7 @@ const Batting: FC<IBatting> = ({ id }) => {
     skip: !id,
     variables: { id: id },
   });
+
   return (
     <>
       <Wrapper>
@@ -35,18 +36,18 @@ const Batting: FC<IBatting> = ({ id }) => {
             <Content>
               <BattingColumn
                 title={"Exit Velocity"}
-                load={data.top_values?.exit_velocity}
-                value={data.top_values?.exit_velocity}
+                load={data.batting_summary.top_values[0]?.exit_velocity}
+                value={data.batting_summary.top_values[0]?.exit_velocity}
               />
               <BattingColumn
                 title={"Carry Distance"}
-                load={data?.top_values?.distance}
-                value={data?.top_values?.distance}
+                load={data.batting_summary.top_values[0]?.distance}
+                value={data.batting_summary.top_values[0]?.distance}
               />
               <BattingColumn
                 title={"Launch Angle"}
-                load={data?.top_values?.launch_angle}
-                value={data?.top_values?.launch_angle}
+                load={data.batting_summary.top_values[0]?.launch_angle}
+                value={data.batting_summary.top_values[0]?.launch_angle}
               />
             </Content>
           )

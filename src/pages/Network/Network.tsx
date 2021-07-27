@@ -1,5 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
@@ -20,13 +21,13 @@ import {
 } from "graphqlMutation/UpdateFavoriteProfile";
 
 import { Loading } from "UIComponents/Loading";
-import { NetworkFilter } from "pages/Network/components/NetworkFilter";
-import { NetworkSearch } from "pages/Network/components/NetworkSearch";
-import { NetworkTable } from "pages/Network/components/NetworkTable";
+import { NetworkFilter } from "./components/NetworkFilter";
+import { NetworkSearch } from "./components/NetworkSearch";
+import { NetworkTable } from "./components/NetworkTable";
 import { ReactComponent as Heart } from "asset/svg/heart_icon.svg";
 import { ReactComponent as FullHeart } from "asset/svg/full_heart_icon.svg";
 import { Pagination } from "UIComponents/Pagination";
-import { Link } from "react-router-dom";
+import schoolYearConst from "constants/schoolYearConst";
 
 interface INetwork {}
 
@@ -101,12 +102,7 @@ const Network: FC<INetwork> = ({}) => {
       {
         Header: "School",
         accessor: (data: any) => {
-          const schoolYear = [
-            { value: "freshman", label: "Freshman" },
-            { value: "sophomore", label: "Sophomore" },
-            { value: "junior", label: "Junior" },
-            { value: "senior", label: "Senior" },
-          ];
+          const schoolYear = schoolYearConst;
           const value = schoolYear.filter(
             (el: any) => el.value === data.school_year
           )[0]?.label;

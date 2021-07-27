@@ -30,7 +30,7 @@ export interface IProfileEventsQueryVars {
     profile_id: number;
     count: number;
     offset: number;
-    date?: string;
+    date?: string | null;
     event_type?: string;
   };
 }

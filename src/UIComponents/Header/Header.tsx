@@ -27,10 +27,20 @@ const Header: FC<IHeader> = ({ username, userAvatar }) => {
   return (
     <Wrapper>
       {drop && <OutsideClick onClick={() => setDrop(!drop)} />}
-      <HeaderIcon />
+      <HeaderIconStyled
+        onClick={() => {
+          history.push("/");
+        }}
+      />
       {user && (
         <RightUnit>
-          <Clickable>Leaderboard</Clickable>
+          <Clickable
+            onClick={() => {
+              history.push("/leaderboard");
+            }}
+          >
+            Leaderboard
+          </Clickable>
           <Clickable
             onClick={() => {
               history.push("/network");
@@ -137,4 +147,8 @@ const Avatar = styled.img`
   height: 32px;
   margin-right: 15px;
   border-radius: 50%;
+`;
+
+const HeaderIconStyled = styled(HeaderIcon)`
+  cursor: pointer;
 `;

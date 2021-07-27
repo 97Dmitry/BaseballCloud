@@ -1,19 +1,20 @@
 import { FC } from "react";
 import styled from "styled-components";
+
 import { useTable } from "react-table";
 
 import { Loading } from "UIComponents/Loading";
 
-interface IBattingTable {
+interface ILeaderBoardTable {
   columns: any;
   tableData: any;
-  loading: boolean;
+  loadingData: boolean;
 }
 
-const BattingTable: FC<IBattingTable> = ({
+const LeaderBoardTable: FC<ILeaderBoardTable> = ({
   columns,
   tableData = [],
-  loading,
+  loadingData,
 }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     //@ts-ignore
@@ -33,7 +34,7 @@ const BattingTable: FC<IBattingTable> = ({
               </TableRow>
             ))}
           </Thead>
-          {!loading ? (
+          {!loadingData ? (
             tableData.length ? (
               <TableBody {...getTableBodyProps()}>
                 {rows.map((row) => {
@@ -57,10 +58,10 @@ const BattingTable: FC<IBattingTable> = ({
             ) : null
           ) : null}
         </MainTable>
-        {!tableData.length && !loading ? (
+        {!tableData.length && !loadingData ? (
           <NoData>There's no info yet!</NoData>
         ) : null}
-        {loading ? (
+        {loadingData ? (
           <NoData>
             <Loading fullScreen={true} />
           </NoData>
@@ -70,7 +71,7 @@ const BattingTable: FC<IBattingTable> = ({
   );
 };
 
-export default BattingTable;
+export default LeaderBoardTable;
 
 const Wrapper = styled.div`
   height: 100%;
@@ -137,21 +138,33 @@ const Cell = styled.td`
     border: none;
     border-bottom: 1px solid #eee;
     position: relative;
-    padding-left: 55%;
+    padding-left: 40%;
     &:nth-of-type(1):before {
-      content: "Date";
+      content: "Rank";
     }
     &:nth-of-type(2):before {
-      content: "Pitcher Name";
+      content: "Batter Name";
     }
     &:nth-of-type(3):before {
-      content: "Pitcher Handedness";
+      content: "Age";
     }
     &:nth-of-type(4):before {
-      content: "Pitch Type";
+      content: "School";
     }
     &:nth-of-type(5):before {
-      content: "Pitch Call";
+      content: "Teams";
+    }
+    &:nth-of-type(6):before {
+      content: "Exit Velocity";
+    }
+    &:nth-of-type(7):before {
+      content: "Launch Angle";
+    }
+    &:nth-of-type(8):before {
+      content: "Favorite";
+    }
+    &:nth-of-type(9):before {
+      content: "Distance";
     }
   }
   &:before {

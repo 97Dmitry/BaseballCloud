@@ -8,6 +8,14 @@ export const labelConverter = (
   };
 };
 
+export const reverseLabelConverter = (
+  value: string | null,
+  selectionArray: { value: string; label: string }[]
+): string | null => {
+  if (value) return selectionArray.filter((el) => el.label === value)[0].value;
+  return null;
+};
+
 export const labelConverterArray = (
   data: Array<{
     id: number;

@@ -10,17 +10,19 @@ import {
   IUpdateFavoriteProfile,
   UpdateFavoriteProfile,
 } from "graphqlMutation/UpdateFavoriteProfile";
+import {
+  ILeaderBoardBattinQuery,
+  ILeaderBoardBattinQueryVars,
+  LeaderBoardBattinQuery,
+} from "graphqlQuery/LeaderBoardBattingQuery";
 
 import { LeaderBoardFilter } from "./components/LeaderBoardFilter";
 import { LeaderTableSwitcher } from "./components/LeaderTableSwitcher";
 import { LeaderBoardTable } from "./components/LeaderBoardTable";
 import { ReactComponent as Heart } from "asset/svg/heart_icon.svg";
 import { ReactComponent as FullHeart } from "asset/svg/full_heart_icon.svg";
-import {
-  ILeaderBoardBattinQuery,
-  ILeaderBoardBattinQueryVars,
-  LeaderBoardBattinQuery,
-} from "graphqlQuery/LeaderBoardBattingQuery";
+import { reverseLabelConverter } from "services/labelConverter";
+import positionConst from "constants/positionConst";
 
 interface ILeaderBoard {}
 
@@ -54,15 +56,7 @@ const LeaderBoard: FC<ILeaderBoard> = ({}) => {
           favorite: favoriteFilter,
           date: dateFilter,
           type: typeFilter,
-          position: (() => {
-            if (positionFilter === null) return null;
-            if (positionFilter === "Catcher") return "catcher";
-            if (positionFilter === "First Base") return "first_base";
-            if (positionFilter === "Second Base") return "second_base";
-            if (positionFilter === "Outfield") return "outfield";
-            if (positionFilter === "Shortstop") return "shortstop";
-            if (positionFilter === "Pitcher") return "pitcher";
-          })(),
+          position: reverseLabelConverter(positionFilter, positionConst),
         },
       },
     }

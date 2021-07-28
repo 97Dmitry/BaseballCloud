@@ -36,7 +36,9 @@ const Network: FC<INetwork> = ({}) => {
   const history = useHistory();
   const query = queryString.parse(history.location.search.substring(1));
 
-  const [showCount, setShowCount] = useState(+query.show | 10);
+  const [showCount, setShowCount] = useState(
+    +query.show === 10 && 15 && 25 ? +query.show : 10
+  );
   const [totalPages, setTotalPages] = useState(0);
 
   const [schoolFilter, setSchoolFilter] = useState("");
@@ -51,7 +53,7 @@ const Network: FC<INetwork> = ({}) => {
     useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
 
   const [currentPageIndex, setCurrentPageIndex] = useState(
-    (+query.index - 1) | 0
+    +query.index < 0 ? 0 : +query.index
   );
 
   const {
@@ -86,15 +88,19 @@ const Network: FC<INetwork> = ({}) => {
     }
   );
   useEffect(() => {
-    if (profilesData) {
+    if (profilesData && !loadingProfiles) {
       setTotalPages(Math.ceil(profilesData.profiles.total_count / showCount));
+
+      if (totalPages > 0 && totalPages <= currentPageIndex) {
+        setCurrentPageIndex(0);
+      }
     }
-  }, [profilesData, showCount, setTotalPages]);
+  }, [profilesData, showCount, setTotalPages, currentPageIndex, totalPages]);
 
   useEffect(() => {
     history.push({
       pathname: "/network",
-      search: `?index=${currentPageIndex + 1}&show=${showCount}`,
+      search: `?index=${currentPageIndex}&show=${showCount}`,
     });
   }, [showCount, currentPageIndex]);
 

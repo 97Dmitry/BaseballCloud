@@ -1,8 +1,9 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { toast } from "react-toastify";
+import * as queryString from "querystring";
 
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -32,7 +33,10 @@ import schoolYearConst from "constants/schoolYearConst";
 interface INetwork {}
 
 const Network: FC<INetwork> = ({}) => {
-  const [showCount, setShowCount] = useState(10);
+  const history = useHistory();
+  const query = queryString.parse(history.location.search.substring(1));
+
+  const [showCount, setShowCount] = useState(+query.show | 10);
   const [totalPages, setTotalPages] = useState(0);
 
   const [schoolFilter, setSchoolFilter] = useState("");
@@ -46,7 +50,9 @@ const Network: FC<INetwork> = ({}) => {
   const { data: userProfile, loading: loadingProfile } =
     useQuery<ICurrentProfileQuery>(CurrentProfileQuery);
 
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const [currentPageIndex, setCurrentPageIndex] = useState(
+    (+query.index - 1) | 0
+  );
 
   const {
     data: profilesData,
@@ -84,6 +90,13 @@ const Network: FC<INetwork> = ({}) => {
       setTotalPages(Math.ceil(profilesData.profiles.total_count / showCount));
     }
   }, [profilesData, showCount, setTotalPages]);
+
+  useEffect(() => {
+    history.push({
+      pathname: "/network",
+      search: `?index=${currentPageIndex + 1}&show=${showCount}`,
+    });
+  }, [showCount, currentPageIndex]);
 
   const columns = useMemo(
     () => [

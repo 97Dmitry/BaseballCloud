@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -23,14 +23,21 @@ import { useAppSelector } from "store/hooks";
 import { selectorUserToken } from "store/user/userSelector";
 
 import AuthLayout from "./layouts/AuthLayout";
-import { Login } from "pages/Login";
-import { Registration } from "pages/Registration";
-import { Profile } from "pages/Profile";
-import { UserProfile } from "pages/UserProfile";
-import { Network } from "pages/Network";
-import { LeaderBoard } from "pages/LeaderBoard";
-
 import AuthProtectedRoute from "routes/AuthProtectedRoute";
+
+// import Login from "pages/Login";
+// import Registration from "pages/Registration";
+// import Profile from "pages/Profile";
+// import UserProfile from "pages/UserProfile";
+// import Network from "pages/Network";
+// import LeaderBoard from "pages/LeaderBoard";
+
+const Login = lazy(() => import(`./pages/Login`));
+const Registration = lazy(() => import(`./pages/Registration`));
+const Profile = lazy(() => import(`./pages/Profile`));
+const UserProfile = lazy(() => import(`./pages/UserProfile`));
+const Network = lazy(() => import(`./pages/Network`));
+const LeaderBoard = lazy(() => import(`./pages/LeaderBoard`));
 
 const App: FC = () => {
   const { token, clientToken, email } = useAppSelector(selectorUserToken);
@@ -66,47 +73,49 @@ const App: FC = () => {
       <ToastContainer />
 
       <Router>
-        <Switch>
-          <Redirect exact from={"/"} to={"/profile"} />
-          <AuthProtectedRoute
-            exact
-            path={"/profile"}
-            component={Profile}
-            auth={!!token}
-          />
-          <AuthProtectedRoute
-            exact
-            path={"/profile/:id"}
-            component={UserProfile}
-            auth={!!token}
-          />
-          <AuthProtectedRoute
-            path={"/network"}
-            component={Network}
-            auth={!!token}
-          />
-          <AuthProtectedRoute
-            path={"/leaderboard"}
-            component={LeaderBoard}
-            auth={!!token}
-          />
-          <Route
-            path={"/login"}
-            render={() => (
-              <AuthLayout>
-                <Login />
-              </AuthLayout>
-            )}
-          ></Route>
-          <Route
-            path={"/registration"}
-            render={() => (
-              <AuthLayout>
-                <Registration />
-              </AuthLayout>
-            )}
-          ></Route>
-        </Switch>
+        <Suspense fallback={<div>Загрузка...</div>}>
+          <Switch>
+            <Redirect exact from={"/"} to={"/profile"} />
+            <AuthProtectedRoute
+              exact
+              path={"/profile"}
+              component={Profile}
+              auth={!!token}
+            />
+            <AuthProtectedRoute
+              exact
+              path={"/profile/:id"}
+              component={UserProfile}
+              auth={!!token}
+            />
+            <AuthProtectedRoute
+              path={"/network"}
+              component={Network}
+              auth={!!token}
+            />
+            <AuthProtectedRoute
+              path={"/leaderboard"}
+              component={LeaderBoard}
+              auth={!!token}
+            />
+            <Route
+              path={"/login"}
+              render={() => (
+                <AuthLayout>
+                  <Login />
+                </AuthLayout>
+              )}
+            />
+            <Route
+              path={"/registration"}
+              render={() => (
+                <AuthLayout>
+                  <Registration />
+                </AuthLayout>
+              )}
+            />
+          </Switch>
+        </Suspense>
       </Router>
     </ApolloProvider>
   );

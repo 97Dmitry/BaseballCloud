@@ -40,7 +40,6 @@ const Network: FC<INetwork> = ({}) => {
     +query.show === 10 && 15 && 25 ? +query.show : 10
   );
   const [totalPages, setTotalPages] = useState(0);
-  console.log(totalPages);
   const [schoolFilter, setSchoolFilter] = useState("");
   const [teamFilter, setTeamFilter] = useState("");
   const [ageFilter, setAgeFilter] = useState("");
@@ -55,8 +54,6 @@ const Network: FC<INetwork> = ({}) => {
   const [currentPageIndex, setCurrentPageIndex] = useState(
     +query.index < 0 || !query.index ? 0 : +query.index
   );
-
-  console.log(currentPageIndex);
 
   const {
     data: profilesData,

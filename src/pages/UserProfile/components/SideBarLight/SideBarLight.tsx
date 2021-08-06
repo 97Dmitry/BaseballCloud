@@ -103,7 +103,7 @@ const SideBarLight: FC<ISideBarLight> = ({ userProfile }) => {
               object={true}
             />
           ) : null}
-          {userProfile.profile.biography.length ? (
+          {userProfile.profile.biography?.length ? (
             <SideBarTextItem
               title={"About"}
               subtitle={userProfile.profile.biography}
